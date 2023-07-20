@@ -7,13 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace IntNetViewer
 {
     public partial class Form1 : Form
     {
-        private ProgressBar progressBar;
+        
 
+        private ProgressBar progressBar;
+        
         public Form1()
         {
             InitializeComponent();
@@ -61,8 +64,7 @@ namespace IntNetViewer
             progressBar1.Visible = true;
             progressBar1.Value = 0;
 
-            // Start the Timer to trigger the delay before hiding the progress bar
-            timer1.Start();
+            
         }
         private void webBrowser1_ProgressChanged(object sender, WebBrowserProgressChangedEventArgs e)
         {
@@ -76,18 +78,12 @@ namespace IntNetViewer
         }
         private void webBrowser1_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
-            // Hide the progress bar when the page has finished loading
-           
+            // Update the URL text box with the current page's URL
+            textbox.Text = webBrowser1.Url.ToString();
+
+            progressBar.Visible = false;
+        }
+
         
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            // Stop the Timer
-            timer1.Stop();
-
-            // Hide the progress bar after the delay
-            progressBar1.Visible = false;
-        }
     }
 }
