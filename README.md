@@ -1,6 +1,6 @@
 # IntNetViewer-Windows
 IntNetViewer "ported" to Windows!
 <br>
-this only works with .NET 4.5
+this only works with .NET 4.7.2
 <br>
-Supports Windows Vista or later.
+Supports Windows 7 or later.
