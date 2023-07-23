@@ -65,7 +65,7 @@ namespace IntNetViewer
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(69, 13);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Version 1.0.2";
+            this.label2.Text = "Version 1.0.3";
             // 
             // label3
             // 
@@ -73,9 +73,10 @@ namespace IntNetViewer
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(147, 252);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(135, 54);
+            this.label3.Size = new System.Drawing.Size(190, 108);
             this.label3.TabIndex = 3;
-            this.label3.Text = "Changes:\r\nfixed progress bar\r\nurl text box updated";
+            this.label3.Text = "Changes:\r\nadded secret web page\r\nfixed progress bar (again)\r\nadded search with Fr" +
+    "ogFind\r\nadded \"Open HTML\"\r\n\r\n";
             // 
             // AboutForm
             // 
@@ -86,8 +87,10 @@ namespace IntNetViewer
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "AboutForm";
             this.Text = "About IntNetViewer";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
