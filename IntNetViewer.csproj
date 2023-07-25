@@ -27,7 +27,7 @@
     <PublisherName>robloxboy1000</PublisherName>
     <AutorunEnabled>true</AutorunEnabled>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.3.0</ApplicationVersion>
+    <ApplicationVersion>1.0.4.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -154,6 +154,15 @@
     <None Include="icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="files\back.png" />
+    <None Include="files\find.png" />
+    <None Include="files\fwd.png" />
+    <None Include="files\go.png" />
+    <None Include="files\open.png" />
+    <None Include="files\print.png" />
+    <None Include="files\reload.png" />
+    <None Include="files\loading.png" />
+    <None Include="files\netscape.gif" />
     <Content Include="loading.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

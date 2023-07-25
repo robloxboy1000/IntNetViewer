@@ -13,15 +13,21 @@ namespace IntNetViewer
 {
     public partial class Form1 : Form
     {
+        private Image gifAnimation;
+        private Image gifStillFrame;
 
-        
 
         public Form1()
         {
             InitializeComponent();
+            // Load the GIF animation and still frame images
+            gifAnimation = Properties.Resources.netscape;
+            gifStillFrame = Properties.Resources.loading1;
+
             webBrowser1.Navigating += webBrowser1_Navigating;
             webBrowser1.ProgressChanged += webBrowser1_ProgressChanged;
             webBrowser1.Navigated += webBrowser1_Navigated;
+            webBrowser1.DocumentCompleted += webBrowser1_DocumentCompleted;
             timerHideProgressBar.Tick += timerHideProgressBar_Tick;
             // Navigate to the initial page when the form loads
             webBrowser1.Navigate("http://frogfind.com");
@@ -69,7 +75,21 @@ namespace IntNetViewer
         {
             // Update the URL text box with the current page's URL
             textbox.Text = webBrowser1.Url.ToString();
-            
+            // Get the title of the web page
+            string pageTitle = webBrowser1.DocumentTitle;
+
+            // Get the current URL
+            string currentUrl = e.Url.ToString();
+
+            // Update the ToolStripStatusLabel with the web page title or the current URL
+            if (!string.IsNullOrEmpty(pageTitle))
+            {
+                toolStripStatusLabel1.Text = pageTitle;
+            }
+            else
+            {
+                toolStripStatusLabel1.Text = currentUrl;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -90,6 +110,8 @@ namespace IntNetViewer
         }
         private void webBrowser1_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
+            // Start the animation when the page starts loading
+            pictureBox1.Image = gifAnimation;
             // Show the progress bar when a new page starts loading
             toolStripProgressBar1.Visible = true;
             toolStripProgressBar1.Value = 0; // Reset the progress bar value to 0
@@ -152,6 +174,16 @@ namespace IntNetViewer
                     }
                 }
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            webBrowser1.ShowPrintDialog();
+        }
+        private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            // Show the still frame when the page loading is complete
+            pictureBox1.Image = gifStillFrame;
         }
     }
 }

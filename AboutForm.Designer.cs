@@ -65,7 +65,7 @@ namespace IntNetViewer
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(69, 13);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Version 1.0.3";
+            this.label2.Text = "Version 1.0.4";
             // 
             // label3
             // 
@@ -73,10 +73,10 @@ namespace IntNetViewer
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(147, 252);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(190, 108);
+            this.label3.Size = new System.Drawing.Size(310, 72);
             this.label3.TabIndex = 3;
-            this.label3.Text = "Changes:\r\nadded secret web page\r\nfixed progress bar (again)\r\nadded search with Fr" +
-    "ogFind\r\nadded \"Open HTML\"\r\n\r\n";
+            this.label3.Text = "Changes:\r\nnothing much, just added a feature to print and\r\nthe Netscape loading l" +
+    "ogo for nostalgia.\r\n\r\n";
             // 
             // AboutForm
             // 
