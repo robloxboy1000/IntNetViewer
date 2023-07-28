@@ -30,13 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.textbox = new System.Windows.Forms.TextBox();
             this.back = new System.Windows.Forms.Button();
             this.forward = new System.Windows.Forms.Button();
             this.refresh = new System.Windows.Forms.Button();
             this.go = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
@@ -47,29 +47,21 @@
             this.timerHideProgressBar = new System.Windows.Forms.Timer(this.components);
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxLoading = new System.Windows.Forms.PictureBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
+            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoading)).BeginInit();
             this.SuspendLayout();
-            // 
-            // webBrowser1
-            // 
-            this.webBrowser1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.webBrowser1.Location = new System.Drawing.Point(12, 123);
-            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(984, 581);
-            this.webBrowser1.TabIndex = 0;
             // 
             // textbox
             // 
             this.textbox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textbox.Location = new System.Drawing.Point(64, 97);
+            this.textbox.Location = new System.Drawing.Point(64, 65);
             this.textbox.Name = "textbox";
             this.textbox.Size = new System.Drawing.Size(932, 20);
             this.textbox.TabIndex = 1;
@@ -78,7 +70,7 @@
             // 
             this.back.Location = new System.Drawing.Point(15, 31);
             this.back.Name = "back";
-            this.back.Size = new System.Drawing.Size(76, 52);
+            this.back.Size = new System.Drawing.Size(76, 26);
             this.back.TabIndex = 2;
             this.back.Text = "Back";
             this.back.UseVisualStyleBackColor = true;
@@ -88,7 +80,7 @@
             // 
             this.forward.Location = new System.Drawing.Point(97, 31);
             this.forward.Name = "forward";
-            this.forward.Size = new System.Drawing.Size(75, 52);
+            this.forward.Size = new System.Drawing.Size(75, 26);
             this.forward.TabIndex = 3;
             this.forward.Text = "Forward";
             this.forward.UseVisualStyleBackColor = true;
@@ -96,9 +88,9 @@
             // 
             // refresh
             // 
-            this.refresh.Location = new System.Drawing.Point(178, 31);
+            this.refresh.Location = new System.Drawing.Point(259, 31);
             this.refresh.Name = "refresh";
-            this.refresh.Size = new System.Drawing.Size(75, 52);
+            this.refresh.Size = new System.Drawing.Size(75, 26);
             this.refresh.TabIndex = 4;
             this.refresh.Text = "Refresh";
             this.refresh.UseVisualStyleBackColor = true;
@@ -106,9 +98,9 @@
             // 
             // go
             // 
-            this.go.Location = new System.Drawing.Point(502, 31);
+            this.go.Location = new System.Drawing.Point(583, 31);
             this.go.Name = "go";
-            this.go.Size = new System.Drawing.Size(75, 52);
+            this.go.Size = new System.Drawing.Size(75, 26);
             this.go.TabIndex = 5;
             this.go.Text = "Go";
             this.go.UseVisualStyleBackColor = true;
@@ -117,12 +109,21 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
             this.testToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1008, 24);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.closeToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
             // 
             // testToolStripMenuItem
             // 
@@ -135,14 +136,14 @@
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(178, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem1.Text = "About IntNetViewer";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 100);
+            this.label1.Location = new System.Drawing.Point(12, 68);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(40, 13);
             this.label1.TabIndex = 8;
@@ -151,11 +152,11 @@
             // button1
             // 
             this.button1.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.button1.Location = new System.Drawing.Point(259, 31);
+            this.button1.Location = new System.Drawing.Point(502, 31);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 52);
+            this.button1.Size = new System.Drawing.Size(75, 26);
             this.button1.TabIndex = 9;
-            this.button1.Text = "Find";
+            this.button1.Text = "Search";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -189,7 +190,7 @@
             // 
             this.button2.Location = new System.Drawing.Point(340, 31);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 52);
+            this.button2.Size = new System.Drawing.Size(75, 26);
             this.button2.TabIndex = 11;
             this.button2.Text = "Open";
             this.button2.UseVisualStyleBackColor = true;
@@ -199,28 +200,55 @@
             // 
             this.button3.Location = new System.Drawing.Point(421, 31);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 52);
+            this.button3.Size = new System.Drawing.Size(75, 26);
             this.button3.TabIndex = 13;
             this.button3.Text = "Print";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // pictureBox1
+            // pictureBoxLoading
             // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox1.Location = new System.Drawing.Point(944, 31);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(52, 52);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 14;
-            this.pictureBox1.TabStop = false;
+            this.pictureBoxLoading.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBoxLoading.Location = new System.Drawing.Point(964, 27);
+            this.pictureBoxLoading.Name = "pictureBoxLoading";
+            this.pictureBoxLoading.Size = new System.Drawing.Size(32, 32);
+            this.pictureBoxLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxLoading.TabIndex = 14;
+            this.pictureBoxLoading.TabStop = false;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(178, 31);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 26);
+            this.button4.TabIndex = 15;
+            this.button4.Text = "Home";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // webBrowser1
+            // 
+            this.webBrowser1.Location = new System.Drawing.Point(12, 91);
+            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser1.Name = "webBrowser1";
+            this.webBrowser1.Size = new System.Drawing.Size(984, 613);
+            this.webBrowser1.TabIndex = 16;
+            // 
+            // closeToolStripMenuItem
+            // 
+            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.closeToolStripMenuItem.Text = "Close";
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1008, 729);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.webBrowser1);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.pictureBoxLoading);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.statusStrip1);
@@ -231,7 +259,6 @@
             this.Controls.Add(this.forward);
             this.Controls.Add(this.back);
             this.Controls.Add(this.textbox);
-            this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
@@ -241,15 +268,13 @@
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoading)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.WebBrowser webBrowser1;
         private System.Windows.Forms.TextBox textbox;
         private System.Windows.Forms.Button back;
         private System.Windows.Forms.Button forward;
@@ -266,7 +291,11 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBoxLoading;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.WebBrowser webBrowser1;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
     }
 }
 

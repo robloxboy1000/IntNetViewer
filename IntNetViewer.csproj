@@ -14,7 +14,7 @@
     <Deterministic>true</Deterministic>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
-    <PublishUrl>C:\Users\chris\Downloads\intnetinstaller103\</PublishUrl>
+    <PublishUrl>C:\Users\chris\Downloads\intnetinstaller105\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -25,9 +25,8 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <PublisherName>robloxboy1000</PublisherName>
-    <AutorunEnabled>true</AutorunEnabled>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.4.0</ApplicationVersion>
+    <ApplicationVersion>1.0.5.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -163,6 +162,10 @@
     <None Include="files\reload.png" />
     <None Include="files\loading.png" />
     <None Include="files\netscape.gif" />
+    <None Include="files\dead.gif" />
+    <None Include="files\dead.png" />
+    <None Include="files\UGJmfj8.gif" />
+    <None Include="files\UGJmfj8still.png" />
     <Content Include="loading.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

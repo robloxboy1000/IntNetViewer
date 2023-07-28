@@ -8,30 +8,39 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32;
+using System.Net;
+using System.Diagnostics;
 
 namespace IntNetViewer
 {
     public partial class Form1 : Form
     {
+        
         private Image gifAnimation;
         private Image gifStillFrame;
-
+        
 
         public Form1()
         {
             InitializeComponent();
             // Load the GIF animation and still frame images
-            gifAnimation = Properties.Resources.netscape;
-            gifStillFrame = Properties.Resources.loading1;
+            gifAnimation = Properties.Resources.UGJmfj8;
+            gifStillFrame = Properties.Resources.UGJmfj8still;
 
             webBrowser1.Navigating += webBrowser1_Navigating;
             webBrowser1.ProgressChanged += webBrowser1_ProgressChanged;
             webBrowser1.Navigated += webBrowser1_Navigated;
             webBrowser1.DocumentCompleted += webBrowser1_DocumentCompleted;
             timerHideProgressBar.Tick += timerHideProgressBar_Tick;
+            // Subscribe to the PictureBox's click event
+            pictureBoxLoading.Click += pictureBoxLoading_Click;
+            
             // Navigate to the initial page when the form loads
-            webBrowser1.Navigate("http://frogfind.com");
+            webBrowser1.Navigate("http://robloxboy1000.infinityfreeapp.com/sites/intnetviewer/index.html");
         }
+        
+        
+
 
         private void back_Click(object sender, EventArgs e)
         {
@@ -111,10 +120,33 @@ namespace IntNetViewer
         private void webBrowser1_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
             // Start the animation when the page starts loading
-            pictureBox1.Image = gifAnimation;
+            pictureBoxLoading.Image = gifAnimation;
             // Show the progress bar when a new page starts loading
             toolStripProgressBar1.Visible = true;
             toolStripProgressBar1.Value = 0; // Reset the progress bar value to 0
+            
+            // Get the host name from the URL
+            string hostName = new Uri(e.Url.ToString()).Host;
+
+            try
+            {
+                // Try to resolve the host name to an IP address
+                IPHostEntry hostEntry = Dns.GetHostEntry(hostName);
+
+                // Check if the host entry contains any IP addresses
+                if (hostEntry.AddressList.Length == 0)
+                {
+                    // Show a warning to the user using a MessageBox
+                    MessageBox.Show("Unable to resolve IP address for the website's domain name.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    e.Cancel = true; // Cancel the navigation
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any errors that might occur during DNS resolution
+                MessageBox.Show("Error resolving IP address: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                e.Cancel = true; // Cancel the navigation
+            }
         }
         private void webBrowser1_ProgressChanged(object sender, WebBrowserProgressChangedEventArgs e)
         {
@@ -183,7 +215,23 @@ namespace IntNetViewer
         private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             // Show the still frame when the page loading is complete
-            pictureBox1.Image = gifStillFrame;
+            pictureBoxLoading.Image = gifStillFrame;
+        }
+        private void pictureBoxLoading_Click(object sender, EventArgs e)
+        {
+            // Navigate the WebBrowser control to the product page URL
+            string productPageUrl = "http://robloxboy1000.infinityfreeapp.com/sites/intnetviewer/index.html";
+            webBrowser1.Navigate(productPageUrl);
+        }
+       
+        private void button4_Click(object sender, EventArgs e)
+        {
+            webBrowser1.Navigate("http://robloxboy1000.infinityfreeapp.com/sites/intnetviewer/index.html");
+        }
+
+        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
