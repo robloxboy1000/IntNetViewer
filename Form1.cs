@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Microsoft.Win32;
 using System.Net;
 using System.Diagnostics;
+using System.Deployment.Application;
 
 namespace IntNetViewer
 {
@@ -38,8 +39,34 @@ namespace IntNetViewer
             // Navigate to the initial page when the form loads
             webBrowser1.Navigate("http://robloxboy1000.infinityfreeapp.com/sites/intnetviewer/index.html");
         }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // Optionally, you can check for updates when the application starts.
+            CheckForUpdates();
+        }
+
         
-        
+        private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CheckForUpdates();
+        }
+        private void CheckForUpdates()
+        {
+            // Access the update URL from ApplicationDeployment.
+            string updateUrl = string.Empty;
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                updateUrl = ApplicationDeployment.CurrentDeployment.UpdateLocation?.AbsoluteUri ?? string.Empty;
+            }
+
+            // Now you have the updateUrl and can use it as needed.
+            // You can display it to the user or use it for any custom update logic.
+            if (!string.IsNullOrEmpty(updateUrl))
+            {
+                MessageBox.Show($"Update URL: {updateUrl}", "Update URL", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
 
 
         private void back_Click(object sender, EventArgs e)
@@ -75,7 +102,7 @@ namespace IntNetViewer
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            AboutForm aboutForm = new AboutForm();
+            AboutBox1 aboutForm = new AboutBox1();
             aboutForm.ShowDialog();
         }
         
@@ -233,5 +260,7 @@ namespace IntNetViewer
         {
             Application.Exit();
         }
+
+        
     }
 }
