@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace IntNetViewer.Properties {
+namespace UwUNetViewer.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace IntNetViewer.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IntNetViewer.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("UwUNetViewer.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -127,6 +127,26 @@ namespace IntNetViewer.Properties {
             get {
                 object obj = ResourceManager.GetObject("Icon_512pt2x", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap maxwell {
+            get {
+                object obj = ResourceManager.GetObject("maxwell", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap maxwellcat {
+            get {
+                object obj = ResourceManager.GetObject("maxwellcat", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

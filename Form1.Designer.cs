@@ -1,4 +1,4 @@
-﻿namespace IntNetViewer
+﻿namespace UwUNetViewer
 {
     partial class Form1
     {
@@ -51,7 +51,6 @@
             this.pictureBoxLoading = new System.Windows.Forms.PictureBox();
             this.button4 = new System.Windows.Forms.Button();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
-            this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoading)).BeginInit();
@@ -73,7 +72,7 @@
             this.back.Name = "back";
             this.back.Size = new System.Drawing.Size(76, 26);
             this.back.TabIndex = 2;
-            this.back.Text = "Back";
+            this.back.Text = "Bawck";
             this.back.UseVisualStyleBackColor = true;
             this.back.Click += new System.EventHandler(this.back_Click);
             // 
@@ -83,7 +82,7 @@
             this.forward.Name = "forward";
             this.forward.Size = new System.Drawing.Size(75, 26);
             this.forward.TabIndex = 3;
-            this.forward.Text = "Forward";
+            this.forward.Text = "Fowwawd";
             this.forward.UseVisualStyleBackColor = true;
             this.forward.Click += new System.EventHandler(this.forward_Click);
             // 
@@ -93,7 +92,7 @@
             this.refresh.Name = "refresh";
             this.refresh.Size = new System.Drawing.Size(75, 26);
             this.refresh.TabIndex = 4;
-            this.refresh.Text = "Refresh";
+            this.refresh.Text = "Wefwesh";
             this.refresh.UseVisualStyleBackColor = true;
             this.refresh.Click += new System.EventHandler(this.refresh_Click);
             // 
@@ -103,7 +102,7 @@
             this.go.Name = "go";
             this.go.Size = new System.Drawing.Size(75, 26);
             this.go.TabIndex = 5;
-            this.go.Text = "Go";
+            this.go.Text = "Gow";
             this.go.UseVisualStyleBackColor = true;
             this.go.Click += new System.EventHandler(this.go_Click);
             // 
@@ -121,17 +120,16 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.closeToolStripMenuItem,
-            this.checkForUpdatesToolStripMenuItem});
+            this.closeToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.fileToolStripMenuItem.Text = "Fiwe";
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.closeToolStripMenuItem.Text = "Close";
+            this.closeToolStripMenuItem.Text = "Cwose";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
             // testToolStripMenuItem
@@ -139,24 +137,25 @@
             this.testToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1});
             this.testToolStripMenuItem.Name = "testToolStripMenuItem";
-            this.testToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.testToolStripMenuItem.Text = "Help";
+            this.testToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
+            this.testToolStripMenuItem.Text = "Hewp";
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-            this.toolStripMenuItem1.Text = "About IntNetViewer";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(198, 22);
+            this.toolStripMenuItem1.Text = "Abouwt UwUNetViewer";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 68);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(7, 69);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(40, 13);
+            this.label1.Size = new System.Drawing.Size(51, 12);
             this.label1.TabIndex = 8;
-            this.label1.Text = "Go To:";
+            this.label1.Text = "Gow tuwu:";
             // 
             // button1
             // 
@@ -165,7 +164,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 26);
             this.button1.TabIndex = 9;
-            this.button1.Text = "Search";
+            this.button1.Text = "Seawch";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -211,7 +210,7 @@
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 26);
             this.button3.TabIndex = 13;
-            this.button3.Text = "Print";
+            this.button3.Text = "Pwint";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -237,18 +236,14 @@
             // 
             // webBrowser1
             // 
+            this.webBrowser1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.webBrowser1.Location = new System.Drawing.Point(12, 91);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
             this.webBrowser1.Size = new System.Drawing.Size(984, 613);
             this.webBrowser1.TabIndex = 16;
-            // 
-            // checkForUpdatesToolStripMenuItem
-            // 
-            this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
-            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.checkForUpdatesToolStripMenuItem.Text = "Check For Updates";
-            this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -272,7 +267,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
-            this.Text = "IntNetViewer";
+            this.Text = "UwUNetViewer";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -305,7 +300,6 @@
         private System.Windows.Forms.WebBrowser webBrowser1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
     }
 }
 
