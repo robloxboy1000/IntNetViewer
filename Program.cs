@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace UwUNetViewer
+namespace IntNetViewer
 {
     internal static class Program
     {

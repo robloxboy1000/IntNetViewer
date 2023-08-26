@@ -1,5 +1,5 @@
 ﻿
-namespace UwUNetViewer
+namespace IntNetViewer
 {
     partial class SearchDialog
     {

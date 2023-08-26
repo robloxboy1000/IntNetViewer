@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UwUNetViewer.Properties {
+namespace IntNetViewer.Properties {
     using System;
     
     
@@ -19,7 +19,7 @@ namespace UwUNetViewer.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -39,7 +39,7 @@ namespace UwUNetViewer.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("UwUNetViewer.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IntNetViewer.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -76,6 +76,16 @@ namespace UwUNetViewer.Properties {
         internal static System.Drawing.Bitmap back {
             get {
                 object obj = ResourceManager.GetObject("back", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap CircleImage {
+            get {
+                object obj = ResourceManager.GetObject("CircleImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,26 +143,6 @@ namespace UwUNetViewer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap maxwell {
-            get {
-                object obj = ResourceManager.GetObject("maxwell", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap maxwellcat {
-            get {
-                object obj = ResourceManager.GetObject("maxwellcat", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap open {
             get {
                 object obj = ResourceManager.GetObject("open", resourceCulture);
@@ -176,26 +166,6 @@ namespace UwUNetViewer.Properties {
         internal static System.Drawing.Bitmap reload {
             get {
                 object obj = ResourceManager.GetObject("reload", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap UGJmfj8 {
-            get {
-                object obj = ResourceManager.GetObject("UGJmfj8", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap UGJmfj8still {
-            get {
-                object obj = ResourceManager.GetObject("UGJmfj8still", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

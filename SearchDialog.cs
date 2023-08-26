@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace UwUNetViewer
+namespace IntNetViewer
 {
     public partial class SearchDialog : Form
     {
