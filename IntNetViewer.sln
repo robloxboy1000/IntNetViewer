@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntNetViewer", "IntNetViewer.csproj", "{3015C236-449F-4989-A11A-D274BE8BBE50}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "IntNetSetup", "..\IntNetSetup\IntNetSetup.vdproj", "{AF8CF7BE-A833-4B60-87EF-5C3979F58C4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{3015C236-449F-4989-A11A-D274BE8BBE50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3015C236-449F-4989-A11A-D274BE8BBE50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3015C236-449F-4989-A11A-D274BE8BBE50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF8CF7BE-A833-4B60-87EF-5C3979F58C4B}.Debug|Any CPU.ActiveCfg = Debug
+		{AF8CF7BE-A833-4B60-87EF-5C3979F58C4B}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

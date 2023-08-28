@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
+using Microsoft.Win32;
 
 namespace IntNetViewer
 {
@@ -15,10 +16,7 @@ namespace IntNetViewer
         {
             InitializeComponent();
             InitializeLoadingAnimation();
-
-
-
-
+            // subscribed stuff
             webBrowser1.Navigating += webBrowser1_Navigating;
             webBrowser1.ProgressChanged += webBrowser1_ProgressChanged;
             webBrowser1.Navigated += webBrowser1_Navigated;
@@ -26,7 +24,6 @@ namespace IntNetViewer
             timerHideProgressBar.Tick += timerHideProgressBar_Tick;
             // Subscribe to the PictureBox's click event
             pictureBoxLoading.Click += pictureBoxLoading_Click;
-            
             // Navigate to the initial page when the form loads
             webBrowser1.Navigate("http://intnetviewer.byethost5.com/");
         }
@@ -54,27 +51,18 @@ namespace IntNetViewer
             }
             return rotatedImage;
         }
-
-
-
-
-
-
         private void back_Click(object sender, EventArgs e)
         {
             webBrowser1.GoBack();
         }
-
         private void forward_Click(object sender, EventArgs e)
         {
             webBrowser1.GoForward();
         }
-
         private void refresh_Click(object sender, EventArgs e)
         {
             webBrowser1.Refresh();
         }
-
         // Navigation Start + "Easter Eggs"
         private void go_Click(object sender, EventArgs e)
         {
@@ -97,8 +85,6 @@ namespace IntNetViewer
             }
             
         }
-
-        
         // Web browser finished navigation
         private void webBrowser1_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
@@ -120,7 +106,6 @@ namespace IntNetViewer
                 toolStripStatusLabel1.Text = currentUrl;
             }
         }
-
         // Search button
         private void button1_Click(object sender, EventArgs e)
         {
@@ -138,7 +123,6 @@ namespace IntNetViewer
                 }
             }
         }
-
         // web browser currently navigating
         private void webBrowser1_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
@@ -167,7 +151,6 @@ namespace IntNetViewer
                 }
             }
         }
-
         // timer for hiding progress bar
         private void timerHideProgressBar_Tick(object sender, EventArgs e)
         {
@@ -180,7 +163,6 @@ namespace IntNetViewer
             // Reset the progress bar value to 0
             toolStripProgressBar1.Value = 0;
         }
-
         // Open file
         private void button2_Click(object sender, EventArgs e)
         {
