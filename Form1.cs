@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
-using Microsoft.Win32;
 
 namespace IntNetViewer
 {
@@ -25,7 +24,7 @@ namespace IntNetViewer
             // Subscribe to the PictureBox's click event
             pictureBoxLoading.Click += pictureBoxLoading_Click;
             // Navigate to the initial page when the form loads
-            webBrowser1.Navigate("http://intnetviewer.byethost5.com/");
+            webBrowser1.Navigate("http://robloxboy1000.6te.net/");
         }
         private void InitializeLoadingAnimation()
         {
@@ -211,14 +210,14 @@ namespace IntNetViewer
         private void pictureBoxLoading_Click(object sender, EventArgs e)
         {
             // Navigate the WebBrowser control to the product page URL
-            string productPageUrl = "http://intnetviewer.byethost5.com/";
+            string productPageUrl = "http://robloxboy1000.6te.net";
             webBrowser1.Navigate(productPageUrl);
         }
        
         // Home
         private void button4_Click(object sender, EventArgs e)
         {
-            webBrowser1.Navigate("http://intnetviewer.byethost5.com/");
+            webBrowser1.Navigate("http://robloxboy1000.6te.net");
         }
 
 
@@ -374,7 +373,11 @@ namespace IntNetViewer
             string htmlContent = webBrowser1.DocumentText;
             File.WriteAllText(filePath, htmlContent);
         }
-        
 
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form1 newBrowser = new Form1();
+            newBrowser.Show();
+        }
     }
 }

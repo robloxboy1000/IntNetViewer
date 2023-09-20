@@ -163,13 +163,6 @@
     <None Include="files\print.png" />
     <None Include="files\reload.png" />
     <None Include="files\loading.png" />
-    <None Include="files\netscape.gif" />
-    <None Include="files\dead.gif" />
-    <None Include="files\dead.png" />
-    <None Include="files\UGJmfj8.gif" />
-    <None Include="files\UGJmfj8still.png" />
-    <None Include="files\maxwell.png" />
-    <None Include="files\maxwellcat.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
