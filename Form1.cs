@@ -287,23 +287,6 @@ namespace IntNetViewer
             Application.Exit();
         }
 
-        private void searchToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (var searchDialog = new SearchDialog())
-            {
-                if (searchDialog.ShowDialog() == DialogResult.OK)
-                {
-                    string searchQuery = searchDialog.SearchQuery;
-                    if (!string.IsNullOrWhiteSpace(searchQuery))
-                    {
-                        // Replace "https://www.google.com/search?q=" with the search engine URL
-                        string searchUrl = "http://www.frogfind.com/?q=" + Uri.EscapeDataString(searchQuery);
-                        webBrowser1.Navigate(searchUrl);
-                    }
-                }
-            }
-        }
-
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AboutBox1 aboutForm = new AboutBox1();
@@ -315,16 +298,6 @@ namespace IntNetViewer
                             "Feature Not Implemented",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Information);
-        }
-
-        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ShowFeatureNotImplementedMessage();
-        }
-
-        private void customizeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ShowFeatureNotImplementedMessage();
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -359,15 +332,6 @@ namespace IntNetViewer
             webBrowser1.ShowPrintDialog();
         }
 
-        private void indexToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ShowFeatureNotImplementedMessage();
-        }
-
-        private void contentsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ShowFeatureNotImplementedMessage();
-        }
         private void SaveWebPage(string filePath)
         {
             string htmlContent = webBrowser1.DocumentText;
@@ -378,6 +342,23 @@ namespace IntNetViewer
         {
             Form1 newBrowser = new Form1();
             newBrowser.Show();
+        }
+
+        private void searchButton_Click(object sender, EventArgs e)
+        {
+            string searchTerm = searchTextBox.Text;
+
+            // Check if the search term is not empty
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                
+
+                // Construct the search URL (e.g., using a search engine like Google)
+                string searchUrl = "http://frogfind.com/?q=" + Uri.EscapeDataString(searchTerm);
+
+                // Load the search URL in the web browser control
+                webBrowser1.Navigate(searchUrl);
+            }
         }
     }
 }

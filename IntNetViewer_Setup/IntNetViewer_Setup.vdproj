@@ -27,6 +27,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_2C91402D828D456D9AD4AA2CCC5C1356"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3021E65894554AF6BAA7B23EFB9026A7"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4AC102B15A5F448EBCEFA7C2016E7F0A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -64,7 +76,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_DF0FDD2C3FB1FCA033EB83DA777E3141"
+        "OwnerKey" = "8:_16C6CE2E9EB2480A8E9BFBF09195D85C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -88,7 +100,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_16C6CE2E9EB2480A8E9BFBF09195D85C"
+        "OwnerKey" = "8:_DF0FDD2C3FB1FCA033EB83DA777E3141"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -109,6 +121,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -125,6 +153,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -172,6 +216,46 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2C91402D828D456D9AD4AA2CCC5C1356"
+            {
+            "SourcePath" = "8:..\\Icon-512pt2x.ico"
+            "TargetName" = "8:Icon-512pt2x.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_86F24EE9C9AE435BA81E095EB03025A4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3021E65894554AF6BAA7B23EFB9026A7"
+            {
+            "SourcePath" = "8:..\\AudioGroove\\files\\iconlogo.ico"
+            "TargetName" = "8:iconlogo.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_86F24EE9C9AE435BA81E095EB03025A4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6BC84D47F8716B5669F54BD9BBC218D4"
@@ -288,18 +372,29 @@
             "{1525181F-901A-416C-8A58-119130FE478E}:_D502679384EA44BDA457D3FAB2847C69"
             {
             "Name" = "8:#1919"
-            "AlwaysCreate" = "11:FALSE"
+            "AlwaysCreate" = "11:TRUE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Property" = "8:ProgramMenuFolder"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_B3FDC1C44B5A4721B786D452D82C29FA"
+                    {
+                    "Name" = "8:robloxboy1000"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_49ED5E0C5B174D65BDA2C4687D077D26"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_D56568AE299E4EE4AF3DBF8EFC85B4C7"
             {
             "Name" = "8:#1916"
-            "AlwaysCreate" = "11:FALSE"
+            "AlwaysCreate" = "11:TRUE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Property" = "8:DesktopFolder"
@@ -322,14 +417,14 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:IntNetViewer_Setup"
+        "ProductName" = "8:IntNetViewer"
         "ProductCode" = "8:{23E07DEB-A1EA-4D6E-B6CA-A35A27C6510D}"
-        "PackageCode" = "8:{438AE585-4867-4EC1-8790-2024383D901F}"
+        "PackageCode" = "8:{0F076DF4-9F32-4E2F-B690-85BF8617A578}"
         "UpgradeCode" = "8:{D8E256E6-1CF1-441B-9C6F-F8F47479ABA1}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
-        "DetectNewerInstalledVersion" = "11:TRUE"
+        "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
         "Manufacturer" = "8:robloxboy1000"
@@ -444,6 +539,48 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_0B413AF4F6F24FF58F5BC75234ED056B"
+            {
+            "Name" = "8:IntNetViewer"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_16C6CE2E9EB2480A8E9BFBF09195D85C"
+            "Folder" = "8:_B3FDC1C44B5A4721B786D452D82C29FA"
+            "WorkingFolder" = "8:_86F24EE9C9AE435BA81E095EB03025A4"
+            "Icon" = "8:_2C91402D828D456D9AD4AA2CCC5C1356"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_18FAD88F0DBD4E9E8C7B5A9AB26406B1"
+            {
+            "Name" = "8:AudioGroove"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_4AC102B15A5F448EBCEFA7C2016E7F0A"
+            "Folder" = "8:_B3FDC1C44B5A4721B786D452D82C29FA"
+            "WorkingFolder" = "8:_86F24EE9C9AE435BA81E095EB03025A4"
+            "Icon" = "8:_3021E65894554AF6BAA7B23EFB9026A7"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_83E2224D7BD5465B8335CB53F0EC6992"
+            {
+            "Name" = "8:IntNetViewer"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_16C6CE2E9EB2480A8E9BFBF09195D85C"
+            "Folder" = "8:_D56568AE299E4EE4AF3DBF8EFC85B4C7"
+            "WorkingFolder" = "8:_86F24EE9C9AE435BA81E095EB03025A4"
+            "Icon" = "8:_2C91402D828D456D9AD4AA2CCC5C1356"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
