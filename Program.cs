@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CefSharp;
+using CefSharp.WinForms;
 
 namespace IntNetViewer
 {
@@ -14,6 +16,8 @@ namespace IntNetViewer
         [STAThread]
         static void Main()
         {
+            Cef.Initialize(new CefSettings());
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
