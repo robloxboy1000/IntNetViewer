@@ -16,8 +16,10 @@ namespace IntNetViewer
         {
             InitializeComponent();
 
-            // Create and configure the ChromiumWebBrowser control
             
+
+            // Create and configure the ChromiumWebBrowser control
+
             chromiumWebBrowser1.Dock = DockStyle.None;
 
             // Add the ChromiumWebBrowser control to the form
