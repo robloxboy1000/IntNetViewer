@@ -663,15 +663,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:IntNetViewer"
-        "ProductCode" = "8:{D76A8EC9-46D1-497C-B1E2-573A6962B4A5}"
-        "PackageCode" = "8:{368E161F-EE03-4318-B130-484982D3E8E6}"
+        "ProductCode" = "8:{2744328A-6619-4CCA-B8F8-F8572538CC10}"
+        "PackageCode" = "8:{0F82FC7D-B77E-4904-B79E-BEEBC9E91A97}"
         "UpgradeCode" = "8:{D8E256E6-1CF1-441B-9C6F-F8F47479ABA1}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.8"
+        "ProductVersion" = "8:1.9"
         "Manufacturer" = "8:robloxboy1000"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1227,7 +1227,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_16C6CE2E9EB2480A8E9BFBF09195D85C"
             {
-            "SourcePath" = "8:..\\obj\\x86\\Release\\IntNetViewer.exe"
+            "SourcePath" = "8:..\\obj\\x86\\Debug\\IntNetViewer.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_86F24EE9C9AE435BA81E095EB03025A4"
@@ -1255,7 +1255,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_4AC102B15A5F448EBCEFA7C2016E7F0A"
             {
-            "SourcePath" = "8:..\\AudioGroove\\obj\\Release\\AudioGroove.exe"
+            "SourcePath" = "8:..\\AudioGroove\\obj\\Debug\\AudioGroove.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_86F24EE9C9AE435BA81E095EB03025A4"

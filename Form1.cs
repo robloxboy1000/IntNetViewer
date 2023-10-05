@@ -15,8 +15,16 @@ namespace IntNetViewer
         public Form1()
         {
             InitializeComponent();
+            // Add search engine options to the ComboBox
+            searchEngineComboBox.Items.Add("Google");
+            searchEngineComboBox.Items.Add("Bing");
+            searchEngineComboBox.Items.Add("DuckDuckGo");
+            searchEngineComboBox.Items.Add("FrogFind!");
+            searchEngineComboBox.Items.Add("Yahoo!");
+            searchEngineComboBox.Items.Add("Ecosia");
+            // Set a default search engine
+            searchEngineComboBox.SelectedIndex = 0; // Google
 
-            
 
             // Create and configure the ChromiumWebBrowser control
 
@@ -25,23 +33,28 @@ namespace IntNetViewer
             // Add the ChromiumWebBrowser control to the form
             Controls.Add(chromiumWebBrowser1);
 
-            
+            back.Enabled = false;
+            forward.Enabled = false;
 
             // Navigate to the initial page when the form loads
             chromiumWebBrowser1.Load("https://robloxboy1000.neocities.org/");
         }
+
         
-        
-        
+
         private void back_Click(object sender, EventArgs e)
         {
             if (chromiumWebBrowser1.CanGoBack)
-            chromiumWebBrowser1.Back();
+            {
+                chromiumWebBrowser1.Back();
+            }
         }
         private void forward_Click(object sender, EventArgs e)
         {
             if (chromiumWebBrowser1.CanGoForward)
-            chromiumWebBrowser1.Forward();
+            {
+                chromiumWebBrowser1.Forward();
+            }
         }
         private void refresh_Click(object sender, EventArgs e)
         {
@@ -98,6 +111,12 @@ namespace IntNetViewer
 
         private void chromiumWebBrowser1_FrameLoadEnd(object sender, FrameLoadEndEventArgs e)
         {
+            // Update the navigation buttons when the page loads
+            this.Invoke((MethodInvoker)delegate
+            {
+                back.Enabled = chromiumWebBrowser1.CanGoBack;
+                forward.Enabled = chromiumWebBrowser1.CanGoForward;
+            });
             // Check if the loaded frame is the main frame
             if (e.Frame.IsMain)
             {
@@ -109,5 +128,39 @@ namespace IntNetViewer
             }
 
         }
+
+        private void searchEngineComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedSearchEngine = searchEngineComboBox.SelectedItem.ToString();
+
+            // Use the selected search engine to build the search query URL
+            string searchQuery = searchTextBox.Text; // Get the user's search query
+            string searchUrl = GetSearchEngineUrl(selectedSearchEngine, searchQuery);
+
+            // Navigate to the search query URL
+            chromiumWebBrowser1.Load(searchUrl);
+        }
+        private string GetSearchEngineUrl(string searchEngine, string query)
+        {
+            switch (searchEngine)
+            {
+                case "Google":
+                    return "https://www.google.com/search?q=" + Uri.EscapeDataString(query);
+                case "Bing":
+                    return "https://www.bing.com/search?q=" + Uri.EscapeDataString(query);
+                case "DuckDuckGo":
+                    return "https://duckduckgo.com/?q=" + Uri.EscapeDataString(query);
+                case "FrogFind":
+                    return "http://frogfind.com/?q=" + Uri.EscapeDataString(query);
+                case "Yahoo!":
+                    return "https://search.yahoo.com/search?p=" + Uri.EscapeDataString(query);
+                case "Ecosia":
+                    return "https://www.ecosia.org/search?q=" + Uri.EscapeDataString(query);
+                default:
+                    return "https://www.google.com/search?q=" + Uri.EscapeDataString(query);
+            }
+        }
+
+        
     }
 }

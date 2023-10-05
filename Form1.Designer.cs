@@ -38,17 +38,17 @@
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.devsOnlyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
-            this.pictureBoxLoading = new System.Windows.Forms.PictureBox();
             this.button4 = new System.Windows.Forms.Button();
             this.searchTextBox = new System.Windows.Forms.TextBox();
-            this.searchButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.chromiumWebBrowser1 = new CefSharp.WinForms.ChromiumWebBrowser();
+            this.searchEngineComboBox = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoading)).BeginInit();
             this.SuspendLayout();
             // 
             // urlTextBox
@@ -108,7 +108,8 @@
             this.fileToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
             this.toolStripSeparator2,
-            this.exitToolStripMenuItem});
+            this.exitToolStripMenuItem,
+            this.devsOnlyToolStripMenuItem});
             this.fileToolStripMenuItem1.Name = "fileToolStripMenuItem1";
             this.fileToolStripMenuItem1.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem1.Text = "&File";
@@ -117,21 +118,27 @@
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.newToolStripMenuItem.Text = "&New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(138, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // devsOnlyToolStripMenuItem
+            // 
+            this.devsOnlyToolStripMenuItem.Name = "devsOnlyToolStripMenuItem";
+            this.devsOnlyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.devsOnlyToolStripMenuItem.Text = "devs only!";
             // 
             // helpToolStripMenuItem
             // 
@@ -158,17 +165,6 @@
             this.label1.TabIndex = 8;
             this.label1.Text = "Go To:";
             // 
-            // pictureBoxLoading
-            // 
-            this.pictureBoxLoading.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBoxLoading.Location = new System.Drawing.Point(964, 27);
-            this.pictureBoxLoading.Name = "pictureBoxLoading";
-            this.pictureBoxLoading.Size = new System.Drawing.Size(32, 32);
-            this.pictureBoxLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxLoading.TabIndex = 14;
-            this.pictureBoxLoading.TabStop = false;
-            this.pictureBoxLoading.Visible = false;
-            // 
             // button4
             // 
             this.button4.Location = new System.Drawing.Point(178, 31);
@@ -182,28 +178,16 @@
             // searchTextBox
             // 
             this.searchTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchTextBox.Location = new System.Drawing.Point(648, 35);
+            this.searchTextBox.Location = new System.Drawing.Point(763, 35);
             this.searchTextBox.Name = "searchTextBox";
             this.searchTextBox.Size = new System.Drawing.Size(233, 20);
             this.searchTextBox.TabIndex = 17;
-            // 
-            // searchButton
-            // 
-            this.searchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.searchButton.Location = new System.Drawing.Point(887, 31);
-            this.searchButton.Name = "searchButton";
-            this.searchButton.Size = new System.Drawing.Size(71, 26);
-            this.searchButton.TabIndex = 18;
-            this.searchButton.Text = "Search!";
-            this.searchButton.UseVisualStyleBackColor = true;
-            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
             // 
             // label2
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(583, 38);
+            this.label2.Location = new System.Drawing.Point(698, 38);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(59, 13);
             this.label2.TabIndex = 19;
@@ -221,18 +205,37 @@
             this.chromiumWebBrowser1.TabIndex = 20;
             this.chromiumWebBrowser1.FrameLoadEnd += new System.EventHandler<CefSharp.FrameLoadEndEventArgs>(this.chromiumWebBrowser1_FrameLoadEnd);
             // 
+            // searchEngineComboBox
+            // 
+            this.searchEngineComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.searchEngineComboBox.FormattingEnabled = true;
+            this.searchEngineComboBox.Location = new System.Drawing.Point(571, 35);
+            this.searchEngineComboBox.Name = "searchEngineComboBox";
+            this.searchEngineComboBox.Size = new System.Drawing.Size(121, 21);
+            this.searchEngineComboBox.TabIndex = 21;
+            this.searchEngineComboBox.SelectedIndexChanged += new System.EventHandler(this.searchEngineComboBox_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(499, 38);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(66, 13);
+            this.label3.TabIndex = 22;
+            this.label3.Text = "Search with:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightGray;
             this.ClientSize = new System.Drawing.Size(1008, 729);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.searchEngineComboBox);
             this.Controls.Add(this.chromiumWebBrowser1);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.searchButton);
             this.Controls.Add(this.searchTextBox);
             this.Controls.Add(this.button4);
-            this.Controls.Add(this.pictureBoxLoading);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.refresh);
             this.Controls.Add(this.forward);
@@ -247,7 +250,6 @@
             this.Text = "IntNetViewer";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoading)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -260,7 +262,6 @@
         private System.Windows.Forms.Button refresh;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.PictureBox pictureBoxLoading;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
@@ -269,9 +270,11 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.TextBox searchTextBox;
-        private System.Windows.Forms.Button searchButton;
         private System.Windows.Forms.Label label2;
         private CefSharp.WinForms.ChromiumWebBrowser chromiumWebBrowser1;
+        private System.Windows.Forms.ComboBox searchEngineComboBox;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ToolStripMenuItem devsOnlyToolStripMenuItem;
     }
 }
 
