@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.IO;
 using CefSharp;
 using CefSharp.WinForms;
+using System.Diagnostics;
 
 namespace IntNetViewer
 {
@@ -22,10 +23,13 @@ namespace IntNetViewer
             searchEngineComboBox.Items.Add("FrogFind!");
             searchEngineComboBox.Items.Add("Yahoo!");
             searchEngineComboBox.Items.Add("Ecosia");
+
             // Set a default search engine
             searchEngineComboBox.SelectedIndex = 0; // Google
 
+            
 
+          
             // Create and configure the ChromiumWebBrowser control
 
             chromiumWebBrowser1.Dock = DockStyle.None;
@@ -39,7 +43,8 @@ namespace IntNetViewer
             // Navigate to the initial page when the form loads
             chromiumWebBrowser1.Load("https://robloxboy1000.neocities.org/");
         }
-
+        // test comment with
+        // multiple lines
         
 
         private void back_Click(object sender, EventArgs e)
@@ -150,7 +155,7 @@ namespace IntNetViewer
                     return "https://www.bing.com/search?q=" + Uri.EscapeDataString(query);
                 case "DuckDuckGo":
                     return "https://duckduckgo.com/?q=" + Uri.EscapeDataString(query);
-                case "FrogFind":
+                case "FrogFind!":
                     return "http://frogfind.com/?q=" + Uri.EscapeDataString(query);
                 case "Yahoo!":
                     return "https://search.yahoo.com/search?p=" + Uri.EscapeDataString(query);
@@ -161,6 +166,50 @@ namespace IntNetViewer
             }
         }
 
-        
+        private void devsOnlyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Specify the path to the application's executable file
+                string appPath = @"C:\Program Files (x86)\robloxboy1000\IntNetViewer\AudioGroove.exe";
+
+                // Start the application
+                Process.Start(appPath);
+            }
+            catch (Exception ex)
+            {
+                // Handle any potential exceptions
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void chromiumWebBrowser1_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
+        {
+            if (!e.IsLoading)
+            {
+                string url = e.Browser.MainFrame.Url;
+
+                // Check if the URL starts with "https://" to determine if it's secure
+                bool isSecure = url.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
+
+                // Update the label text based on whether the website is secure or not
+                if (isSecure)
+                {
+                    this.Invoke(new Action(() =>
+                    {
+                       labelSecurity.Text = "Secure (https)";
+                    }));
+                    
+                }
+                else
+                {
+                    this.Invoke(new Action(() =>
+                    {
+                        labelSecurity.Text = "Not Secure (http)";
+                    }));
+                    
+                }
+            }
+        }
     }
 }

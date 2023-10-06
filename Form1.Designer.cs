@@ -37,8 +37,8 @@
             this.fileToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.devsOnlyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
@@ -48,6 +48,7 @@
             this.chromiumWebBrowser1 = new CefSharp.WinForms.ChromiumWebBrowser();
             this.searchEngineComboBox = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.labelSecurity = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,7 +57,7 @@
             this.urlTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.urlTextBox.Location = new System.Drawing.Point(64, 65);
+            this.urlTextBox.Location = new System.Drawing.Point(64, 82);
             this.urlTextBox.Name = "urlTextBox";
             this.urlTextBox.Size = new System.Drawing.Size(932, 20);
             this.urlTextBox.TabIndex = 1;
@@ -108,8 +109,8 @@
             this.fileToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
             this.toolStripSeparator2,
-            this.exitToolStripMenuItem,
-            this.devsOnlyToolStripMenuItem});
+            this.devsOnlyToolStripMenuItem,
+            this.exitToolStripMenuItem});
             this.fileToolStripMenuItem1.Name = "fileToolStripMenuItem1";
             this.fileToolStripMenuItem1.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem1.Text = "&File";
@@ -118,27 +119,28 @@
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.newToolStripMenuItem.Text = "&New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.exitToolStripMenuItem.Text = "E&xit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(183, 6);
             // 
             // devsOnlyToolStripMenuItem
             // 
             this.devsOnlyToolStripMenuItem.Name = "devsOnlyToolStripMenuItem";
-            this.devsOnlyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.devsOnlyToolStripMenuItem.Text = "devs only!";
+            this.devsOnlyToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.devsOnlyToolStripMenuItem.Text = "Launch AudioGroove";
+            this.devsOnlyToolStripMenuItem.Click += new System.EventHandler(this.devsOnlyToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.exitToolStripMenuItem.Text = "E&xit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -159,7 +161,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(18, 68);
+            this.label1.Location = new System.Drawing.Point(18, 85);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(40, 13);
             this.label1.TabIndex = 8;
@@ -199,11 +201,12 @@
             this.chromiumWebBrowser1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chromiumWebBrowser1.Location = new System.Drawing.Point(0, 91);
+            this.chromiumWebBrowser1.Location = new System.Drawing.Point(0, 108);
             this.chromiumWebBrowser1.Name = "chromiumWebBrowser1";
-            this.chromiumWebBrowser1.Size = new System.Drawing.Size(1008, 638);
+            this.chromiumWebBrowser1.Size = new System.Drawing.Size(1008, 621);
             this.chromiumWebBrowser1.TabIndex = 20;
             this.chromiumWebBrowser1.FrameLoadEnd += new System.EventHandler<CefSharp.FrameLoadEndEventArgs>(this.chromiumWebBrowser1_FrameLoadEnd);
+            this.chromiumWebBrowser1.LoadingStateChanged += new System.EventHandler<CefSharp.LoadingStateChangedEventArgs>(this.chromiumWebBrowser1_LoadingStateChanged);
             // 
             // searchEngineComboBox
             // 
@@ -217,6 +220,7 @@
             // 
             // label3
             // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(499, 38);
             this.label3.Name = "label3";
@@ -224,12 +228,22 @@
             this.label3.TabIndex = 22;
             this.label3.Text = "Search with:";
             // 
+            // labelSecurity
+            // 
+            this.labelSecurity.AutoSize = true;
+            this.labelSecurity.Location = new System.Drawing.Point(15, 64);
+            this.labelSecurity.Name = "labelSecurity";
+            this.labelSecurity.Size = new System.Drawing.Size(219, 13);
+            this.labelSecurity.TabIndex = 23;
+            this.labelSecurity.Text = "This label shows if a website is secure or not.";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightGray;
             this.ClientSize = new System.Drawing.Size(1008, 729);
+            this.Controls.Add(this.labelSecurity);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.searchEngineComboBox);
             this.Controls.Add(this.chromiumWebBrowser1);
@@ -275,6 +289,7 @@
         private System.Windows.Forms.ComboBox searchEngineComboBox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ToolStripMenuItem devsOnlyToolStripMenuItem;
+        private System.Windows.Forms.Label labelSecurity;
     }
 }
 

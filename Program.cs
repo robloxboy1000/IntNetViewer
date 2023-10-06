@@ -16,8 +16,11 @@ namespace IntNetViewer
         [STAThread]
         static void Main()
         {
-            Cef.Initialize(new CefSettings());
-
+            
+            CefSettings settings = new CefSettings();
+            
+            settings.UserAgentProduct = "Firefox/70.0";
+            Cef.Initialize(settings);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
