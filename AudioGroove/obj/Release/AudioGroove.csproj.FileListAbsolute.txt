@@ -1,0 +1,16 @@
+C:\Users\robloxboy1000\source\repos\robloxboy100058\IntNetViewer-Windows\AudioGroove\bin\Release\AudioGroove.exe.config
+C:\Users\robloxboy1000\source\repos\robloxboy100058\IntNetViewer-Windows\AudioGroove\bin\Release\AudioGroove.exe
+C:\Users\robloxboy1000\source\repos\robloxboy100058\IntNetViewer-Windows\AudioGroove\bin\Release\AudioGroove.pdb
+C:\Users\robloxboy1000\source\repos\robloxboy100058\IntNetViewer-Windows\AudioGroove\bin\Release\Interop.WMPLib.dll
+C:\Users\robloxboy1000\source\repos\robloxboy100058\IntNetViewer-Windows\AudioGroove\bin\Release\AxInterop.WMPLib.dll
+C:\Users\robloxboy1000\source\repos\robloxboy100058\IntNetViewer-Windows\AudioGroove\obj\Release\AudioGroove.csproj.AssemblyReference.cache
+C:\Users\robloxboy1000\source\repos\robloxboy100058\IntNetViewer-Windows\AudioGroove\obj\Release\Interop.WMPLib.dll
+C:\Users\robloxboy1000\source\repos\robloxboy100058\IntNetViewer-Windows\AudioGroove\obj\Release\AxInterop.WMPLib.dll
+C:\Users\robloxboy1000\source\repos\robloxboy100058\IntNetViewer-Windows\AudioGroove\obj\Release\AudioGroove.csproj.ResolveComReference.cache
+C:\Users\robloxboy1000\source\repos\robloxboy100058\IntNetViewer-Windows\AudioGroove\obj\Release\AudioGroove.AboutBox1.resources
+C:\Users\robloxboy1000\source\repos\robloxboy100058\IntNetViewer-Windows\AudioGroove\obj\Release\AudioGroove.Form1.resources
+C:\Users\robloxboy1000\source\repos\robloxboy100058\IntNetViewer-Windows\AudioGroove\obj\Release\AudioGroove.Properties.Resources.resources
+C:\Users\robloxboy1000\source\repos\robloxboy100058\IntNetViewer-Windows\AudioGroove\obj\Release\AudioGroove.csproj.GenerateResource.cache
+C:\Users\robloxboy1000\source\repos\robloxboy100058\IntNetViewer-Windows\AudioGroove\obj\Release\AudioGroove.csproj.CoreCompileInputs.cache
+C:\Users\robloxboy1000\source\repos\robloxboy100058\IntNetViewer-Windows\AudioGroove\obj\Release\AudioGroove.exe
+C:\Users\robloxboy1000\source\repos\robloxboy100058\IntNetViewer-Windows\AudioGroove\obj\Release\AudioGroove.pdb

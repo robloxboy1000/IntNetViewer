@@ -99,12 +99,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9D609F74E7AFA125D548C6A2429F68B3"
-        "OwnerKey" = "8:_16C6CE2E9EB2480A8E9BFBF09195D85C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_B3B2BDFEDF14FFE475D368EA59843CBC"
         "OwnerKey" = "8:_4AC102B15A5F448EBCEFA7C2016E7F0A"
         "MsmSig" = "8:_UNDEFINED"
@@ -185,12 +179,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_DF0FDD2C3FB1FCA033EB83DA777E3141"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_9D609F74E7AFA125D548C6A2429F68B3"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -472,37 +460,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9D609F74E7AFA125D548C6A2429F68B3"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Microsoft.VisualStudio.DebuggerVisualizers, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_9D609F74E7AFA125D548C6A2429F68B3"
-                    {
-                    "Name" = "8:Microsoft.VisualStudio.DebuggerVisualizers.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Microsoft.VisualStudio.DebuggerVisualizers.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_86F24EE9C9AE435BA81E095EB03025A4"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B3B2BDFEDF14FFE475D368EA59843CBC"
             {
             "AssemblyRegister" = "3:1"
@@ -663,15 +620,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:IntNetViewer"
-        "ProductCode" = "8:{2744328A-6619-4CCA-B8F8-F8572538CC10}"
-        "PackageCode" = "8:{0F82FC7D-B77E-4904-B79E-BEEBC9E91A97}"
+        "ProductCode" = "8:{493F4D9B-63AE-4A0E-A57C-35DE1B7CD5EF}"
+        "PackageCode" = "8:{08B1D83B-F729-47A9-813B-8312F9511780}"
         "UpgradeCode" = "8:{D8E256E6-1CF1-441B-9C6F-F8F47479ABA1}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.9"
+        "ProductVersion" = "8:2.0"
         "Manufacturer" = "8:robloxboy1000"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1227,7 +1184,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_16C6CE2E9EB2480A8E9BFBF09195D85C"
             {
-            "SourcePath" = "8:..\\obj\\x86\\Debug\\IntNetViewer.exe"
+            "SourcePath" = "8:..\\obj\\x86\\Release\\IntNetViewer.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_86F24EE9C9AE435BA81E095EB03025A4"
@@ -1255,7 +1212,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_4AC102B15A5F448EBCEFA7C2016E7F0A"
             {
-            "SourcePath" = "8:..\\AudioGroove\\obj\\Debug\\AudioGroove.exe"
+            "SourcePath" = "8:..\\AudioGroove\\obj\\Release\\AudioGroove.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_86F24EE9C9AE435BA81E095EB03025A4"
