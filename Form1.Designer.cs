@@ -49,7 +49,9 @@
             this.searchEngineComboBox = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.labelSecurity = new System.Windows.Forms.Label();
+            this.pictureBoxFavicon = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFavicon)).BeginInit();
             this.SuspendLayout();
             // 
             // urlTextBox
@@ -203,7 +205,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chromiumWebBrowser1.Location = new System.Drawing.Point(0, 108);
             this.chromiumWebBrowser1.Name = "chromiumWebBrowser1";
-            this.chromiumWebBrowser1.Size = new System.Drawing.Size(1008, 621);
+            this.chromiumWebBrowser1.Size = new System.Drawing.Size(1008, 593);
             this.chromiumWebBrowser1.TabIndex = 20;
             this.chromiumWebBrowser1.FrameLoadEnd += new System.EventHandler<CefSharp.FrameLoadEndEventArgs>(this.chromiumWebBrowser1_FrameLoadEnd);
             this.chromiumWebBrowser1.LoadingStateChanged += new System.EventHandler<CefSharp.LoadingStateChangedEventArgs>(this.chromiumWebBrowser1_LoadingStateChanged);
@@ -231,18 +233,28 @@
             // labelSecurity
             // 
             this.labelSecurity.AutoSize = true;
-            this.labelSecurity.Location = new System.Drawing.Point(15, 64);
+            this.labelSecurity.Location = new System.Drawing.Point(42, 66);
             this.labelSecurity.Name = "labelSecurity";
             this.labelSecurity.Size = new System.Drawing.Size(219, 13);
             this.labelSecurity.TabIndex = 23;
             this.labelSecurity.Text = "This label shows if a website is secure or not.";
+            // 
+            // pictureBoxFavicon
+            // 
+            this.pictureBoxFavicon.Location = new System.Drawing.Point(12, 58);
+            this.pictureBoxFavicon.Name = "pictureBoxFavicon";
+            this.pictureBoxFavicon.Size = new System.Drawing.Size(24, 24);
+            this.pictureBoxFavicon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxFavicon.TabIndex = 24;
+            this.pictureBoxFavicon.TabStop = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightGray;
-            this.ClientSize = new System.Drawing.Size(1008, 729);
+            this.ClientSize = new System.Drawing.Size(1008, 701);
+            this.Controls.Add(this.pictureBoxFavicon);
             this.Controls.Add(this.labelSecurity);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.searchEngineComboBox);
@@ -264,6 +276,7 @@
             this.Text = "IntNetViewer";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFavicon)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -290,6 +303,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ToolStripMenuItem devsOnlyToolStripMenuItem;
         private System.Windows.Forms.Label labelSecurity;
+        private System.Windows.Forms.PictureBox pictureBoxFavicon;
     }
 }
 

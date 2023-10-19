@@ -5,7 +5,10 @@ using System.IO;
 using CefSharp;
 using CefSharp.WinForms;
 using System.Diagnostics;
-
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+// Sonic Says: don't be a fool, smoking isnt cool.
 namespace IntNetViewer
 {
     public partial class Form1 : Form
@@ -183,10 +186,45 @@ namespace IntNetViewer
             }
         }
 
-        private void chromiumWebBrowser1_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
+        private async void chromiumWebBrowser1_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
         {
             if (!e.IsLoading)
             {
+                // Execute JavaScript code to get the webpage's title
+                const string script1 = "document.title;";
+                var result = await chromiumWebBrowser1.EvaluateScriptAsync(script1);
+
+                if (result.Success && !string.IsNullOrEmpty(result.Result.ToString()))
+                {
+                    this.Invoke(new Action(() =>
+                    {
+                        // Set the form's title to the webpage's title
+                        this.Text = "IntNetViewer - " + result.Result.ToString();
+                    }));
+                }
+
+                // Execute JavaScript code to get the favicon URL
+                const string script = "document.querySelector(\"link[rel*='icon']\").getAttribute('href');";
+                var faviconUrl = await chromiumWebBrowser1.EvaluateScriptAsync(script);
+
+                if (faviconUrl.Success && !string.IsNullOrEmpty(faviconUrl.Result.ToString()))
+                {
+                    // Convert the favicon URL to an absolute URL
+                    string absoluteFaviconUrl = ConvertToAbsoluteUrl(chromiumWebBrowser1.Address, faviconUrl.Result.ToString());
+
+                    // Load the favicon image from the absolute URL
+                    Image favicon = await LoadFaviconAsync(absoluteFaviconUrl);
+
+                    if (favicon != null)
+                    {
+                        this.Invoke(new Action(() =>
+                        {
+                            pictureBoxFavicon.Image = favicon;
+                        }));
+                        
+                    }
+                }
+
                 string url = e.Browser.MainFrame.Url;
 
                 // Check if the URL starts with "https://" to determine if it's secure
@@ -210,6 +248,41 @@ namespace IntNetViewer
                     
                 }
             }
+        }
+        private string ConvertToAbsoluteUrl(string baseUrl, string relativeUrl)
+        {
+            try
+            {
+                Uri baseUri = new Uri(baseUrl);
+                Uri absoluteUri = new Uri(baseUri, relativeUrl);
+                return absoluteUri.AbsoluteUri;
+            }
+            catch (UriFormatException)
+            {
+                return string.Empty;
+            }
+        }
+        private async Task<Image> LoadFaviconAsync(string url)
+        {
+            try
+            {
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    var response = await httpClient.GetAsync(url);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var stream = await response.Content.ReadAsStreamAsync();
+                        return Image.FromStream(stream);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any errors related to loading the favicon
+                Console.WriteLine("Error loading favicon: " + ex.Message);
+            }
+
+            return null;
         }
     }
 }
