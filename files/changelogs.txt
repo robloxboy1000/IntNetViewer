@@ -1,0 +1,89 @@
+v2.3 - October 25, 2023
+Added loading anaimation
+Added downloading (finally!)
+Added changelogs
+
+v2.2.1 - 
+Development build
+
+v2.2 - 
+finally fixed the installer
+
+v2.1 - 
+some more stuff
+Update: installer is acting weird, full installed version below.
+
+v2.0 - 
+some changes
+
+changed user agent to Firefox so Google login works now
+search bar stuff
+some more idk
+
+v1.9 - 
+design changes
+
+v1.8 - 
+fixed installer
+v2.0 will be coming out soon
+
+v1.7 -  (Huge update)
+this update is so huge, that it can't even fit in the source code.
+Updates:
+replaced normal browser with CEF (required changes to code and design)
+removed progress bar
+removed loading animation
+
+The problem was that the CEF libraries went over the 100 file limit, so the source code will be out of date, until further notice.
+
+v1.6 - 
+design changes
+update: fixed installer again
+
+v1.5 - 
+fixed installer
+
+v1.4 - September 19, 2023
+hidden secret
+
+v1.3 - August 28, 2023 - (fixed update)
+Updated assembly information, and now has an actual installer
+
+v1.2 - August 25, 2023 - (naming update)
+Starting with v1.2, I will be naming these updates from either improv or ChatGPT.
+
+Changes:
+switched menu bar to default items from visual studio
+new loading animation
+saving webpages as html (files not supported yet)
+
+v1.1 - August 1, 2023 (uwu update)
+Totawwy nowt an update whewe i badwy twanswated the intewface intwo uwu!
+
+v1.0.5 - july 27, 2023
+Changed nothing at all.
+
+v1.0.4 - July 24, 2023
+nothing much, just added a feature to print and
+the Netscape loading logo for nostalgia.
+Almost forgot, the page title shows up in the status toolbar now.
+
+v1.0.3 - July 23, 2023
+added secret web page
+fixed progress bar (again)
+added search with FrogFind
+added "Open HTML"
+
+v1.0.2 - July 20, 2023
+Fixed progress bar
+url text box updates after navigation
+
+v1.0.1 - July 20, 2023
+Added about window
+Added progress bar
+
+v1.0.0-fixed - September 2, 2022
+Update: I put in proper assembly information and added icon
+
+v1.0.0 - September 1, 2022
+First release!

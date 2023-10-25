@@ -8,17 +8,19 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-// Sonic Says: don't be a fool, smoking isnt cool.
+
 namespace IntNetViewer
 {
     public partial class Form1 : Form
     {
 
+        private float rotationAngle;
 
 
         public Form1()
         {
             InitializeComponent();
+            InitializeLoadingAnimation();
             // Add search engine options to the ComboBox
             searchEngineComboBox.Items.Add("Google");
             searchEngineComboBox.Items.Add("Bing");
@@ -30,9 +32,13 @@ namespace IntNetViewer
             // Set a default search engine
             searchEngineComboBox.SelectedIndex = 0; // Google
 
+            // Load the loading animation
+            pictureBoxLoading.Image = Properties.Resources.loading; // Replace with your actual loading image
+
+            
+            chromiumWebBrowser1.DownloadHandler = new CustomDownloadHandler(progressBarDownload); // Set a custom download handler
             
 
-          
             // Create and configure the ChromiumWebBrowser control
 
             chromiumWebBrowser1.Dock = DockStyle.None;
@@ -46,10 +52,91 @@ namespace IntNetViewer
             // Navigate to the initial page when the form loads
             chromiumWebBrowser1.Load("https://robloxboy1000.neocities.org/");
         }
-        // test comment with
-        // multiple lines
-        
 
+        public class CustomDownloadHandler : IDownloadHandler
+        {
+            private ProgressBar progressBar;
+
+
+            public CustomDownloadHandler(ProgressBar progressBar)
+            {
+                this.progressBar = progressBar;
+            }
+            public bool CanDownload(IWebBrowser chromiumWebBrowser, IBrowser browser, string url, string requestMethod)
+            {
+                return true;
+            }
+
+            public void OnBeforeDownload(IWebBrowser chromiumWebBrowser, IBrowser browser, DownloadItem downloadItem, IBeforeDownloadCallback callback)
+            {
+                // Create a SaveFileDialog to let the user choose the download location
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.FileName = downloadItem.SuggestedFileName;
+                DialogResult result = saveFileDialog.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    // Set the download file path to the selected file
+                    downloadItem.SuggestedFileName = saveFileDialog.FileName;
+                    callback.Continue(downloadItem.SuggestedFileName, showDialog: false);
+                }
+                else
+                {
+                    // User canceled the download
+                    callback.Dispose();
+                }
+            }
+
+            public void OnDownloadUpdated(IWebBrowser chromiumWebBrowser, IBrowser browser, DownloadItem downloadItem, IDownloadItemCallback callback)
+            {
+                if (downloadItem.IsComplete)
+                {
+                    // The download is complete, hide or reset the progress bar
+                    progressBar.Invoke((MethodInvoker)delegate
+                    {
+                        progressBar.Visible = false;
+
+                    });
+                }
+                else if (downloadItem.IsInProgress)
+                {
+                    // Calculate the download progress and update the progress bar
+                    int progress = (int)(downloadItem.ReceivedBytes / (float)downloadItem.TotalBytes * 100);
+                    progressBar.Invoke((MethodInvoker)delegate
+                    {
+                        progressBar.Value = progress;
+                        progressBar.Visible = true;
+                    });
+                }
+            }
+        }
+
+        private void InitializeLoadingAnimation()
+        {
+            loadingTimer = new Timer();
+            loadingTimer.Interval = 50; // Adjust the interval as needed for animation speed
+            loadingTimer.Tick += LoadingTimer_Tick;
+            loadingTimer.Start();
+        }
+
+        private void LoadingTimer_Tick(object sender, EventArgs e)
+        {
+            rotationAngle += 10; // Adjust the rotation speed as needed
+            pictureBoxLoading.Image = RotateImage(Properties.Resources.loading, rotationAngle);
+        }
+
+        private Image RotateImage(Image image, float angle)
+        {
+            Bitmap rotatedImage = new Bitmap(image.Width, image.Height);
+            using (Graphics g = Graphics.FromImage(rotatedImage))
+            {
+                g.TranslateTransform(image.Width / 2, image.Height / 2);
+                g.RotateTransform(angle);
+                g.TranslateTransform(-image.Width / 2, -image.Height / 2);
+                g.DrawImage(image, Point.Empty);
+            }
+            return rotatedImage;
+        }
         private void back_Click(object sender, EventArgs e)
         {
             if (chromiumWebBrowser1.CanGoBack)
@@ -57,6 +144,7 @@ namespace IntNetViewer
                 chromiumWebBrowser1.Back();
             }
         }
+
         private void forward_Click(object sender, EventArgs e)
         {
             if (chromiumWebBrowser1.CanGoForward)
@@ -190,6 +278,11 @@ namespace IntNetViewer
         {
             if (!e.IsLoading)
             {
+                this.Invoke(new Action(() =>
+                {
+                    // The ChromiumWebBrowser is loading a page, show the loading animation
+                    pictureBoxLoading.Visible = false;
+                }));
                 // Execute JavaScript code to get the webpage's title
                 const string script1 = "document.title;";
                 var result = await chromiumWebBrowser1.EvaluateScriptAsync(script1);
@@ -247,6 +340,14 @@ namespace IntNetViewer
                     }));
                     
                 }
+            }
+            else
+            {
+                this.Invoke(new Action(() =>
+                {
+                    // The page has finished loading, hide the loading animation
+                    pictureBoxLoading.Visible = true;
+                }));
             }
         }
         private string ConvertToAbsoluteUrl(string baseUrl, string relativeUrl)

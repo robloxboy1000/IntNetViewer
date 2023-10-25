@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.urlTextBox = new System.Windows.Forms.TextBox();
             this.back = new System.Windows.Forms.Button();
@@ -50,8 +51,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.labelSecurity = new System.Windows.Forms.Label();
             this.pictureBoxFavicon = new System.Windows.Forms.PictureBox();
+            this.pictureBoxLoading = new System.Windows.Forms.PictureBox();
+            this.loadingTimer = new System.Windows.Forms.Timer(this.components);
+            this.progressBarDownload = new System.Windows.Forms.ProgressBar();
+            this.label4 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFavicon)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoading)).BeginInit();
             this.SuspendLayout();
             // 
             // urlTextBox
@@ -235,9 +241,9 @@
             this.labelSecurity.AutoSize = true;
             this.labelSecurity.Location = new System.Drawing.Point(42, 66);
             this.labelSecurity.Name = "labelSecurity";
-            this.labelSecurity.Size = new System.Drawing.Size(219, 13);
+            this.labelSecurity.Size = new System.Drawing.Size(51, 13);
             this.labelSecurity.TabIndex = 23;
-            this.labelSecurity.Text = "This label shows if a website is secure or not.";
+            this.labelSecurity.Text = "unloaded";
             // 
             // pictureBoxFavicon
             // 
@@ -248,12 +254,47 @@
             this.pictureBoxFavicon.TabIndex = 24;
             this.pictureBoxFavicon.TabStop = false;
             // 
+            // pictureBoxLoading
+            // 
+            this.pictureBoxLoading.Location = new System.Drawing.Point(341, 31);
+            this.pictureBoxLoading.Name = "pictureBoxLoading";
+            this.pictureBoxLoading.Size = new System.Drawing.Size(26, 26);
+            this.pictureBoxLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxLoading.TabIndex = 25;
+            this.pictureBoxLoading.TabStop = false;
+            // 
+            // loadingTimer
+            // 
+            this.loadingTimer.Enabled = true;
+            // 
+            // progressBarDownload
+            // 
+            this.progressBarDownload.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBarDownload.Location = new System.Drawing.Point(137, 58);
+            this.progressBarDownload.Name = "progressBarDownload";
+            this.progressBarDownload.Size = new System.Drawing.Size(859, 23);
+            this.progressBarDownload.TabIndex = 26;
+            this.progressBarDownload.Visible = false;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(373, 42);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(115, 13);
+            this.label4.TabIndex = 27;
+            this.label4.Text = "Downloading progress:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightGray;
             this.ClientSize = new System.Drawing.Size(1008, 701);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.progressBarDownload);
+            this.Controls.Add(this.pictureBoxLoading);
             this.Controls.Add(this.pictureBoxFavicon);
             this.Controls.Add(this.labelSecurity);
             this.Controls.Add(this.label3);
@@ -271,12 +312,13 @@
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.MinimumSize = new System.Drawing.Size(855, 600);
+            this.MinimumSize = new System.Drawing.Size(1024, 740);
             this.Name = "Form1";
             this.Text = "IntNetViewer";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFavicon)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoading)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -304,6 +346,10 @@
         private System.Windows.Forms.ToolStripMenuItem devsOnlyToolStripMenuItem;
         private System.Windows.Forms.Label labelSecurity;
         private System.Windows.Forms.PictureBox pictureBoxFavicon;
+        private System.Windows.Forms.PictureBox pictureBoxLoading;
+        private System.Windows.Forms.Timer loadingTimer;
+        private System.Windows.Forms.ProgressBar progressBarDownload;
+        private System.Windows.Forms.Label label4;
     }
 }
 

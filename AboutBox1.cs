@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace IntNetViewer
 {
@@ -21,7 +22,7 @@ namespace IntNetViewer
             this.labelCompanyName.Text = AssemblyCompany;
             this.textBoxDescription.Text = AssemblyDescription;
         }
-
+      
         #region Assembly Attribute Accessors
 
         public string AssemblyTitle
@@ -101,5 +102,25 @@ namespace IntNetViewer
             }
         }
         #endregion
+
+        private void AboutBox1_Load(object sender, EventArgs e)
+        {
+            // Specify the path to your changelogs text file
+            string changelogsFilePath = @"C:\Program Files\robloxboy1000\IntNetViewer\changelogs.txt";
+
+            try
+            {
+                // Read the text file
+                string changelogs = File.ReadAllText(changelogsFilePath);
+
+                // Set the content of the RichTextBox to display the changelogs
+                richTextBoxChangelogs.Text = changelogs;
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions, such as file not found
+                MessageBox.Show("Error reading changelogs: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
