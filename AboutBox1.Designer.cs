@@ -35,8 +35,9 @@ namespace IntNetViewer
             this.labelCopyright = new System.Windows.Forms.Label();
             this.labelCompanyName = new System.Windows.Forms.Label();
             this.textBoxDescription = new System.Windows.Forms.TextBox();
-            this.richTextBoxChangelogs = new System.Windows.Forms.RichTextBox();
             this.okButton = new System.Windows.Forms.Button();
+            this.richTextBoxChangelogs = new System.Windows.Forms.RichTextBox();
+            this.labelOperatingSystem = new System.Windows.Forms.Label();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
             this.SuspendLayout();
@@ -52,19 +53,21 @@ namespace IntNetViewer
             this.tableLayoutPanel.Controls.Add(this.labelCopyright, 1, 2);
             this.tableLayoutPanel.Controls.Add(this.labelCompanyName, 1, 3);
             this.tableLayoutPanel.Controls.Add(this.textBoxDescription, 1, 4);
-            this.tableLayoutPanel.Controls.Add(this.okButton, 1, 6);
             this.tableLayoutPanel.Controls.Add(this.richTextBoxChangelogs, 1, 5);
+            this.tableLayoutPanel.Controls.Add(this.okButton, 1, 7);
+            this.tableLayoutPanel.Controls.Add(this.labelOperatingSystem, 1, 6);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(9, 9);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
-            this.tableLayoutPanel.RowCount = 7;
+            this.tableLayoutPanel.RowCount = 8;
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.91489F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 48.93617F));
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             this.tableLayoutPanel.Size = new System.Drawing.Size(417, 265);
             this.tableLayoutPanel.TabIndex = 0;
             // 
@@ -75,7 +78,7 @@ namespace IntNetViewer
             this.logoPictureBox.Location = new System.Drawing.Point(3, 3);
             this.logoPictureBox.Name = "logoPictureBox";
             this.tableLayoutPanel.SetRowSpan(this.logoPictureBox, 6);
-            this.logoPictureBox.Size = new System.Drawing.Size(131, 229);
+            this.logoPictureBox.Size = new System.Drawing.Size(131, 198);
             this.logoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.logoPictureBox.TabIndex = 12;
             this.logoPictureBox.TabStop = false;
@@ -95,7 +98,7 @@ namespace IntNetViewer
             // labelVersion
             // 
             this.labelVersion.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelVersion.Location = new System.Drawing.Point(143, 23);
+            this.labelVersion.Location = new System.Drawing.Point(143, 20);
             this.labelVersion.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelVersion.MaximumSize = new System.Drawing.Size(0, 17);
             this.labelVersion.Name = "labelVersion";
@@ -107,7 +110,7 @@ namespace IntNetViewer
             // labelCopyright
             // 
             this.labelCopyright.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelCopyright.Location = new System.Drawing.Point(143, 46);
+            this.labelCopyright.Location = new System.Drawing.Point(143, 40);
             this.labelCopyright.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelCopyright.MaximumSize = new System.Drawing.Size(0, 17);
             this.labelCopyright.Name = "labelCopyright";
@@ -119,7 +122,7 @@ namespace IntNetViewer
             // labelCompanyName
             // 
             this.labelCompanyName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelCompanyName.Location = new System.Drawing.Point(143, 69);
+            this.labelCompanyName.Location = new System.Drawing.Point(143, 60);
             this.labelCompanyName.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelCompanyName.MaximumSize = new System.Drawing.Size(0, 17);
             this.labelCompanyName.Name = "labelCompanyName";
@@ -131,24 +134,16 @@ namespace IntNetViewer
             // textBoxDescription
             // 
             this.textBoxDescription.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxDescription.Location = new System.Drawing.Point(143, 95);
+            this.textBoxDescription.Location = new System.Drawing.Point(143, 83);
             this.textBoxDescription.Margin = new System.Windows.Forms.Padding(6, 3, 3, 3);
             this.textBoxDescription.Multiline = true;
             this.textBoxDescription.Name = "textBoxDescription";
             this.textBoxDescription.ReadOnly = true;
             this.textBoxDescription.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxDescription.Size = new System.Drawing.Size(271, 22);
+            this.textBoxDescription.Size = new System.Drawing.Size(271, 18);
             this.textBoxDescription.TabIndex = 23;
             this.textBoxDescription.TabStop = false;
             this.textBoxDescription.Text = "Description";
-            // 
-            // richTextBoxChangelogs
-            // 
-            this.richTextBoxChangelogs.Location = new System.Drawing.Point(140, 123);
-            this.richTextBoxChangelogs.Name = "richTextBoxChangelogs";
-            this.richTextBoxChangelogs.Size = new System.Drawing.Size(274, 109);
-            this.richTextBoxChangelogs.TabIndex = 25;
-            this.richTextBoxChangelogs.Text = "";
             // 
             // okButton
             // 
@@ -159,6 +154,23 @@ namespace IntNetViewer
             this.okButton.Size = new System.Drawing.Size(75, 24);
             this.okButton.TabIndex = 24;
             this.okButton.Text = "&OK";
+            // 
+            // richTextBoxChangelogs
+            // 
+            this.richTextBoxChangelogs.Location = new System.Drawing.Point(140, 107);
+            this.richTextBoxChangelogs.Name = "richTextBoxChangelogs";
+            this.richTextBoxChangelogs.Size = new System.Drawing.Size(274, 94);
+            this.richTextBoxChangelogs.TabIndex = 25;
+            this.richTextBoxChangelogs.Text = "";
+            // 
+            // labelOperatingSystem
+            // 
+            this.labelOperatingSystem.AutoSize = true;
+            this.labelOperatingSystem.Location = new System.Drawing.Point(140, 204);
+            this.labelOperatingSystem.Name = "labelOperatingSystem";
+            this.labelOperatingSystem.Size = new System.Drawing.Size(27, 13);
+            this.labelOperatingSystem.TabIndex = 26;
+            this.labelOperatingSystem.Text = "plug";
             // 
             // AboutBox1
             // 
@@ -195,5 +207,6 @@ namespace IntNetViewer
         private System.Windows.Forms.TextBox textBoxDescription;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.RichTextBox richTextBoxChangelogs;
+        private System.Windows.Forms.Label labelOperatingSystem;
     }
 }

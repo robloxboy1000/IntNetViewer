@@ -50,7 +50,7 @@ namespace IntNetViewer
             forward.Enabled = false;
 
             // Navigate to the initial page when the form loads
-            chromiumWebBrowser1.Load("https://robloxboy1000.neocities.org/");
+            chromiumWebBrowser1.Load("https://robloxboy1000.neocities.org/intnetviewer/landing/");
         }
 
         public class CustomDownloadHandler : IDownloadHandler
@@ -62,6 +62,7 @@ namespace IntNetViewer
             {
                 this.progressBar = progressBar;
             }
+
             public bool CanDownload(IWebBrowser chromiumWebBrowser, IBrowser browser, string url, string requestMethod)
             {
                 return true;
@@ -95,8 +96,8 @@ namespace IntNetViewer
                     progressBar.Invoke((MethodInvoker)delegate
                     {
                         progressBar.Visible = false;
-
                     });
+
                 }
                 else if (downloadItem.IsInProgress)
                 {
@@ -106,10 +107,14 @@ namespace IntNetViewer
                     {
                         progressBar.Value = progress;
                         progressBar.Visible = true;
+
                     });
+
                 }
             }
+
         }
+
 
         private void InitializeLoadingAnimation()
         {
@@ -160,7 +165,7 @@ namespace IntNetViewer
         // Home
         private void button4_Click(object sender, EventArgs e)
         {
-           chromiumWebBrowser1.Load("https://robloxboy1000.neocities.org");
+           chromiumWebBrowser1.Load("https://google.com");
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -180,21 +185,7 @@ namespace IntNetViewer
             newBrowser.Show();
         }
 
-        private void searchButton_Click(object sender, EventArgs e)
-        {
-            string searchTerm = searchTextBox.Text;
-
-            // Check if the search term is not empty
-            if (!string.IsNullOrEmpty(searchTerm))
-            {
- 
-                // Construct the search URL (e.g., using a search engine like Google)
-                string searchUrl = "https://google.com/search?q=" + Uri.EscapeDataString(searchTerm);
-
-                // Load the search URL in the web browser control
-                chromiumWebBrowser1.Load(searchUrl);
-            }
-        }
+        
 
         private void textbox_KeyDown(object sender, KeyEventArgs e)
         {
@@ -225,16 +216,18 @@ namespace IntNetViewer
 
         }
 
-        private void searchEngineComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        
+        private void searchTextBox_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Enter)
+            {
             string selectedSearchEngine = searchEngineComboBox.SelectedItem.ToString();
-
             // Use the selected search engine to build the search query URL
             string searchQuery = searchTextBox.Text; // Get the user's search query
             string searchUrl = GetSearchEngineUrl(selectedSearchEngine, searchQuery);
-
-            // Navigate to the search query URL
             chromiumWebBrowser1.Load(searchUrl);
+            }
+
         }
         private string GetSearchEngineUrl(string searchEngine, string query)
         {
@@ -385,5 +378,7 @@ namespace IntNetViewer
 
             return null;
         }
+
+        
     }
 }

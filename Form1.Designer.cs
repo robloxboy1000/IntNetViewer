@@ -54,7 +54,6 @@
             this.pictureBoxLoading = new System.Windows.Forms.PictureBox();
             this.loadingTimer = new System.Windows.Forms.Timer(this.components);
             this.progressBarDownload = new System.Windows.Forms.ProgressBar();
-            this.label4 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFavicon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoading)).BeginInit();
@@ -192,6 +191,7 @@
             this.searchTextBox.Name = "searchTextBox";
             this.searchTextBox.Size = new System.Drawing.Size(233, 20);
             this.searchTextBox.TabIndex = 17;
+            this.searchTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchTextBox_KeyDown);
             // 
             // label2
             // 
@@ -224,7 +224,6 @@
             this.searchEngineComboBox.Name = "searchEngineComboBox";
             this.searchEngineComboBox.Size = new System.Drawing.Size(121, 21);
             this.searchEngineComboBox.TabIndex = 21;
-            this.searchEngineComboBox.SelectedIndexChanged += new System.EventHandler(this.searchEngineComboBox_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -271,20 +270,11 @@
             // 
             this.progressBarDownload.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBarDownload.Location = new System.Drawing.Point(137, 58);
+            this.progressBarDownload.Location = new System.Drawing.Point(113, 58);
             this.progressBarDownload.Name = "progressBarDownload";
-            this.progressBarDownload.Size = new System.Drawing.Size(859, 23);
+            this.progressBarDownload.Size = new System.Drawing.Size(883, 23);
             this.progressBarDownload.TabIndex = 26;
             this.progressBarDownload.Visible = false;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(373, 42);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(115, 13);
-            this.label4.TabIndex = 27;
-            this.label4.Text = "Downloading progress:";
             // 
             // Form1
             // 
@@ -292,7 +282,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightGray;
             this.ClientSize = new System.Drawing.Size(1008, 701);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.progressBarDownload);
             this.Controls.Add(this.pictureBoxLoading);
             this.Controls.Add(this.pictureBoxFavicon);
@@ -349,7 +338,6 @@
         private System.Windows.Forms.PictureBox pictureBoxLoading;
         private System.Windows.Forms.Timer loadingTimer;
         private System.Windows.Forms.ProgressBar progressBarDownload;
-        private System.Windows.Forms.Label label4;
     }
 }
 
