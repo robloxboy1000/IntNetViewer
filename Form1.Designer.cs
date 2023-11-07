@@ -38,6 +38,7 @@
             this.fileToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.launchIntNetViewerWithTabbedViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.devsOnlyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,6 +55,7 @@
             this.pictureBoxLoading = new System.Windows.Forms.PictureBox();
             this.loadingTimer = new System.Windows.Forms.Timer(this.components);
             this.progressBarDownload = new System.Windows.Forms.ProgressBar();
+            this.label4 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFavicon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoading)).BeginInit();
@@ -116,6 +118,7 @@
             this.fileToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
             this.toolStripSeparator2,
+            this.launchIntNetViewerWithTabbedViewToolStripMenuItem,
             this.devsOnlyToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem1.Name = "fileToolStripMenuItem1";
@@ -126,26 +129,33 @@
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.newToolStripMenuItem.Text = "&New";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
+            this.newToolStripMenuItem.Text = "&New Window";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(183, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(276, 6);
+            // 
+            // launchIntNetViewerWithTabbedViewToolStripMenuItem
+            // 
+            this.launchIntNetViewerWithTabbedViewToolStripMenuItem.Name = "launchIntNetViewerWithTabbedViewToolStripMenuItem";
+            this.launchIntNetViewerWithTabbedViewToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
+            this.launchIntNetViewerWithTabbedViewToolStripMenuItem.Text = "Launch IntNetViewer with Tabbed View";
+            this.launchIntNetViewerWithTabbedViewToolStripMenuItem.Click += new System.EventHandler(this.launchIntNetViewerWithTabbedViewToolStripMenuItem_Click);
             // 
             // devsOnlyToolStripMenuItem
             // 
             this.devsOnlyToolStripMenuItem.Name = "devsOnlyToolStripMenuItem";
-            this.devsOnlyToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.devsOnlyToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
             this.devsOnlyToolStripMenuItem.Text = "Launch AudioGroove";
             this.devsOnlyToolStripMenuItem.Click += new System.EventHandler(this.devsOnlyToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -270,11 +280,21 @@
             // 
             this.progressBarDownload.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBarDownload.Location = new System.Drawing.Point(113, 58);
+            this.progressBarDownload.Location = new System.Drawing.Point(157, 71);
             this.progressBarDownload.Name = "progressBarDownload";
-            this.progressBarDownload.Size = new System.Drawing.Size(883, 23);
+            this.progressBarDownload.Size = new System.Drawing.Size(839, 10);
             this.progressBarDownload.TabIndex = 26;
             this.progressBarDownload.Visible = false;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 5.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(155, 60);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(78, 7);
+            this.label4.TabIndex = 27;
+            this.label4.Text = "Downloading progress:";
             // 
             // Form1
             // 
@@ -282,6 +302,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightGray;
             this.ClientSize = new System.Drawing.Size(1008, 701);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.progressBarDownload);
             this.Controls.Add(this.pictureBoxLoading);
             this.Controls.Add(this.pictureBoxFavicon);
@@ -338,6 +359,8 @@
         private System.Windows.Forms.PictureBox pictureBoxLoading;
         private System.Windows.Forms.Timer loadingTimer;
         private System.Windows.Forms.ProgressBar progressBarDownload;
+        private System.Windows.Forms.ToolStripMenuItem launchIntNetViewerWithTabbedViewToolStripMenuItem;
+        private System.Windows.Forms.Label label4;
     }
 }
 

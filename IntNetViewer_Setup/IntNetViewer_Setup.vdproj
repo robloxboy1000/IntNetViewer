@@ -33,6 +33,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_8DB911642C4D4B03821870957D7598B9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_A1369CC2247DCBAF78BA07C9539E51AB"
         "OwnerKey" = "8:_AD1A94CB98EF475EB5EFA335F36AECFF"
         "MsmSig" = "8:_UNDEFINED"
@@ -352,6 +358,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8DB911642C4D4B03821870957D7598B9"
+            {
+            "SourcePath" = "8:..\\files\\changelogs.txt"
+            "TargetName" = "8:changelogs.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_86F24EE9C9AE435BA81E095EB03025A4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A1369CC2247DCBAF78BA07C9539E51AB"
             {
             "AssemblyRegister" = "3:1"
@@ -605,15 +631,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:IntNetViewer"
-        "ProductCode" = "8:{2781CA6A-0016-43A5-943C-FC0938BCEA5C}"
-        "PackageCode" = "8:{747BC6AC-FF51-4933-B50E-52796D7DF0D7}"
+        "ProductCode" = "8:{2466CFF1-1FAD-466A-8447-18552E776C26}"
+        "PackageCode" = "8:{1599C95A-DE2B-4331-AFF5-CAB9426DFEE8}"
         "UpgradeCode" = "8:{D8E256E6-1CF1-441B-9C6F-F8F47479ABA1}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.2"
+        "ProductVersion" = "8:2.5"
         "Manufacturer" = "8:robloxboy1000"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

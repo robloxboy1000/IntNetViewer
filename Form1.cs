@@ -13,10 +13,8 @@ namespace IntNetViewer
 {
     public partial class Form1 : Form
     {
-
         private float rotationAngle;
-
-
+        
         public Form1()
         {
             InitializeComponent();
@@ -28,46 +26,38 @@ namespace IntNetViewer
             searchEngineComboBox.Items.Add("FrogFind!");
             searchEngineComboBox.Items.Add("Yahoo!");
             searchEngineComboBox.Items.Add("Ecosia");
-
             // Set a default search engine
             searchEngineComboBox.SelectedIndex = 0; // Google
-
             // Load the loading animation
             pictureBoxLoading.Image = Properties.Resources.loading; // Replace with your actual loading image
-
-            
             chromiumWebBrowser1.DownloadHandler = new CustomDownloadHandler(progressBarDownload); // Set a custom download handler
-            
-
             // Create and configure the ChromiumWebBrowser control
-
             chromiumWebBrowser1.Dock = DockStyle.None;
-
             // Add the ChromiumWebBrowser control to the form
             Controls.Add(chromiumWebBrowser1);
-
             back.Enabled = false;
             forward.Enabled = false;
-
+            
             // Navigate to the initial page when the form loads
             chromiumWebBrowser1.Load("https://robloxboy1000.neocities.org/intnetviewer/landing/");
         }
+        
 
+        
+
+        // #mark - Downloading code Start
         public class CustomDownloadHandler : IDownloadHandler
         {
             private ProgressBar progressBar;
-
 
             public CustomDownloadHandler(ProgressBar progressBar)
             {
                 this.progressBar = progressBar;
             }
-
             public bool CanDownload(IWebBrowser chromiumWebBrowser, IBrowser browser, string url, string requestMethod)
             {
                 return true;
             }
-
             public void OnBeforeDownload(IWebBrowser chromiumWebBrowser, IBrowser browser, DownloadItem downloadItem, IBeforeDownloadCallback callback)
             {
                 // Create a SaveFileDialog to let the user choose the download location
@@ -87,7 +77,6 @@ namespace IntNetViewer
                     callback.Dispose();
                 }
             }
-
             public void OnDownloadUpdated(IWebBrowser chromiumWebBrowser, IBrowser browser, DownloadItem downloadItem, IDownloadItemCallback callback)
             {
                 if (downloadItem.IsComplete)
@@ -97,7 +86,6 @@ namespace IntNetViewer
                     {
                         progressBar.Visible = false;
                     });
-
                 }
                 else if (downloadItem.IsInProgress)
                 {
@@ -107,15 +95,12 @@ namespace IntNetViewer
                     {
                         progressBar.Value = progress;
                         progressBar.Visible = true;
-
                     });
-
                 }
             }
-
         }
-
-
+        // #mark - Downloading code End
+        // #mark - Loading Animation code Start
         private void InitializeLoadingAnimation()
         {
             loadingTimer = new Timer();
@@ -123,13 +108,11 @@ namespace IntNetViewer
             loadingTimer.Tick += LoadingTimer_Tick;
             loadingTimer.Start();
         }
-
         private void LoadingTimer_Tick(object sender, EventArgs e)
         {
             rotationAngle += 10; // Adjust the rotation speed as needed
             pictureBoxLoading.Image = RotateImage(Properties.Resources.loading, rotationAngle);
         }
-
         private Image RotateImage(Image image, float angle)
         {
             Bitmap rotatedImage = new Bitmap(image.Width, image.Height);
@@ -142,6 +125,8 @@ namespace IntNetViewer
             }
             return rotatedImage;
         }
+        // #mark - Loading Animation code End
+        // #mark - Control code Start
         private void back_Click(object sender, EventArgs e)
         {
             if (chromiumWebBrowser1.CanGoBack)
@@ -149,7 +134,6 @@ namespace IntNetViewer
                 chromiumWebBrowser1.Back();
             }
         }
-
         private void forward_Click(object sender, EventArgs e)
         {
             if (chromiumWebBrowser1.CanGoForward)
@@ -161,32 +145,25 @@ namespace IntNetViewer
         {
             chromiumWebBrowser1.Reload();
         }
-        
         // Home
         private void button4_Click(object sender, EventArgs e)
         {
            chromiumWebBrowser1.Load("https://google.com");
         }
-
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
-
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AboutBox1 aboutForm = new AboutBox1();
             aboutForm.ShowDialog();
         }
-        
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form1 newBrowser = new Form1();
             newBrowser.Show();
         }
-
-        
-
         private void textbox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -195,7 +172,7 @@ namespace IntNetViewer
                 chromiumWebBrowser1.Load(url);
             }
         }
-
+        // #mark - Control code End
         private void chromiumWebBrowser1_FrameLoadEnd(object sender, FrameLoadEndEventArgs e)
         {
             // Update the navigation buttons when the page loads
@@ -213,10 +190,7 @@ namespace IntNetViewer
                     urlTextBox.Text = e.Url;
                 });
             }
-
         }
-
-        
         private void searchTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -227,7 +201,6 @@ namespace IntNetViewer
             string searchUrl = GetSearchEngineUrl(selectedSearchEngine, searchQuery);
             chromiumWebBrowser1.Load(searchUrl);
             }
-
         }
         private string GetSearchEngineUrl(string searchEngine, string query)
         {
@@ -249,14 +222,12 @@ namespace IntNetViewer
                     return "https://www.google.com/search?q=" + Uri.EscapeDataString(query);
             }
         }
-
         private void devsOnlyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
                 // Specify the path to the application's executable file
                 string appPath = @"C:\Program Files (x86)\robloxboy1000\IntNetViewer\AudioGroove.exe";
-
                 // Start the application
                 Process.Start(appPath);
             }
@@ -266,81 +237,92 @@ namespace IntNetViewer
                 MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        
         private async void chromiumWebBrowser1_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
         {
+           
             if (!e.IsLoading)
             {
-                this.Invoke(new Action(() =>
+                
+                Invoke(new Action(() =>
                 {
-                    // The ChromiumWebBrowser is loading a page, show the loading animation
+                    // The page has finished loading, hide the loading animation
                     pictureBoxLoading.Visible = false;
                 }));
+
+
+                try
+                {
                 // Execute JavaScript code to get the webpage's title
                 const string script1 = "document.title;";
                 var result = await chromiumWebBrowser1.EvaluateScriptAsync(script1);
-
                 if (result.Success && !string.IsNullOrEmpty(result.Result.ToString()))
                 {
-                    this.Invoke(new Action(() =>
+                    Invoke(new Action(() =>
                     {
                         // Set the form's title to the webpage's title
-                        this.Text = "IntNetViewer - " + result.Result.ToString();
+                        Text = "IntNetViewer - " + result.Result.ToString();
                     }));
                 }
-
-                // Execute JavaScript code to get the favicon URL
-                const string script = "document.querySelector(\"link[rel*='icon']\").getAttribute('href');";
-                var faviconUrl = await chromiumWebBrowser1.EvaluateScriptAsync(script);
-
-                if (faviconUrl.Success && !string.IsNullOrEmpty(faviconUrl.Result.ToString()))
+                }
+                catch (Exception)
                 {
-                    // Convert the favicon URL to an absolute URL
-                    string absoluteFaviconUrl = ConvertToAbsoluteUrl(chromiumWebBrowser1.Address, faviconUrl.Result.ToString());
+                    Console.WriteLine("Error - maybe try !ing the IsLoading code?");
+                }
 
-                    // Load the favicon image from the absolute URL
-                    Image favicon = await LoadFaviconAsync(absoluteFaviconUrl);
-
-                    if (favicon != null)
+                try
+                {
+                    // Execute JavaScript code to get the favicon URL
+                    const string script = "document.querySelector(\"link[rel*='icon']\").getAttribute('href');";
+                    var faviconUrl = await chromiumWebBrowser1.EvaluateScriptAsync(script);
+                    if (faviconUrl.Success && !string.IsNullOrEmpty(faviconUrl.Result.ToString()))
                     {
-                        this.Invoke(new Action(() =>
+                        // Convert the favicon URL to an absolute URL
+                        string absoluteFaviconUrl = ConvertToAbsoluteUrl(chromiumWebBrowser1.Address, faviconUrl.Result.ToString());
+                        // Load the favicon image from the absolute URL
+                        Image favicon = await LoadFaviconAsync(absoluteFaviconUrl);
+                        if (favicon != null)
                         {
-                            pictureBoxFavicon.Image = favicon;
-                        }));
-                        
+                            Invoke(new Action(() =>
+                            {
+                                pictureBoxFavicon.Image = favicon;
+                            }));
+                        }
                     }
                 }
-
-                string url = e.Browser.MainFrame.Url;
-
-                // Check if the URL starts with "https://" to determine if it's secure
-                bool isSecure = url.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
-
-                // Update the label text based on whether the website is secure or not
-                if (isSecure)
+                catch (Exception)
                 {
-                    this.Invoke(new Action(() =>
-                    {
-                       labelSecurity.Text = "Secure (https)";
-                    }));
-                    
+                    Console.WriteLine("Error - maybe try !ing the IsLoading code?");
                 }
-                else
-                {
-                    this.Invoke(new Action(() =>
-                    {
-                        labelSecurity.Text = "Not Secure (http)";
-                    }));
-                    
-                }
+                
             }
             else
             {
-                this.Invoke(new Action(() =>
+                string url = e.Browser.MainFrame.Url;
+                // Check if the URL starts with "https://" to determine if it's secure
+                bool isSecure = url.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
+                // Update the label text based on whether the website is secure or not
+                if (isSecure)
                 {
-                    // The page has finished loading, hide the loading animation
+                    Invoke(new Action(() =>
+                    {
+                        labelSecurity.Text = "Secure (https)";
+                    }));
+                }
+                else
+                {
+                    Invoke(new Action(() =>
+                    {
+                        labelSecurity.Text = "Not Secure (http)";
+                    }));
+                }
+                Invoke(new Action(() =>
+                {
+                    // The ChromiumWebBrowser is loading a page, show the loading animation
                     pictureBoxLoading.Visible = true;
                 }));
+                
+                
             }
         }
         private string ConvertToAbsoluteUrl(string baseUrl, string relativeUrl)
@@ -375,10 +357,15 @@ namespace IntNetViewer
                 // Handle any errors related to loading the favicon
                 Console.WriteLine("Error loading favicon: " + ex.Message);
             }
-
             return null;
         }
 
         
+
+        private void launchIntNetViewerWithTabbedViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            IntNetTabbed intNetTabbed = new IntNetTabbed();
+            intNetTabbed.Show();
+        }
     }
 }

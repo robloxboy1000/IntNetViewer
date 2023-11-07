@@ -35,8 +35,8 @@ namespace IntNetViewer
             this.labelCopyright = new System.Windows.Forms.Label();
             this.labelCompanyName = new System.Windows.Forms.Label();
             this.textBoxDescription = new System.Windows.Forms.TextBox();
-            this.okButton = new System.Windows.Forms.Button();
             this.richTextBoxChangelogs = new System.Windows.Forms.RichTextBox();
+            this.okButton = new System.Windows.Forms.Button();
             this.labelOperatingSystem = new System.Windows.Forms.Label();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
@@ -145,6 +145,14 @@ namespace IntNetViewer
             this.textBoxDescription.TabStop = false;
             this.textBoxDescription.Text = "Description";
             // 
+            // richTextBoxChangelogs
+            // 
+            this.richTextBoxChangelogs.Location = new System.Drawing.Point(140, 107);
+            this.richTextBoxChangelogs.Name = "richTextBoxChangelogs";
+            this.richTextBoxChangelogs.Size = new System.Drawing.Size(274, 94);
+            this.richTextBoxChangelogs.TabIndex = 25;
+            this.richTextBoxChangelogs.Text = "";
+            // 
             // okButton
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -154,14 +162,6 @@ namespace IntNetViewer
             this.okButton.Size = new System.Drawing.Size(75, 24);
             this.okButton.TabIndex = 24;
             this.okButton.Text = "&OK";
-            // 
-            // richTextBoxChangelogs
-            // 
-            this.richTextBoxChangelogs.Location = new System.Drawing.Point(140, 107);
-            this.richTextBoxChangelogs.Name = "richTextBoxChangelogs";
-            this.richTextBoxChangelogs.Size = new System.Drawing.Size(274, 94);
-            this.richTextBoxChangelogs.TabIndex = 25;
-            this.richTextBoxChangelogs.Text = "";
             // 
             // labelOperatingSystem
             // 
