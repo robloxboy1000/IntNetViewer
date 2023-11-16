@@ -19,7 +19,7 @@ namespace IntNetViewer
             
             CefSettings settings = new CefSettings();
             
-            settings.UserAgentProduct = "Firefox/70.0";
+            settings.UserAgent = "Opera/9.30 (Nintendo Wii; U; ; 3642; en)";
             Cef.Initialize(settings);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

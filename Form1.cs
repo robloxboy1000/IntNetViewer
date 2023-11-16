@@ -31,13 +31,14 @@ namespace IntNetViewer
             // Load the loading animation
             pictureBoxLoading.Image = Properties.Resources.loading; // Replace with your actual loading image
             chromiumWebBrowser1.DownloadHandler = new CustomDownloadHandler(progressBarDownload); // Set a custom download handler
+
             // Create and configure the ChromiumWebBrowser control
             chromiumWebBrowser1.Dock = DockStyle.None;
             // Add the ChromiumWebBrowser control to the form
             Controls.Add(chromiumWebBrowser1);
             back.Enabled = false;
             forward.Enabled = false;
-            
+            label4.Visible = false;
             // Navigate to the initial page when the form loads
             chromiumWebBrowser1.Load("https://robloxboy1000.neocities.org/intnetviewer/landing/");
         }
@@ -49,7 +50,12 @@ namespace IntNetViewer
         public class CustomDownloadHandler : IDownloadHandler
         {
             private ProgressBar progressBar;
+            private Label label;
 
+            public CustomDownloadHandler(Label label)
+            {
+                this.label = label; // Initialize label4 with the provided Label
+            }
             public CustomDownloadHandler(ProgressBar progressBar)
             {
                 this.progressBar = progressBar;
@@ -85,6 +91,7 @@ namespace IntNetViewer
                     progressBar.Invoke((MethodInvoker)delegate
                     {
                         progressBar.Visible = false;
+                        
                     });
                 }
                 else if (downloadItem.IsInProgress)
@@ -95,6 +102,8 @@ namespace IntNetViewer
                     {
                         progressBar.Value = progress;
                         progressBar.Visible = true;
+
+                        
                     });
                 }
             }
