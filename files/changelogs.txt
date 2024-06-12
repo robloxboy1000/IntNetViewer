@@ -1,3 +1,14 @@
+v2.6 - 12/6/2023
+Downloading update
+Added a new tool
+brought back AudioGroove
+
+v2.5.01 - 11/16/2023
+Development Build (Nintendo Wii Opera User Agent)
+
+v2.5 - 
+added tabbed view
+
 v2.4 - 10/31/2023 (spooky day!)
 find the changes yourself.
 
