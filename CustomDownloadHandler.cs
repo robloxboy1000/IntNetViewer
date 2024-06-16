@@ -16,9 +16,12 @@ namespace IntNetViewer
         private ToolStripMenuItem label3;
         private ToolStripMenuItem labelDLURL;
         private Form MainWindow;
+        private readonly Dictionary<int, IDownloadItemCallback> activeDownloads = new Dictionary<int, IDownloadItemCallback>();
+        private ToolStripMenuItem idToolStripMenuItem;
 
 
-        public CustomDownloadHandler(ToolStripMenuItem progressBar, ToolStripMenuItem labelDLSpeed, ToolStripMenuItem label2, ToolStripMenuItem label3, ToolStripMenuItem labelDLURL, MainWindow mainWindow)
+
+        public CustomDownloadHandler(ToolStripMenuItem progressBar, ToolStripMenuItem labelDLSpeed, ToolStripMenuItem label2, ToolStripMenuItem label3, ToolStripMenuItem labelDLURL, MainWindow mainWindow, ToolStripMenuItem idToolStripMenuItem)
         {
             this.progressBar = progressBar;
             this.labelDLSpeed = labelDLSpeed;
@@ -26,6 +29,7 @@ namespace IntNetViewer
             this.label3 = label3;
             this.labelDLURL = labelDLURL;
             this.MainWindow = mainWindow;
+            this.idToolStripMenuItem = idToolStripMenuItem;
         }
 
         public bool CanDownload(IWebBrowser chromiumWebBrowser, IBrowser browser, string url, string requestMethod)
@@ -36,12 +40,14 @@ namespace IntNetViewer
         {
             
             MainWindow.Invoke(new Action(() => { labelDLURL.Text = downloadItem.Url; }));
+            MainWindow.Invoke(new Action(() => { idToolStripMenuItem.Text = downloadItem.Id.ToString(); }));
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.FileName = downloadItem.SuggestedFileName;
             DialogResult result = saveFileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
+                
                 downloadItem.SuggestedFileName = saveFileDialog.FileName;
                 callback.Continue(downloadItem.SuggestedFileName, showDialog: false);
             }
@@ -53,7 +59,13 @@ namespace IntNetViewer
         }
         public void OnDownloadUpdated(IWebBrowser chromiumWebBrowser, IBrowser browser, DownloadItem downloadItem, IDownloadItemCallback callback)
         {
-
+            activeDownloads[downloadItem.Id] = callback;
+            if (!activeDownloads.ContainsKey(downloadItem.Id))
+            {
+                // Download was canceled; handle cleanup or UI updates
+                // For example, remove UI elements associated with the download
+                return;
+            }
             if (downloadItem.IsComplete)
             {
 
@@ -123,6 +135,17 @@ namespace IntNetViewer
                     MainWindow.Invoke(new Action(() => { labelDLSpeed.Text = $"{downloadItem.CurrentSpeed} B/s"; }));
                 }
 
+            }
+        }
+        public void CancelDownload(int downloadId)
+        {
+            if (activeDownloads.TryGetValue(downloadId, out var callback))
+            {
+                // Notify CefSharp to cancel the download
+                callback.Cancel();
+
+                // Remove the canceled download from the active list
+                activeDownloads.Remove(downloadId);
             }
         }
     }

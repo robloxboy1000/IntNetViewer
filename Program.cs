@@ -30,6 +30,7 @@ namespace IntNetViewer
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainWindow());
+            
         }
         // Event handler for UI thread exceptions
         static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)

@@ -116,6 +116,12 @@
     <Compile Include="About_New.Designer.cs">
       <DependentUpon>About_New.cs</DependentUpon>
     </Compile>
+    <Compile Include="CancelDLDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CancelDLDialog.Designer.cs">
+      <DependentUpon>CancelDLDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomAudioHandler.cs" />
     <Compile Include="CustomContextMenuHandler.cs" />
     <Compile Include="CustomDownloadHandler.cs" />
@@ -127,6 +133,12 @@
     </Compile>
     <Compile Include="DownloadDialog.Designer.cs">
       <DependentUpon>DownloadDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Log.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Log.Designer.cs">
+      <DependentUpon>Log.cs</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
@@ -161,8 +173,14 @@
     <EmbeddedResource Include="About_New.resx">
       <DependentUpon>About_New.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CancelDLDialog.resx">
+      <DependentUpon>CancelDLDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DownloadDialog.resx">
       <DependentUpon>DownloadDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Log.resx">
+      <DependentUpon>Log.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>

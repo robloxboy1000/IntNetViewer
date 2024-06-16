@@ -1,18 +1,28 @@
-﻿using System;
+﻿/// IntNetViewer - MainWindow.cs
+
+
+using System;
 using System.Windows.Forms;
 using CefSharp;
 using CefSharp.WinForms;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using System.Security.Policy;
+
 
 namespace IntNetViewer
 {
     public partial class MainWindow : Form
     {
+        /// <summary>
+        /// The main program window.
+        /// </summary>
         private string appPath = Path.GetDirectoryName(Application.ExecutablePath) + @"\";
         public static MainWindow Instance;
         private DateTime startTime;
+        private CustomDownloadHandler downloadHandler;
+        private string version = Application.ProductVersion;
         public MainWindow()
         {
             Instance = this;
@@ -22,7 +32,8 @@ namespace IntNetViewer
         }
         private void InitializeChromium()
         {
-            chromiumWebBrowser1.DownloadHandler = new CustomDownloadHandler(progressToolStripMenuItem1, labelDLSpeed, labelRXBytes, labelTBytes, labelDLURL, this);
+            downloadHandler = new CustomDownloadHandler(progressToolStripMenuItem1, labelDLSpeed, labelRXBytes, labelTBytes, labelDLURL, this, idToolStripMenuItem);
+            chromiumWebBrowser1.DownloadHandler = downloadHandler;
             chromiumWebBrowser1.RequestHandler = new CustomRequestHandler();
             chromiumWebBrowser1.LifeSpanHandler = new CustomLifeSpanHandler(OpenNewTab);
             chromiumWebBrowser1.MenuHandler = new CustomContextMenuHandler();
@@ -53,6 +64,7 @@ namespace IntNetViewer
                 newForm.Show();
             }));
         }
+        
         private void CheckForUpdates()
         {
             string owner = "robloxboy100058";
@@ -86,9 +98,11 @@ namespace IntNetViewer
         }
         private bool IsUpdateAvailable(string latestVersion)
         {
-            string currentVersion = "v3.2";
+            string currentVersion = "v3.3";
             return latestVersion.CompareTo(currentVersion) > 0;
         }
+        
+        
         private void back_Click(object sender, EventArgs e)
         {
             if (chromiumWebBrowser1.CanGoBack)
@@ -122,13 +136,29 @@ namespace IntNetViewer
             {
                 string url = urlTextBox.Text;
                 chromiumWebBrowser1.Load(url);
+                back.Enabled = chromiumWebBrowser1.CanGoBack;
+                forward.Enabled = chromiumWebBrowser1.CanGoForward;
+                if (url.Contains("vargfren"))
+                {
+                    chromiumWebBrowser1.Stop();
+                    chromiumWebBrowser1.Load("intnetviewer://assets/vargfren.html");
+                }
             }
         }
         private void btnGo_Click(object sender, EventArgs e)
         {
             string url = urlTextBox.Text;
             chromiumWebBrowser1.Load(url);
+            back.Enabled = chromiumWebBrowser1.CanGoBack;
+            forward.Enabled = chromiumWebBrowser1.CanGoForward;
+            if (url.Contains("vargfren"))
+            {
+                chromiumWebBrowser1.Stop();
+                chromiumWebBrowser1.Load("intnetviewer://assets/vargfren.html");
+            }
         }
+        
+        
         private void googleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             chromiumWebBrowser1.Load("https://google.com");
@@ -197,6 +227,12 @@ namespace IntNetViewer
         {
             chromiumWebBrowser1.Load("intnetviewer://assets/test.html");
         }
+        private void returnExcecutablePathToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine($"{appPath}");
+        }
+        
+        
         private void saveToHardDriveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string sourceFolderPath = SelectSourceFolder();
@@ -252,6 +288,8 @@ namespace IntNetViewer
                 CopyDirectory(subDir.FullName, newDestinationDir);
             }
         }
+        
+
         private void chromiumWebBrowser1_FrameLoadStart(object sender, FrameLoadStartEventArgs e)
         {
             this.Invoke(new Action(() =>
@@ -292,7 +330,7 @@ namespace IntNetViewer
             {
                 this.Invoke(new Action(() =>
                 {
-                    MessageBox.Show($"IntNetViewer encountered an error.\r\nError: {e.ErrorText}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"CEF encountered an error.\r\nError: {e.ErrorText}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }));
                 chromiumWebBrowser1.Stop();
             }
@@ -304,10 +342,7 @@ namespace IntNetViewer
                 Text = e.Title + " - IntNetViewer";
             });
         }
-        private void returnExcecutablePathToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Console.WriteLine($"{appPath}");
-        }
+
         private void urlTextBox_Enter(object sender, EventArgs e)
         {
             label1.Text = "Go to:";
@@ -355,8 +390,9 @@ namespace IntNetViewer
         {
             startTime = DateTime.Now;
             timer1.Start();
+            
         }
-
+        // "wasted time"
         private void timer1_Tick(object sender, EventArgs e)
         {
             // Calculate the elapsed time
@@ -365,6 +401,49 @@ namespace IntNetViewer
             // Update the label with the elapsed time
             toolStripStatusLabel2.Text = string.Format("{0:D2}:{1:D2}:{2:D2}",
                 elapsedTime.Hours, elapsedTime.Minutes, elapsedTime.Seconds);
+        }
+
+        private void cancelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (CancelDLDialog dialog = new CancelDLDialog())
+            {
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Get the selected value from the dialog
+                    int selectedValue = dialog.SelectedValue;
+
+                    // Use the selected value as needed
+                    downloadHandler.CancelDownload(selectedValue);
+                }
+            }
+        }
+
+        private void chromiumWebBrowser1_ConsoleMessage(object sender, ConsoleMessageEventArgs e)
+        {
+            this.Invoke(new Action(() =>
+            {
+                consoleOutput.AppendText($"Line: {e.Line}, Source: {e.Source}, Message: {e.Message}{Environment.NewLine}");
+                consoleOutput.ScrollToCaret();
+            }));
+        }
+
+        private void showLogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            panel1.Visible = !panel1.Visible;
+        }
+
+        private void chromiumWebBrowser1_FrameLoadEnd(object sender, FrameLoadEndEventArgs e)
+        {
+            this.Invoke(new Action(() =>
+            {
+                back.Enabled = chromiumWebBrowser1.CanGoBack;
+                forward.Enabled = chromiumWebBrowser1.CanGoForward;
+            }));
+        }
+
+        private void returnVersionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine(version.ToString());
         }
     }
 }
