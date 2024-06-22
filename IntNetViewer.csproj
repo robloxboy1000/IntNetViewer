@@ -161,6 +161,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SchemeHandlerFactory.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="UnusedForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -233,6 +234,8 @@
     <Content Include="files\changelogs.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\banner.png" />
+    <None Include="Resources\watermark.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="assets\" />

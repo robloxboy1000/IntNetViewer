@@ -9,15 +9,15 @@ using System.Net;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Security.Policy;
+using System.Diagnostics;
+using System.Threading;
 
 
 namespace IntNetViewer
 {
     public partial class MainWindow : Form
     {
-        /// <summary>
-        /// The main program window.
-        /// </summary>
+        
         private string appPath = Path.GetDirectoryName(Application.ExecutablePath) + @"\";
         public static MainWindow Instance;
         private DateTime startTime;
@@ -25,6 +25,9 @@ namespace IntNetViewer
         private string version = Application.ProductVersion;
         public MainWindow()
         {
+            /// <summary>
+            /// The main program window.
+            /// </summary>
             Instance = this;
             InitializeComponent();
             Init();
@@ -38,7 +41,7 @@ namespace IntNetViewer
             chromiumWebBrowser1.LifeSpanHandler = new CustomLifeSpanHandler(OpenNewTab);
             chromiumWebBrowser1.MenuHandler = new CustomContextMenuHandler();
             CefSettings cefSettings = new CefSettings();
-            cefSettings.UserAgent = IntNetConfig.UserAgent;
+            // cefSettings.UserAgent = IntNetConfig.UserAgent;
             cefSettings.CachePath = IntNetConfig.CachePath;
             cefSettings.RootCachePath = IntNetConfig.CachePath;
             cefSettings.RegisterScheme(new CefCustomScheme()
@@ -98,7 +101,7 @@ namespace IntNetViewer
         }
         private bool IsUpdateAvailable(string latestVersion)
         {
-            string currentVersion = "v3.3";
+            string currentVersion = "v3.4";
             return latestVersion.CompareTo(currentVersion) > 0;
         }
         
@@ -371,19 +374,7 @@ namespace IntNetViewer
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to exit?", "Closing", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
-            {
-                e.Cancel = false;
-            }
-            else if (result == DialogResult.No)
-            {
-                e.Cancel = true;
-            }
-            else
-            {
-                e.Cancel = true;
-            }
+
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -420,16 +411,7 @@ namespace IntNetViewer
 
         private void chromiumWebBrowser1_ConsoleMessage(object sender, ConsoleMessageEventArgs e)
         {
-            this.Invoke(new Action(() =>
-            {
-                consoleOutput.AppendText($"Line: {e.Line}, Source: {e.Source}, Message: {e.Message}{Environment.NewLine}");
-                consoleOutput.ScrollToCaret();
-            }));
-        }
 
-        private void showLogToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            panel1.Visible = !panel1.Visible;
         }
 
         private void chromiumWebBrowser1_FrameLoadEnd(object sender, FrameLoadEndEventArgs e)
@@ -444,6 +426,48 @@ namespace IntNetViewer
         private void returnVersionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Console.WriteLine(version.ToString());
+        }
+
+        private void clearCacheToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("This will erase all your cache.\r\nAre you sure?", "Clearing Cache", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                MessageBox.Show("Due to limitations, please restart IntNetViewer manually.", "Clearing Cache", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Cef.Shutdown();
+                Thread.Sleep(1000);
+                
+                // delete all cache
+                try
+                {
+                    Directory.Delete(IntNetConfig.CachePath, true);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"{ex.Message}");
+                }
+
+                // re-add folder if it deletes
+                if (!Directory.Exists(IntNetConfig.CachePath))
+                {
+                    Directory.CreateDirectory(IntNetConfig.CachePath);
+                }
+                else
+                {
+                    return;
+                }
+                Thread.Sleep(1000);
+                
+                Application.Exit();
+            }
+            else if (result == DialogResult.No)
+            {
+                return;
+            }
+            else
+            {
+                return;
+            }
         }
     }
 }
