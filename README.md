@@ -22,7 +22,7 @@ System requirements are the same as the latest version of CefSharp. If your OS i
 1. Clone the repo
 2. Open `IntNetViewer.sln` solution file in Visual Studio
 3. Make your changes
-4. Choose the `Debug` configuration and `x64` platform/CPU
+4. Choose the `Debug` configuration and `x64` platform/CPU (yes, it has to be in `Debug` or it won't have some of the required assets.)
 5. Build the solution
 6. `IntNetViewer.exe` is now in `bin\x64\Debug\`
 
