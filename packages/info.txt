@@ -1,6 +1,2 @@
 Since the files were too big, just download the NuGet packages yourself and put them in this folder.
-list of packages:
-cef.redist.x64.116.0.23
-cef.redist.x86.116.0.23
-CefSharp.Common.116.0.230
-CefSharp.WinForms.116.0.230
+Packages needed are in the packages.config file in the root of the repo.
