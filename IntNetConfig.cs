@@ -15,5 +15,6 @@ namespace IntNetViewer
         public static string ErrorPage = "intnetviewer://assets/error.html";
         public static string BrandLower = "intnetviewer";
         public static string BrandUpper = "IntNetViewer";
+        public string version = "";
     }
 }

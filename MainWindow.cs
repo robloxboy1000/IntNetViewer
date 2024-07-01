@@ -22,12 +22,9 @@ namespace IntNetViewer
         public static MainWindow Instance;
         private DateTime startTime;
         private CustomDownloadHandler downloadHandler;
-        private string version = Application.ProductVersion;
+        private string version = "v" + Application.ProductVersion;
         public MainWindow()
         {
-            /// <summary>
-            /// The main program window.
-            /// </summary>
             Instance = this;
             InitializeComponent();
             Init();
@@ -83,12 +80,12 @@ namespace IntNetViewer
                     string latestVersion = releaseInfo["tag_name"].ToString();
                     if (IsUpdateAvailable(latestVersion))
                     {
-                        MessageBox.Show("An update is available. Please visit the download page to get the latest version.",
+                        MessageBox.Show($"An update is available. Please visit the download page to get the latest version.\r\nNew Version: {latestVersion}\r\nCurrent Version: {version}",
                             "Update Available", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
-                        MessageBox.Show("You are using the latest version of the web browser.",
+                        MessageBox.Show($"You are using the latest version of the web browser.\r\nCurrent Version: {version}\r\nGitHub Version: {latestVersion}",
                             "No Updates", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
@@ -101,7 +98,7 @@ namespace IntNetViewer
         }
         private bool IsUpdateAvailable(string latestVersion)
         {
-            string currentVersion = "v3.4";
+            string currentVersion = version;
             return latestVersion.CompareTo(currentVersion) > 0;
         }
         
@@ -379,19 +376,13 @@ namespace IntNetViewer
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            startTime = DateTime.Now;
-            timer1.Start();
+            
             
         }
         // "wasted time"
         private void timer1_Tick(object sender, EventArgs e)
         {
-            // Calculate the elapsed time
-            TimeSpan elapsedTime = DateTime.Now - startTime;
 
-            // Update the label with the elapsed time
-            toolStripStatusLabel2.Text = string.Format("{0:D2}:{1:D2}:{2:D2}",
-                elapsedTime.Hours, elapsedTime.Minutes, elapsedTime.Seconds);
         }
 
         private void cancelToolStripMenuItem_Click(object sender, EventArgs e)

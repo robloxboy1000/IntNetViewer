@@ -65,12 +65,11 @@
             this.saveToHardDriveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.returnExcecutablePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.returnVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearCacheToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.btnGo = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.labelDLSpeed = new System.Windows.Forms.ToolStripMenuItem();
             this.labelTBytes = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,7 +81,6 @@
             this.lblHoverLink = new System.Windows.Forms.ToolStripStatusLabel();
             this.chromiumWebBrowser1 = new CefSharp.WinForms.ChromiumWebBrowser();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.clearCacheToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -141,8 +139,8 @@
             this.fileToolStripMenuItem1,
             this.editToolStripMenuItem1,
             this.cEFStuffToolStripMenuItem,
-            this.helpToolStripMenuItem,
-            this.debugToolStripMenuItem});
+            this.debugToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(962, 24);
@@ -397,6 +395,13 @@
             this.returnVersionToolStripMenuItem.Text = "return version";
             this.returnVersionToolStripMenuItem.Click += new System.EventHandler(this.returnVersionToolStripMenuItem_Click);
             // 
+            // clearCacheToolStripMenuItem
+            // 
+            this.clearCacheToolStripMenuItem.Name = "clearCacheToolStripMenuItem";
+            this.clearCacheToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.clearCacheToolStripMenuItem.Text = "clear cache";
+            this.clearCacheToolStripMenuItem.Click += new System.EventHandler(this.clearCacheToolStripMenuItem_Click);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -434,8 +439,6 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1,
-            this.toolStripStatusLabel2,
             this.toolStripDropDownButton1,
             this.lblHoverLink});
             this.statusStrip1.Location = new System.Drawing.Point(0, 649);
@@ -443,18 +446,6 @@
             this.statusStrip1.Size = new System.Drawing.Size(962, 22);
             this.statusStrip1.TabIndex = 53;
             this.statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(76, 17);
-            this.toolStripStatusLabel1.Text = "Time wasted:";
-            // 
-            // toolStripStatusLabel2
-            // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(49, 17);
-            this.toolStripStatusLabel2.Text = "00:00:00";
             // 
             // toolStripDropDownButton1
             // 
@@ -476,44 +467,44 @@
             // labelDLSpeed
             // 
             this.labelDLSpeed.Name = "labelDLSpeed";
-            this.labelDLSpeed.Size = new System.Drawing.Size(141, 22);
+            this.labelDLSpeed.Size = new System.Drawing.Size(180, 22);
             this.labelDLSpeed.Text = "Speed:";
             // 
             // labelTBytes
             // 
             this.labelTBytes.Name = "labelTBytes";
-            this.labelTBytes.Size = new System.Drawing.Size(141, 22);
+            this.labelTBytes.Size = new System.Drawing.Size(180, 22);
             this.labelTBytes.Text = "Total:";
             // 
             // labelRXBytes
             // 
             this.labelRXBytes.Name = "labelRXBytes";
-            this.labelRXBytes.Size = new System.Drawing.Size(141, 22);
+            this.labelRXBytes.Size = new System.Drawing.Size(180, 22);
             this.labelRXBytes.Text = "Recieved:";
             // 
             // labelDLURL
             // 
             this.labelDLURL.Name = "labelDLURL";
-            this.labelDLURL.Size = new System.Drawing.Size(141, 22);
+            this.labelDLURL.Size = new System.Drawing.Size(180, 22);
             this.labelDLURL.Text = "URL:";
             // 
             // progressToolStripMenuItem1
             // 
             this.progressToolStripMenuItem1.Name = "progressToolStripMenuItem1";
-            this.progressToolStripMenuItem1.Size = new System.Drawing.Size(141, 22);
+            this.progressToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.progressToolStripMenuItem1.Text = "Progress: 0%";
             // 
             // cancelToolStripMenuItem
             // 
             this.cancelToolStripMenuItem.Name = "cancelToolStripMenuItem";
-            this.cancelToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.cancelToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.cancelToolStripMenuItem.Text = "Cancel";
             this.cancelToolStripMenuItem.Click += new System.EventHandler(this.cancelToolStripMenuItem_Click);
             // 
             // idToolStripMenuItem
             // 
             this.idToolStripMenuItem.Name = "idToolStripMenuItem";
-            this.idToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.idToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.idToolStripMenuItem.Text = "Id:";
             // 
             // lblHoverLink
@@ -545,13 +536,6 @@
             // 
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // clearCacheToolStripMenuItem
-            // 
-            this.clearCacheToolStripMenuItem.Name = "clearCacheToolStripMenuItem";
-            this.clearCacheToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.clearCacheToolStripMenuItem.Text = "clear cache";
-            this.clearCacheToolStripMenuItem.Click += new System.EventHandler(this.clearCacheToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -635,8 +619,6 @@
         private System.Windows.Forms.ToolStripMenuItem labelTBytes;
         private System.Windows.Forms.ToolStripMenuItem labelDLURL;
         private System.Windows.Forms.ToolStripMenuItem progressToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.ToolStripMenuItem cancelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem idToolStripMenuItem;
