@@ -8,9 +8,11 @@ using CefSharp.WinForms;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using System.IO;
-using System.Security.Policy;
-using System.Diagnostics;
 using System.Threading;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Drawing;
+
 
 
 namespace IntNetViewer
@@ -313,8 +315,48 @@ namespace IntNetViewer
                 {
                     label5.Visible = false;
                 }));
+                // Page has finished loading
+                chromiumWebBrowser1.Invoke((MethodInvoker)async delegate
+                {
+                    string url = chromiumWebBrowser1.Address;
+                    string faviconUrl = GetFaviconUrl(url);
+                    if (!string.IsNullOrEmpty(faviconUrl))
+                    {
+                        await SetFaviconAsync(faviconUrl);
+                    }
+                });
             }
         }
+        private string GetFaviconUrl(string url)
+        {
+            // Simple way to construct the favicon URL, may not work for all sites
+            Uri uri = new Uri(url);
+            return $"{uri.Scheme}://{uri.Host}/favicon.ico";
+        }
+
+        private async Task SetFaviconAsync(string faviconUrl)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    byte[] imageBytes = await client.GetByteArrayAsync(faviconUrl);
+                    using (var ms = new System.IO.MemoryStream(imageBytes))
+                    {
+                        Image faviconImage = Image.FromStream(ms);
+                        pictureBox1.Image = faviconImage;
+                        Icon faviconIcon = Icon.FromHandle(((Bitmap)faviconImage).GetHicon());
+                        this.Icon = faviconIcon;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions, e.g., log the error
+                Console.WriteLine("Error fetching favicon: " + ex.Message);
+            }
+        }
+
         private void chromiumWebBrowser1_StatusMessage(object sender, StatusMessageEventArgs e)
         {
             lblHoverLink.Text = e.Value;
@@ -411,6 +453,7 @@ namespace IntNetViewer
             {
                 back.Enabled = chromiumWebBrowser1.CanGoBack;
                 forward.Enabled = chromiumWebBrowser1.CanGoForward;
+                
             }));
         }
 
