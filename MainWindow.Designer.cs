@@ -31,9 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.urlTextBox = new System.Windows.Forms.TextBox();
-            this.back = new System.Windows.Forms.Button();
-            this.forward = new System.Windows.Forms.Button();
-            this.refresh = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,6 +79,9 @@
             this.chromiumWebBrowser1 = new CefSharp.WinForms.ChromiumWebBrowser();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.mtlbackbtn = new MaterialSkin.Controls.MaterialButton();
+            this.mtlfwdbtn = new MaterialSkin.Controls.MaterialButton();
+            this.materialButton3 = new MaterialSkin.Controls.MaterialButton();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -93,46 +93,13 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.urlTextBox.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.urlTextBox.Location = new System.Drawing.Point(64, 63);
+            this.urlTextBox.Location = new System.Drawing.Point(64, 129);
             this.urlTextBox.Name = "urlTextBox";
-            this.urlTextBox.Size = new System.Drawing.Size(854, 22);
+            this.urlTextBox.Size = new System.Drawing.Size(845, 22);
             this.urlTextBox.TabIndex = 1;
             this.urlTextBox.Enter += new System.EventHandler(this.urlTextBox_Enter);
             this.urlTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textbox_KeyDown);
             this.urlTextBox.Leave += new System.EventHandler(this.urlTextBox_Leave);
-            // 
-            // back
-            // 
-            this.back.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.back.Location = new System.Drawing.Point(15, 31);
-            this.back.Name = "back";
-            this.back.Size = new System.Drawing.Size(76, 26);
-            this.back.TabIndex = 2;
-            this.back.Text = "Back";
-            this.back.UseVisualStyleBackColor = true;
-            this.back.Click += new System.EventHandler(this.back_Click);
-            // 
-            // forward
-            // 
-            this.forward.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.forward.Location = new System.Drawing.Point(97, 31);
-            this.forward.Name = "forward";
-            this.forward.Size = new System.Drawing.Size(75, 26);
-            this.forward.TabIndex = 3;
-            this.forward.Text = "Forward";
-            this.forward.UseVisualStyleBackColor = true;
-            this.forward.Click += new System.EventHandler(this.forward_Click);
-            // 
-            // refresh
-            // 
-            this.refresh.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.refresh.Location = new System.Drawing.Point(178, 31);
-            this.refresh.Name = "refresh";
-            this.refresh.Size = new System.Drawing.Size(75, 26);
-            this.refresh.TabIndex = 4;
-            this.refresh.Text = "Refresh";
-            this.refresh.UseVisualStyleBackColor = true;
-            this.refresh.Click += new System.EventHandler(this.refresh_Click);
             // 
             // menuStrip1
             // 
@@ -143,9 +110,9 @@
             this.cEFStuffToolStripMenuItem,
             this.debugToolStripMenuItem,
             this.helpToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Location = new System.Drawing.Point(3, 64);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(962, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(956, 24);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -409,7 +376,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label1.Location = new System.Drawing.Point(10, 66);
+            this.label1.Location = new System.Drawing.Point(10, 132);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(46, 13);
             this.label1.TabIndex = 8;
@@ -419,9 +386,9 @@
             // 
             this.btnGo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGo.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGo.Location = new System.Drawing.Point(924, 61);
+            this.btnGo.Location = new System.Drawing.Point(915, 127);
             this.btnGo.Name = "btnGo";
-            this.btnGo.Size = new System.Drawing.Size(31, 23);
+            this.btnGo.Size = new System.Drawing.Size(40, 23);
             this.btnGo.TabIndex = 36;
             this.btnGo.Text = "Go";
             this.btnGo.UseVisualStyleBackColor = true;
@@ -431,7 +398,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(259, 37);
+            this.label5.Location = new System.Drawing.Point(259, 103);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(56, 13);
             this.label5.TabIndex = 52;
@@ -443,9 +410,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownButton1,
             this.lblHoverLink});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 649);
+            this.statusStrip1.Location = new System.Drawing.Point(3, 646);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(962, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(956, 22);
             this.statusStrip1.TabIndex = 53;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -521,9 +488,9 @@
             this.chromiumWebBrowser1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chromiumWebBrowser1.Location = new System.Drawing.Point(0, 89);
+            this.chromiumWebBrowser1.Location = new System.Drawing.Point(0, 157);
             this.chromiumWebBrowser1.Name = "chromiumWebBrowser1";
-            this.chromiumWebBrowser1.Size = new System.Drawing.Size(962, 560);
+            this.chromiumWebBrowser1.Size = new System.Drawing.Size(962, 492);
             this.chromiumWebBrowser1.TabIndex = 54;
             this.chromiumWebBrowser1.AddressChanged += new System.EventHandler<CefSharp.AddressChangedEventArgs>(this.chromiumWebBrowser1_AddressChanged);
             this.chromiumWebBrowser1.TitleChanged += new System.EventHandler<CefSharp.TitleChangedEventArgs>(this.chromiumWebBrowser1_TitleChanged);
@@ -541,12 +508,75 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(946, 25);
+            this.pictureBox1.Location = new System.Drawing.Point(946, 91);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(16, 16);
             this.pictureBox1.TabIndex = 55;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Visible = false;
+            // 
+            // mtlbackbtn
+            // 
+            this.mtlbackbtn.AutoSize = false;
+            this.mtlbackbtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.mtlbackbtn.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.mtlbackbtn.Depth = 0;
+            this.mtlbackbtn.HighEmphasis = true;
+            this.mtlbackbtn.Icon = null;
+            this.mtlbackbtn.Location = new System.Drawing.Point(15, 96);
+            this.mtlbackbtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.mtlbackbtn.MouseState = MaterialSkin.MouseState.HOVER;
+            this.mtlbackbtn.Name = "mtlbackbtn";
+            this.mtlbackbtn.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.mtlbackbtn.Size = new System.Drawing.Size(76, 26);
+            this.mtlbackbtn.TabIndex = 56;
+            this.mtlbackbtn.Text = "Back";
+            this.mtlbackbtn.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.mtlbackbtn.UseAccentColor = false;
+            this.mtlbackbtn.UseVisualStyleBackColor = true;
+            this.mtlbackbtn.Click += new System.EventHandler(this.mtlbackbtn_Click);
+            // 
+            // mtlfwdbtn
+            // 
+            this.mtlfwdbtn.AutoSize = false;
+            this.mtlfwdbtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.mtlfwdbtn.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.mtlfwdbtn.Depth = 0;
+            this.mtlfwdbtn.HighEmphasis = true;
+            this.mtlfwdbtn.Icon = null;
+            this.mtlfwdbtn.Location = new System.Drawing.Point(96, 96);
+            this.mtlfwdbtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.mtlfwdbtn.MouseState = MaterialSkin.MouseState.HOVER;
+            this.mtlfwdbtn.Name = "mtlfwdbtn";
+            this.mtlfwdbtn.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.mtlfwdbtn.Size = new System.Drawing.Size(76, 26);
+            this.mtlfwdbtn.TabIndex = 57;
+            this.mtlfwdbtn.Text = "Fwd";
+            this.mtlfwdbtn.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.mtlfwdbtn.UseAccentColor = false;
+            this.mtlfwdbtn.UseVisualStyleBackColor = true;
+            this.mtlfwdbtn.Click += new System.EventHandler(this.mtlfwdbtn_Click);
+            // 
+            // materialButton3
+            // 
+            this.materialButton3.AutoSize = false;
+            this.materialButton3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton3.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton3.Depth = 0;
+            this.materialButton3.HighEmphasis = true;
+            this.materialButton3.Icon = null;
+            this.materialButton3.Location = new System.Drawing.Point(179, 96);
+            this.materialButton3.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton3.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton3.Name = "materialButton3";
+            this.materialButton3.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton3.Size = new System.Drawing.Size(76, 26);
+            this.materialButton3.TabIndex = 58;
+            this.materialButton3.Text = "Reload";
+            this.materialButton3.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton3.UseAccentColor = false;
+            this.materialButton3.UseVisualStyleBackColor = true;
+            this.materialButton3.Click += new System.EventHandler(this.materialButton3_Click);
             // 
             // MainWindow
             // 
@@ -554,15 +584,15 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(962, 671);
+            this.Controls.Add(this.materialButton3);
+            this.Controls.Add(this.mtlfwdbtn);
+            this.Controls.Add(this.mtlbackbtn);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.chromiumWebBrowser1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnGo);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.refresh);
-            this.Controls.Add(this.forward);
-            this.Controls.Add(this.back);
             this.Controls.Add(this.urlTextBox);
             this.Controls.Add(this.menuStrip1);
             this.Cursor = System.Windows.Forms.Cursors.Default;
@@ -587,9 +617,6 @@
 
         #endregion
         private System.Windows.Forms.TextBox urlTextBox;
-        private System.Windows.Forms.Button back;
-        private System.Windows.Forms.Button forward;
-        private System.Windows.Forms.Button refresh;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem1;
@@ -638,6 +665,9 @@
         private System.Windows.Forms.ToolStripMenuItem returnVersionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearCacheToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private MaterialSkin.Controls.MaterialButton mtlbackbtn;
+        private MaterialSkin.Controls.MaterialButton mtlfwdbtn;
+        private MaterialSkin.Controls.MaterialButton materialButton3;
     }
 }
 

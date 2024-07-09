@@ -1,7 +1,4 @@
-﻿/// IntNetViewer - MainWindow.cs
-
-
-using System;
+﻿using System;
 using System.Windows.Forms;
 using CefSharp;
 using CefSharp.WinForms;
@@ -12,17 +9,18 @@ using System.Threading;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Drawing;
+using MaterialSkin.Controls;
+using MaterialSkin;
 
+using System.Linq;
 
 
 namespace IntNetViewer
 {
-    public partial class MainWindow : Form
+    public partial class MainWindow : MaterialForm
     {
-        
         private string appPath = Path.GetDirectoryName(Application.ExecutablePath) + @"\";
         public static MainWindow Instance;
-        private DateTime startTime;
         private CustomDownloadHandler downloadHandler;
         private string version = "v" + Application.ProductVersion;
         public MainWindow()
@@ -31,6 +29,11 @@ namespace IntNetViewer
             InitializeComponent();
             Init();
             InitializeChromium();
+
+            var materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
+            materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
         }
         private void InitializeChromium()
         {
@@ -54,9 +57,10 @@ namespace IntNetViewer
         }
         private void Init()
         {
-            back.Enabled = false;
-            forward.Enabled = false;
+            mtlbackbtn.Enabled = false;
+            mtlfwdbtn.Enabled = false;
             this.WindowState = FormWindowState.Maximized;
+            debugToolStripMenuItem.Visible = false;
         }
         private void OpenNewTab(string url)
         {
@@ -138,8 +142,8 @@ namespace IntNetViewer
             {
                 string url = urlTextBox.Text;
                 chromiumWebBrowser1.Load(url);
-                back.Enabled = chromiumWebBrowser1.CanGoBack;
-                forward.Enabled = chromiumWebBrowser1.CanGoForward;
+                mtlbackbtn.Enabled = chromiumWebBrowser1.CanGoBack;
+                mtlfwdbtn.Enabled = chromiumWebBrowser1.CanGoForward;
                 if (url.Contains("vargfren"))
                 {
                     chromiumWebBrowser1.Stop();
@@ -151,8 +155,8 @@ namespace IntNetViewer
         {
             string url = urlTextBox.Text;
             chromiumWebBrowser1.Load(url);
-            back.Enabled = chromiumWebBrowser1.CanGoBack;
-            forward.Enabled = chromiumWebBrowser1.CanGoForward;
+            mtlbackbtn.Enabled = chromiumWebBrowser1.CanGoBack;
+            mtlfwdbtn.Enabled = chromiumWebBrowser1.CanGoForward;
             if (url.Contains("vargfren"))
             {
                 chromiumWebBrowser1.Stop();
@@ -296,8 +300,8 @@ namespace IntNetViewer
         {
             this.Invoke(new Action(() =>
             {
-                back.Enabled = chromiumWebBrowser1.CanGoBack;
-                forward.Enabled = chromiumWebBrowser1.CanGoForward;
+                mtlbackbtn.Enabled = chromiumWebBrowser1.CanGoBack;
+                mtlfwdbtn.Enabled = chromiumWebBrowser1.CanGoForward;
             }));
         }
         private void chromiumWebBrowser1_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
@@ -315,47 +319,13 @@ namespace IntNetViewer
                 {
                     label5.Visible = false;
                 }));
-                // Page has finished loading
-                chromiumWebBrowser1.Invoke((MethodInvoker)async delegate
-                {
-                    string url = chromiumWebBrowser1.Address;
-                    string faviconUrl = GetFaviconUrl(url);
-                    if (!string.IsNullOrEmpty(faviconUrl))
-                    {
-                        await SetFaviconAsync(faviconUrl);
-                    }
-                });
+                
             }
         }
-        private string GetFaviconUrl(string url)
-        {
-            // Simple way to construct the favicon URL, may not work for all sites
-            Uri uri = new Uri(url);
-            return $"{uri.Scheme}://{uri.Host}/favicon.ico";
-        }
+        
+    
 
-        private async Task SetFaviconAsync(string faviconUrl)
-        {
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    byte[] imageBytes = await client.GetByteArrayAsync(faviconUrl);
-                    using (var ms = new System.IO.MemoryStream(imageBytes))
-                    {
-                        Image faviconImage = Image.FromStream(ms);
-                        pictureBox1.Image = faviconImage;
-                        Icon faviconIcon = Icon.FromHandle(((Bitmap)faviconImage).GetHicon());
-                        this.Icon = faviconIcon;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions, e.g., log the error
-                Console.WriteLine("Error fetching favicon: " + ex.Message);
-            }
-        }
+    
 
         private void chromiumWebBrowser1_StatusMessage(object sender, StatusMessageEventArgs e)
         {
@@ -451,8 +421,8 @@ namespace IntNetViewer
         {
             this.Invoke(new Action(() =>
             {
-                back.Enabled = chromiumWebBrowser1.CanGoBack;
-                forward.Enabled = chromiumWebBrowser1.CanGoForward;
+                mtlbackbtn.Enabled = chromiumWebBrowser1.CanGoBack;
+                mtlfwdbtn.Enabled = chromiumWebBrowser1.CanGoForward;
                 
             }));
         }
@@ -503,6 +473,28 @@ namespace IntNetViewer
                 return;
             }
         }
+
+        private void mtlbackbtn_Click(object sender, EventArgs e)
+        {
+            if (chromiumWebBrowser1.CanGoBack)
+            {
+                chromiumWebBrowser1.Back();
+            }
+        }
+
+        private void mtlfwdbtn_Click(object sender, EventArgs e)
+        {
+            if (chromiumWebBrowser1.CanGoForward)
+            {
+                chromiumWebBrowser1.Forward();
+            }
+        }
+
+        private void materialButton3_Click(object sender, EventArgs e)
+        {
+            chromiumWebBrowser1.Reload();
+        }
     }
+    
 }
 

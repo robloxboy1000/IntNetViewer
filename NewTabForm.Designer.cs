@@ -44,7 +44,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Browser.Location = new System.Drawing.Point(0, 70);
             this.Browser.Name = "Browser";
-            this.Browser.Size = new System.Drawing.Size(1007, 658);
+            this.Browser.Size = new System.Drawing.Size(961, 600);
             this.Browser.TabIndex = 0;
             this.Browser.FrameLoadStart += new System.EventHandler<CefSharp.FrameLoadStartEventArgs>(this.Browser_FrameLoadStart);
             // 
@@ -99,7 +99,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1008, 729);
+            this.ClientSize = new System.Drawing.Size(962, 671);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button3);
