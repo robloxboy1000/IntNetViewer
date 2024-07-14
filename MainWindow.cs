@@ -1,76 +1,26 @@
 ﻿using System;
 using System.Windows.Forms;
-using CefSharp;
-using CefSharp.WinForms;
 using System.Net;
 using Newtonsoft.Json.Linq;
-using System.IO;
-using System.Threading;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Drawing;
-using MaterialSkin.Controls;
-using MaterialSkin;
-
-using System.Linq;
-
+using System.Diagnostics;
 
 namespace IntNetViewer
 {
-    public partial class MainWindow : MaterialForm
+    public partial class MainWindow : Form
     {
-        private string appPath = Path.GetDirectoryName(Application.ExecutablePath) + @"\";
-        public static MainWindow Instance;
-        private CustomDownloadHandler downloadHandler;
         private string version = "v" + Application.ProductVersion;
+
         public MainWindow()
         {
-            Instance = this;
             InitializeComponent();
             Init();
-            InitializeChromium();
-
-            var materialSkinManager = MaterialSkinManager.Instance;
-            materialSkinManager.AddFormToManage(this);
-            materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
-            materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
-        }
-        private void InitializeChromium()
-        {
-            downloadHandler = new CustomDownloadHandler(progressToolStripMenuItem1, labelDLSpeed, labelRXBytes, labelTBytes, labelDLURL, this, idToolStripMenuItem);
-            chromiumWebBrowser1.DownloadHandler = downloadHandler;
-            chromiumWebBrowser1.RequestHandler = new CustomRequestHandler();
-            chromiumWebBrowser1.LifeSpanHandler = new CustomLifeSpanHandler(OpenNewTab);
-            chromiumWebBrowser1.MenuHandler = new CustomContextMenuHandler();
-            CefSettings cefSettings = new CefSettings();
-            // cefSettings.UserAgent = IntNetConfig.UserAgent;
-            cefSettings.CachePath = IntNetConfig.CachePath;
-            cefSettings.RootCachePath = IntNetConfig.CachePath;
-            cefSettings.RegisterScheme(new CefCustomScheme()
-            {
-                SchemeName = "intnetviewer",
-                SchemeHandlerFactory = new SchemeHandlerFactory()
-            });
-            Cef.Initialize(cefSettings);
-            this.Controls.Add(chromiumWebBrowser1);
-            chromiumWebBrowser1.Load("https://google.com");
-        }
-        private void Init()
-        {
-            mtlbackbtn.Enabled = false;
-            mtlfwdbtn.Enabled = false;
-            this.WindowState = FormWindowState.Maximized;
-            debugToolStripMenuItem.Visible = false;
-        }
-        private void OpenNewTab(string url)
-        {
-            this.Invoke(new Action(() =>
-            {
-                var newForm = new NewTabForm(url);
-                newForm.Show();
-            }));
         }
         
+        private void Init()
+        {
+            this.WindowState = FormWindowState.Maximized;
+        }
+
         private void CheckForUpdates()
         {
             string owner = "robloxboy100058";
@@ -88,6 +38,7 @@ namespace IntNetViewer
                     {
                         MessageBox.Show($"An update is available. Please visit the download page to get the latest version.\r\nNew Version: {latestVersion}\r\nCurrent Version: {version}",
                             "Update Available", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        Process.Start("https://github.com/robloxboy100058/IntNetViewer-Windows/releases/latest");
                     }
                     else
                     {
@@ -107,26 +58,7 @@ namespace IntNetViewer
             string currentVersion = version;
             return latestVersion.CompareTo(currentVersion) > 0;
         }
-        
-        
-        private void back_Click(object sender, EventArgs e)
-        {
-            if (chromiumWebBrowser1.CanGoBack)
-            {
-                chromiumWebBrowser1.Back();
-            }
-        }
-        private void forward_Click(object sender, EventArgs e)
-        {
-            if (chromiumWebBrowser1.CanGoForward)
-            {
-                chromiumWebBrowser1.Forward();
-            }
-        }
-        private void refresh_Click(object sender, EventArgs e)
-        {
-            chromiumWebBrowser1.Reload();
-        }
+
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -136,365 +68,34 @@ namespace IntNetViewer
             About_New aboutForm = new About_New();
             aboutForm.ShowDialog();
         }
-        private void textbox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                string url = urlTextBox.Text;
-                chromiumWebBrowser1.Load(url);
-                mtlbackbtn.Enabled = chromiumWebBrowser1.CanGoBack;
-                mtlfwdbtn.Enabled = chromiumWebBrowser1.CanGoForward;
-                if (url.Contains("vargfren"))
-                {
-                    chromiumWebBrowser1.Stop();
-                    chromiumWebBrowser1.Load("intnetviewer://assets/vargfren.html");
-                }
-            }
-        }
-        private void btnGo_Click(object sender, EventArgs e)
-        {
-            string url = urlTextBox.Text;
-            chromiumWebBrowser1.Load(url);
-            mtlbackbtn.Enabled = chromiumWebBrowser1.CanGoBack;
-            mtlfwdbtn.Enabled = chromiumWebBrowser1.CanGoForward;
-            if (url.Contains("vargfren"))
-            {
-                chromiumWebBrowser1.Stop();
-                chromiumWebBrowser1.Load("intnetviewer://assets/vargfren.html");
-            }
-        }
-        
-        
-        private void googleToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            chromiumWebBrowser1.Load("https://google.com");
-        }
-        private void wttrinToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            chromiumWebBrowser1.Load("https://wttr.in");
-        }
-        private void frogfindToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            chromiumWebBrowser1.Load("http://frogfind.com");
-        }
-        private void cNNLiteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            chromiumWebBrowser1.Load("http://lite.cnn.com/en");
-        }
-        private void riiConnect24BookmarksToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            chromiumWebBrowser1.Load("http://bookmark.rc24.xyz");
-        }
-        private void wiiNetToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            chromiumWebBrowser1.Load("http://wiinet.xyz");
-        }
-        private void viewSourceToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {
-            chromiumWebBrowser1.ViewSource();
-        }
-        private void testToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {
-            chromiumWebBrowser1.ShowDevTools();
-        }
+
         private void checkForUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CheckForUpdates();
         }
-        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void button1_Click(object sender, EventArgs e)
         {
-            chromiumWebBrowser1.Undo();
+            webView21.GoBack();
         }
-        private void redoToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void button2_Click(object sender, EventArgs e)
         {
-            chromiumWebBrowser1.Redo();
+            webView21.GoForward();
         }
-        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void btnReload_Click(object sender, EventArgs e)
         {
-            chromiumWebBrowser1.Cut();
+            webView21.Reload();
         }
-        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
-            chromiumWebBrowser1.Copy();
-        }
-        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            chromiumWebBrowser1.Paste();
-        }
-        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            chromiumWebBrowser1.SelectAll();
-        }
-        private void aboutCEFToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            chromiumWebBrowser1.Load("chrome://version");
-        }
-        private void testSchemeHandlerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            chromiumWebBrowser1.Load("intnetviewer://assets/test.html");
-        }
-        private void returnExcecutablePathToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Console.WriteLine($"{appPath}");
-        }
-        
-        
-        private void saveToHardDriveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string sourceFolderPath = SelectSourceFolder();
-            if (string.IsNullOrEmpty(sourceFolderPath))
+            if (e.KeyCode == Keys.Enter)
             {
-                return;
+                string url = textBox1.Text;
+                webView21.Source = new Uri(url);
             }
-            string destinationFilePath = SelectDestinationFile();
-            if (string.IsNullOrEmpty(destinationFilePath))
-            {
-                return;
-            }
-            string destinationFolderPath = Path.GetDirectoryName(destinationFilePath);
-            CopyDirectory(sourceFolderPath, destinationFolderPath);
-            MessageBox.Show("Folder copied successfully!");
-        }
-        private string SelectSourceFolder()
-        {
-            return appPath;
-        }
-        private string SelectDestinationFile()
-        {
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
-            {
-                saveFileDialog.FileName = "SelectFolder";
-                saveFileDialog.Filter = "Folder Selection|*.folder";
-                saveFileDialog.CheckFileExists = false;
-                saveFileDialog.InitialDirectory = @"C:\Program Files\robloxboy1000\IntNetViewer\";
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    return saveFileDialog.FileName;
-                }
-            }
-            return null;
-        }
-        private void CopyDirectory(string sourceDir, string destDir)
-        {
-            DirectoryInfo dir = new DirectoryInfo(sourceDir);
-            if (!dir.Exists)
-            {
-                throw new DirectoryNotFoundException($"Source directory not found: {dir.FullName}");
-            }
-            DirectoryInfo[] dirs = dir.GetDirectories();
-            Directory.CreateDirectory(destDir);
-            foreach (FileInfo file in dir.GetFiles())
-            {
-                string targetFilePath = Path.Combine(destDir, file.Name);
-                file.CopyTo(targetFilePath, true);
-            }
-            foreach (DirectoryInfo subDir in dirs)
-            {
-                string newDestinationDir = Path.Combine(destDir, subDir.Name);
-                CopyDirectory(subDir.FullName, newDestinationDir);
-            }
-        }
-        
-
-        private void chromiumWebBrowser1_FrameLoadStart(object sender, FrameLoadStartEventArgs e)
-        {
-            this.Invoke(new Action(() =>
-            {
-                mtlbackbtn.Enabled = chromiumWebBrowser1.CanGoBack;
-                mtlfwdbtn.Enabled = chromiumWebBrowser1.CanGoForward;
-            }));
-        }
-        private void chromiumWebBrowser1_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
-        {
-            if (e.IsLoading)
-            {
-                this.Invoke(new Action(() =>
-                {
-                    label5.Visible = true;
-                }));
-            }
-            if (!e.IsLoading)
-            {
-                this.Invoke(new Action(() =>
-                {
-                    label5.Visible = false;
-                }));
-                
-            }
-        }
-        
-    
-
-    
-
-        private void chromiumWebBrowser1_StatusMessage(object sender, StatusMessageEventArgs e)
-        {
-            lblHoverLink.Text = e.Value;
-        }
-        private void chromiumWebBrowser1_LoadError(object sender, LoadErrorEventArgs e)
-        {
-            
-            if (e.ErrorText == "ERR_ABORTED")
-            {
-                return;
-            }
-            else
-            {
-                this.Invoke(new Action(() =>
-                {
-                    MessageBox.Show($"CEF encountered an error.\r\nError: {e.ErrorText}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }));
-                chromiumWebBrowser1.Stop();
-            }
-        }  
-        private void chromiumWebBrowser1_TitleChanged(object sender, TitleChangedEventArgs e)
-        {
-            this.Invoke((MethodInvoker)delegate
-            {
-                Text = e.Title + " - IntNetViewer";
-            });
-        }
-
-        private void urlTextBox_Enter(object sender, EventArgs e)
-        {
-            label1.Text = "Go to:";
-        }
-        private void urlTextBox_Leave(object sender, EventArgs e)
-        {
-            label1.Text = "Netsite:";
-        }
-        private void chromiumWebBrowser1_AddressChanged(object sender, AddressChangedEventArgs e)
-        {
-            urlTextBox.Invoke(new Action(() =>
-            {
-                urlTextBox.Text = e.Address;
-            }));
-        }
-
-        private void MainWindow_Leave(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void MainWindow_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
-        {
-
-        }
-
-        private void MainWindow_Load(object sender, EventArgs e)
-        {
-            
-            
-        }
-        // "wasted time"
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cancelToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (CancelDLDialog dialog = new CancelDLDialog())
-            {
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    // Get the selected value from the dialog
-                    int selectedValue = dialog.SelectedValue;
-
-                    // Use the selected value as needed
-                    downloadHandler.CancelDownload(selectedValue);
-                }
-            }
-        }
-
-        private void chromiumWebBrowser1_ConsoleMessage(object sender, ConsoleMessageEventArgs e)
-        {
-
-        }
-
-        private void chromiumWebBrowser1_FrameLoadEnd(object sender, FrameLoadEndEventArgs e)
-        {
-            this.Invoke(new Action(() =>
-            {
-                mtlbackbtn.Enabled = chromiumWebBrowser1.CanGoBack;
-                mtlfwdbtn.Enabled = chromiumWebBrowser1.CanGoForward;
-                
-            }));
-        }
-
-        private void returnVersionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Console.WriteLine(version.ToString());
-        }
-
-        private void clearCacheToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DialogResult result = MessageBox.Show("This will erase all your cache.\r\nAre you sure?", "Clearing Cache", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
-            {
-                MessageBox.Show("Due to limitations, please restart IntNetViewer manually.", "Clearing Cache", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Cef.Shutdown();
-                Thread.Sleep(1000);
-                
-                // delete all cache
-                try
-                {
-                    Directory.Delete(IntNetConfig.CachePath, true);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"{ex.Message}");
-                }
-
-                // re-add folder if it deletes
-                if (!Directory.Exists(IntNetConfig.CachePath))
-                {
-                    Directory.CreateDirectory(IntNetConfig.CachePath);
-                }
-                else
-                {
-                    return;
-                }
-                Thread.Sleep(1000);
-                
-                Application.Exit();
-            }
-            else if (result == DialogResult.No)
-            {
-                return;
-            }
-            else
-            {
-                return;
-            }
-        }
-
-        private void mtlbackbtn_Click(object sender, EventArgs e)
-        {
-            if (chromiumWebBrowser1.CanGoBack)
-            {
-                chromiumWebBrowser1.Back();
-            }
-        }
-
-        private void mtlfwdbtn_Click(object sender, EventArgs e)
-        {
-            if (chromiumWebBrowser1.CanGoForward)
-            {
-                chromiumWebBrowser1.Forward();
-            }
-        }
-
-        private void materialButton3_Click(object sender, EventArgs e)
-        {
-            chromiumWebBrowser1.Reload();
         }
     }
-    
 }
-

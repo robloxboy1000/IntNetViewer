@@ -57,7 +57,8 @@ namespace IntNetViewer
                     // Log the serious error if necessary
 
                     // Exit the application immediately
-                    Environment.FailFast("Critical application error", ex);
+                    
+                    Application.Exit();
                 }
                 // For serious errors, consider exiting the application
                 // Application.Exit();

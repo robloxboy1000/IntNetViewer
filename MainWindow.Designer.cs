@@ -28,91 +28,31 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            this.urlTextBox = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.linksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.googleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.wttrinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.frogfindToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cNNLiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.riiConnect24BookmarksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.wiiNetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.redoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cEFStuffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewSourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.testSchemeHandlerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToHardDriveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.returnExcecutablePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.returnVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clearCacheToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutCEFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label1 = new System.Windows.Forms.Label();
-            this.btnGo = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.labelDLSpeed = new System.Windows.Forms.ToolStripMenuItem();
-            this.labelTBytes = new System.Windows.Forms.ToolStripMenuItem();
-            this.labelRXBytes = new System.Windows.Forms.ToolStripMenuItem();
-            this.labelDLURL = new System.Windows.Forms.ToolStripMenuItem();
-            this.progressToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.cancelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.idToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.lblHoverLink = new System.Windows.Forms.ToolStripStatusLabel();
-            this.chromiumWebBrowser1 = new CefSharp.WinForms.ChromiumWebBrowser();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.mtlbackbtn = new MaterialSkin.Controls.MaterialButton();
-            this.mtlfwdbtn = new MaterialSkin.Controls.MaterialButton();
-            this.materialButton3 = new MaterialSkin.Controls.MaterialButton();
+            this.webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.btnReload = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.webView21)).BeginInit();
             this.SuspendLayout();
-            // 
-            // urlTextBox
-            // 
-            this.urlTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.urlTextBox.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.urlTextBox.Location = new System.Drawing.Point(64, 129);
-            this.urlTextBox.Name = "urlTextBox";
-            this.urlTextBox.Size = new System.Drawing.Size(845, 22);
-            this.urlTextBox.TabIndex = 1;
-            this.urlTextBox.Enter += new System.EventHandler(this.urlTextBox_Enter);
-            this.urlTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textbox_KeyDown);
-            this.urlTextBox.Leave += new System.EventHandler(this.urlTextBox_Leave);
             // 
             // menuStrip1
             // 
             this.menuStrip1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem1,
-            this.editToolStripMenuItem1,
-            this.cEFStuffToolStripMenuItem,
-            this.debugToolStripMenuItem,
             this.helpToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(3, 64);
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(956, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(962, 24);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -120,7 +60,6 @@
             // 
             this.fileToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.checkForUpdateToolStripMenuItem,
-            this.linksToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fileToolStripMenuItem1.Name = "fileToolStripMenuItem1";
@@ -130,453 +69,86 @@
             // checkForUpdateToolStripMenuItem
             // 
             this.checkForUpdateToolStripMenuItem.Name = "checkForUpdateToolStripMenuItem";
-            this.checkForUpdateToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.checkForUpdateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.checkForUpdateToolStripMenuItem.Text = "Check for update";
             this.checkForUpdateToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdateToolStripMenuItem_Click);
-            // 
-            // linksToolStripMenuItem
-            // 
-            this.linksToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.googleToolStripMenuItem,
-            this.wttrinToolStripMenuItem,
-            this.frogfindToolStripMenuItem,
-            this.cNNLiteToolStripMenuItem,
-            this.riiConnect24BookmarksToolStripMenuItem,
-            this.wiiNetToolStripMenuItem});
-            this.linksToolStripMenuItem.Name = "linksToolStripMenuItem";
-            this.linksToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.linksToolStripMenuItem.Text = "Links";
-            // 
-            // googleToolStripMenuItem
-            // 
-            this.googleToolStripMenuItem.Name = "googleToolStripMenuItem";
-            this.googleToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.googleToolStripMenuItem.Text = "Google";
-            this.googleToolStripMenuItem.Click += new System.EventHandler(this.googleToolStripMenuItem_Click);
-            // 
-            // wttrinToolStripMenuItem
-            // 
-            this.wttrinToolStripMenuItem.Name = "wttrinToolStripMenuItem";
-            this.wttrinToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.wttrinToolStripMenuItem.Text = "wttr.in";
-            this.wttrinToolStripMenuItem.Click += new System.EventHandler(this.wttrinToolStripMenuItem_Click);
-            // 
-            // frogfindToolStripMenuItem
-            // 
-            this.frogfindToolStripMenuItem.Name = "frogfindToolStripMenuItem";
-            this.frogfindToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.frogfindToolStripMenuItem.Text = "FrogFind";
-            this.frogfindToolStripMenuItem.Click += new System.EventHandler(this.frogfindToolStripMenuItem_Click);
-            // 
-            // cNNLiteToolStripMenuItem
-            // 
-            this.cNNLiteToolStripMenuItem.Name = "cNNLiteToolStripMenuItem";
-            this.cNNLiteToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.cNNLiteToolStripMenuItem.Text = "CNN Lite";
-            this.cNNLiteToolStripMenuItem.Click += new System.EventHandler(this.cNNLiteToolStripMenuItem_Click);
-            // 
-            // riiConnect24BookmarksToolStripMenuItem
-            // 
-            this.riiConnect24BookmarksToolStripMenuItem.Name = "riiConnect24BookmarksToolStripMenuItem";
-            this.riiConnect24BookmarksToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.riiConnect24BookmarksToolStripMenuItem.Text = "RiiConnect24 Bookmarks";
-            this.riiConnect24BookmarksToolStripMenuItem.Click += new System.EventHandler(this.riiConnect24BookmarksToolStripMenuItem_Click);
-            // 
-            // wiiNetToolStripMenuItem
-            // 
-            this.wiiNetToolStripMenuItem.Name = "wiiNetToolStripMenuItem";
-            this.wiiNetToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.wiiNetToolStripMenuItem.Text = "WiiNet";
-            this.wiiNetToolStripMenuItem.Click += new System.EventHandler(this.wiiNetToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // editToolStripMenuItem1
-            // 
-            this.editToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.undoToolStripMenuItem,
-            this.redoToolStripMenuItem,
-            this.toolStripSeparator3,
-            this.cutToolStripMenuItem,
-            this.copyToolStripMenuItem,
-            this.pasteToolStripMenuItem,
-            this.toolStripSeparator4,
-            this.selectAllToolStripMenuItem});
-            this.editToolStripMenuItem1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.editToolStripMenuItem1.Name = "editToolStripMenuItem1";
-            this.editToolStripMenuItem1.Size = new System.Drawing.Size(39, 20);
-            this.editToolStripMenuItem1.Text = "&Edit";
-            // 
-            // undoToolStripMenuItem
-            // 
-            this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
-            this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.undoToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.undoToolStripMenuItem.Text = "&Undo";
-            this.undoToolStripMenuItem.Click += new System.EventHandler(this.undoToolStripMenuItem_Click);
-            // 
-            // redoToolStripMenuItem
-            // 
-            this.redoToolStripMenuItem.Name = "redoToolStripMenuItem";
-            this.redoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.redoToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.redoToolStripMenuItem.Text = "&Redo";
-            this.redoToolStripMenuItem.Click += new System.EventHandler(this.redoToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(141, 6);
-            // 
-            // cutToolStripMenuItem
-            // 
-            this.cutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("cutToolStripMenuItem.Image")));
-            this.cutToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
-            this.cutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.cutToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.cutToolStripMenuItem.Text = "Cu&t";
-            this.cutToolStripMenuItem.Click += new System.EventHandler(this.cutToolStripMenuItem_Click);
-            // 
-            // copyToolStripMenuItem
-            // 
-            this.copyToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("copyToolStripMenuItem.Image")));
-            this.copyToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.copyToolStripMenuItem.Text = "&Copy";
-            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
-            // 
-            // pasteToolStripMenuItem
-            // 
-            this.pasteToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("pasteToolStripMenuItem.Image")));
-            this.pasteToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.pasteToolStripMenuItem.Text = "&Paste";
-            this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(141, 6);
-            // 
-            // selectAllToolStripMenuItem
-            // 
-            this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
-            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.selectAllToolStripMenuItem.Text = "Select &All";
-            this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
-            // 
-            // cEFStuffToolStripMenuItem
-            // 
-            this.cEFStuffToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.viewSourceToolStripMenuItem,
-            this.testToolStripMenuItem});
-            this.cEFStuffToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cEFStuffToolStripMenuItem.Name = "cEFStuffToolStripMenuItem";
-            this.cEFStuffToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
-            this.cEFStuffToolStripMenuItem.Text = "CEF &Stuff";
-            // 
-            // viewSourceToolStripMenuItem
-            // 
-            this.viewSourceToolStripMenuItem.Name = "viewSourceToolStripMenuItem";
-            this.viewSourceToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.viewSourceToolStripMenuItem.Text = "View Source";
-            this.viewSourceToolStripMenuItem.Click += new System.EventHandler(this.viewSourceToolStripMenuItem_Click_1);
-            // 
-            // testToolStripMenuItem
-            // 
-            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
-            this.testToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.testToolStripMenuItem.Text = "Show Dev Tools";
-            this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click_1);
-            // 
-            // debugToolStripMenuItem
-            // 
-            this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.testSchemeHandlerToolStripMenuItem,
-            this.saveToHardDriveToolStripMenuItem,
-            this.returnExcecutablePathToolStripMenuItem,
-            this.returnVersionToolStripMenuItem,
-            this.clearCacheToolStripMenuItem});
-            this.debugToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-            this.debugToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
-            this.debugToolStripMenuItem.Text = "debug";
-            // 
-            // testSchemeHandlerToolStripMenuItem
-            // 
-            this.testSchemeHandlerToolStripMenuItem.Name = "testSchemeHandlerToolStripMenuItem";
-            this.testSchemeHandlerToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.testSchemeHandlerToolStripMenuItem.Text = "test scheme handler";
-            this.testSchemeHandlerToolStripMenuItem.Click += new System.EventHandler(this.testSchemeHandlerToolStripMenuItem_Click);
-            // 
-            // saveToHardDriveToolStripMenuItem
-            // 
-            this.saveToHardDriveToolStripMenuItem.Name = "saveToHardDriveToolStripMenuItem";
-            this.saveToHardDriveToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.saveToHardDriveToolStripMenuItem.Text = "save to hard drive";
-            this.saveToHardDriveToolStripMenuItem.Click += new System.EventHandler(this.saveToHardDriveToolStripMenuItem_Click);
-            // 
-            // returnExcecutablePathToolStripMenuItem
-            // 
-            this.returnExcecutablePathToolStripMenuItem.Name = "returnExcecutablePathToolStripMenuItem";
-            this.returnExcecutablePathToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.returnExcecutablePathToolStripMenuItem.Text = "return excecutable path";
-            this.returnExcecutablePathToolStripMenuItem.Click += new System.EventHandler(this.returnExcecutablePathToolStripMenuItem_Click);
-            // 
-            // returnVersionToolStripMenuItem
-            // 
-            this.returnVersionToolStripMenuItem.Name = "returnVersionToolStripMenuItem";
-            this.returnVersionToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.returnVersionToolStripMenuItem.Text = "return version";
-            this.returnVersionToolStripMenuItem.Click += new System.EventHandler(this.returnVersionToolStripMenuItem_Click);
-            // 
-            // clearCacheToolStripMenuItem
-            // 
-            this.clearCacheToolStripMenuItem.Name = "clearCacheToolStripMenuItem";
-            this.clearCacheToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.clearCacheToolStripMenuItem.Text = "clear cache";
-            this.clearCacheToolStripMenuItem.Click += new System.EventHandler(this.clearCacheToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aboutCEFToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
-            // aboutCEFToolStripMenuItem
-            // 
-            this.aboutCEFToolStripMenuItem.Name = "aboutCEFToolStripMenuItem";
-            this.aboutCEFToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
-            this.aboutCEFToolStripMenuItem.Text = "About CEF";
-            this.aboutCEFToolStripMenuItem.Click += new System.EventHandler(this.aboutCEFToolStripMenuItem_Click);
-            // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aboutToolStripMenuItem.Text = "&About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
-            // label1
+            // webView21
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label1.Location = new System.Drawing.Point(10, 132);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 13);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "Netsite:";
-            // 
-            // btnGo
-            // 
-            this.btnGo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGo.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGo.Location = new System.Drawing.Point(915, 127);
-            this.btnGo.Name = "btnGo";
-            this.btnGo.Size = new System.Drawing.Size(40, 23);
-            this.btnGo.TabIndex = 36;
-            this.btnGo.Text = "Go";
-            this.btnGo.UseVisualStyleBackColor = true;
-            this.btnGo.Click += new System.EventHandler(this.btnGo_Click);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(259, 103);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(56, 13);
-            this.label5.TabIndex = 52;
-            this.label5.Text = "loading...";
-            this.label5.Visible = false;
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripDropDownButton1,
-            this.lblHoverLink});
-            this.statusStrip1.Location = new System.Drawing.Point(3, 646);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(956, 22);
-            this.statusStrip1.TabIndex = 53;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripDropDownButton1
-            // 
-            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.labelDLSpeed,
-            this.labelTBytes,
-            this.labelRXBytes,
-            this.labelDLURL,
-            this.progressToolStripMenuItem1,
-            this.cancelToolStripMenuItem,
-            this.idToolStripMenuItem});
-            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
-            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(79, 20);
-            this.toolStripDropDownButton1.Text = "Downloads";
-            // 
-            // labelDLSpeed
-            // 
-            this.labelDLSpeed.Name = "labelDLSpeed";
-            this.labelDLSpeed.Size = new System.Drawing.Size(141, 22);
-            this.labelDLSpeed.Text = "Speed:";
-            // 
-            // labelTBytes
-            // 
-            this.labelTBytes.Name = "labelTBytes";
-            this.labelTBytes.Size = new System.Drawing.Size(141, 22);
-            this.labelTBytes.Text = "Total:";
-            // 
-            // labelRXBytes
-            // 
-            this.labelRXBytes.Name = "labelRXBytes";
-            this.labelRXBytes.Size = new System.Drawing.Size(141, 22);
-            this.labelRXBytes.Text = "Recieved:";
-            // 
-            // labelDLURL
-            // 
-            this.labelDLURL.Name = "labelDLURL";
-            this.labelDLURL.Size = new System.Drawing.Size(141, 22);
-            this.labelDLURL.Text = "URL:";
-            // 
-            // progressToolStripMenuItem1
-            // 
-            this.progressToolStripMenuItem1.Name = "progressToolStripMenuItem1";
-            this.progressToolStripMenuItem1.Size = new System.Drawing.Size(141, 22);
-            this.progressToolStripMenuItem1.Text = "Progress: 0%";
-            // 
-            // cancelToolStripMenuItem
-            // 
-            this.cancelToolStripMenuItem.Name = "cancelToolStripMenuItem";
-            this.cancelToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
-            this.cancelToolStripMenuItem.Text = "Cancel";
-            this.cancelToolStripMenuItem.Click += new System.EventHandler(this.cancelToolStripMenuItem_Click);
-            // 
-            // idToolStripMenuItem
-            // 
-            this.idToolStripMenuItem.Name = "idToolStripMenuItem";
-            this.idToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
-            this.idToolStripMenuItem.Text = "Id:";
-            // 
-            // lblHoverLink
-            // 
-            this.lblHoverLink.Name = "lblHoverLink";
-            this.lblHoverLink.Size = new System.Drawing.Size(10, 17);
-            this.lblHoverLink.Text = " ";
-            // 
-            // chromiumWebBrowser1
-            // 
-            this.chromiumWebBrowser1.ActivateBrowserOnCreation = false;
-            this.chromiumWebBrowser1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.webView21.AllowExternalDrop = true;
+            this.webView21.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chromiumWebBrowser1.Location = new System.Drawing.Point(0, 157);
-            this.chromiumWebBrowser1.Name = "chromiumWebBrowser1";
-            this.chromiumWebBrowser1.Size = new System.Drawing.Size(962, 492);
-            this.chromiumWebBrowser1.TabIndex = 54;
-            this.chromiumWebBrowser1.AddressChanged += new System.EventHandler<CefSharp.AddressChangedEventArgs>(this.chromiumWebBrowser1_AddressChanged);
-            this.chromiumWebBrowser1.TitleChanged += new System.EventHandler<CefSharp.TitleChangedEventArgs>(this.chromiumWebBrowser1_TitleChanged);
-            this.chromiumWebBrowser1.LoadError += new System.EventHandler<CefSharp.LoadErrorEventArgs>(this.chromiumWebBrowser1_LoadError);
-            this.chromiumWebBrowser1.FrameLoadStart += new System.EventHandler<CefSharp.FrameLoadStartEventArgs>(this.chromiumWebBrowser1_FrameLoadStart);
-            this.chromiumWebBrowser1.FrameLoadEnd += new System.EventHandler<CefSharp.FrameLoadEndEventArgs>(this.chromiumWebBrowser1_FrameLoadEnd);
-            this.chromiumWebBrowser1.LoadingStateChanged += new System.EventHandler<CefSharp.LoadingStateChangedEventArgs>(this.chromiumWebBrowser1_LoadingStateChanged);
-            this.chromiumWebBrowser1.ConsoleMessage += new System.EventHandler<CefSharp.ConsoleMessageEventArgs>(this.chromiumWebBrowser1_ConsoleMessage);
-            this.chromiumWebBrowser1.StatusMessage += new System.EventHandler<CefSharp.StatusMessageEventArgs>(this.chromiumWebBrowser1_StatusMessage);
+            this.webView21.CreationProperties = null;
+            this.webView21.DefaultBackgroundColor = System.Drawing.Color.White;
+            this.webView21.Location = new System.Drawing.Point(0, 57);
+            this.webView21.Name = "webView21";
+            this.webView21.Size = new System.Drawing.Size(962, 615);
+            this.webView21.TabIndex = 54;
+            this.webView21.ZoomFactor = 1D;
             // 
-            // timer1
+            // button1
             // 
-            this.timer1.Interval = 1000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.button1.Location = new System.Drawing.Point(12, 28);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 55;
+            this.button1.Text = "Back";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // pictureBox1
+            // button2
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(946, 91);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox1.TabIndex = 55;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Visible = false;
+            this.button2.Location = new System.Drawing.Point(93, 28);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 56;
+            this.button2.Text = "Forward";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // mtlbackbtn
+            // btnReload
             // 
-            this.mtlbackbtn.AutoSize = false;
-            this.mtlbackbtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.mtlbackbtn.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.mtlbackbtn.Depth = 0;
-            this.mtlbackbtn.HighEmphasis = true;
-            this.mtlbackbtn.Icon = null;
-            this.mtlbackbtn.Location = new System.Drawing.Point(15, 96);
-            this.mtlbackbtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.mtlbackbtn.MouseState = MaterialSkin.MouseState.HOVER;
-            this.mtlbackbtn.Name = "mtlbackbtn";
-            this.mtlbackbtn.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.mtlbackbtn.Size = new System.Drawing.Size(76, 26);
-            this.mtlbackbtn.TabIndex = 56;
-            this.mtlbackbtn.Text = "Back";
-            this.mtlbackbtn.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.mtlbackbtn.UseAccentColor = false;
-            this.mtlbackbtn.UseVisualStyleBackColor = true;
-            this.mtlbackbtn.Click += new System.EventHandler(this.mtlbackbtn_Click);
+            this.btnReload.Location = new System.Drawing.Point(174, 28);
+            this.btnReload.Name = "btnReload";
+            this.btnReload.Size = new System.Drawing.Size(75, 23);
+            this.btnReload.TabIndex = 57;
+            this.btnReload.Text = "Reload";
+            this.btnReload.UseVisualStyleBackColor = true;
+            this.btnReload.Click += new System.EventHandler(this.btnReload_Click);
             // 
-            // mtlfwdbtn
+            // textBox1
             // 
-            this.mtlfwdbtn.AutoSize = false;
-            this.mtlfwdbtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.mtlfwdbtn.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.mtlfwdbtn.Depth = 0;
-            this.mtlfwdbtn.HighEmphasis = true;
-            this.mtlfwdbtn.Icon = null;
-            this.mtlfwdbtn.Location = new System.Drawing.Point(96, 96);
-            this.mtlfwdbtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.mtlfwdbtn.MouseState = MaterialSkin.MouseState.HOVER;
-            this.mtlfwdbtn.Name = "mtlfwdbtn";
-            this.mtlfwdbtn.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.mtlfwdbtn.Size = new System.Drawing.Size(76, 26);
-            this.mtlfwdbtn.TabIndex = 57;
-            this.mtlfwdbtn.Text = "Fwd";
-            this.mtlfwdbtn.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.mtlfwdbtn.UseAccentColor = false;
-            this.mtlfwdbtn.UseVisualStyleBackColor = true;
-            this.mtlfwdbtn.Click += new System.EventHandler(this.mtlfwdbtn_Click);
-            // 
-            // materialButton3
-            // 
-            this.materialButton3.AutoSize = false;
-            this.materialButton3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialButton3.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.materialButton3.Depth = 0;
-            this.materialButton3.HighEmphasis = true;
-            this.materialButton3.Icon = null;
-            this.materialButton3.Location = new System.Drawing.Point(179, 96);
-            this.materialButton3.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialButton3.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialButton3.Name = "materialButton3";
-            this.materialButton3.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton3.Size = new System.Drawing.Size(76, 26);
-            this.materialButton3.TabIndex = 58;
-            this.materialButton3.Text = "Reload";
-            this.materialButton3.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.materialButton3.UseAccentColor = false;
-            this.materialButton3.UseVisualStyleBackColor = true;
-            this.materialButton3.Click += new System.EventHandler(this.materialButton3_Click);
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox1.Location = new System.Drawing.Point(256, 29);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(694, 20);
+            this.textBox1.TabIndex = 58;
+            this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
             // 
             // MainWindow
             // 
@@ -584,16 +156,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(962, 671);
-            this.Controls.Add(this.materialButton3);
-            this.Controls.Add(this.mtlfwdbtn);
-            this.Controls.Add(this.mtlbackbtn);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.chromiumWebBrowser1);
-            this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.btnGo);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.urlTextBox);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.btnReload);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.webView21);
             this.Controls.Add(this.menuStrip1);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -601,73 +168,26 @@
             this.MinimumSize = new System.Drawing.Size(745, 435);
             this.Name = "MainWindow";
             this.Text = "IntNetViewer";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
-            this.Load += new System.EventHandler(this.MainWindow_Load);
-            this.Enter += new System.EventHandler(this.MainWindow_Enter);
-            this.Leave += new System.EventHandler(this.MainWindow_Leave);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.webView21)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.TextBox urlTextBox;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem linksToolStripMenuItem;
-        private System.Windows.Forms.Button btnGo;
-        private System.Windows.Forms.ToolStripMenuItem googleToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem wttrinToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem frogfindToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem cNNLiteToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem riiConnect24BookmarksToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem wiiNetToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem undoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem redoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem cutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripMenuItem selectAllToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem cEFStuffToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewSourceToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkForUpdateToolStripMenuItem;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ToolStripMenuItem aboutCEFToolStripMenuItem;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel lblHoverLink;
-        private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem testSchemeHandlerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveToHardDriveToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem returnExcecutablePathToolStripMenuItem;
-        private CefSharp.WinForms.ChromiumWebBrowser chromiumWebBrowser1;
-        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
-        private System.Windows.Forms.ToolStripMenuItem labelDLSpeed;
-        private System.Windows.Forms.ToolStripMenuItem labelRXBytes;
-        private System.Windows.Forms.ToolStripMenuItem labelTBytes;
-        private System.Windows.Forms.ToolStripMenuItem labelDLURL;
-        private System.Windows.Forms.ToolStripMenuItem progressToolStripMenuItem1;
-        private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.ToolStripMenuItem cancelToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem idToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem returnVersionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem clearCacheToolStripMenuItem;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private MaterialSkin.Controls.MaterialButton mtlbackbtn;
-        private MaterialSkin.Controls.MaterialButton mtlfwdbtn;
-        private MaterialSkin.Controls.MaterialButton materialButton3;
+        private Microsoft.Web.WebView2.WinForms.WebView2 webView21;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnReload;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 
