@@ -13,14 +13,9 @@ namespace IntNetViewer
         public MainWindow()
         {
             InitializeComponent();
-            Init();
-        }
-        
-        private void Init()
-        {
-            this.WindowState = FormWindowState.Maximized;
         }
 
+        #region update
         private void CheckForUpdates()
         {
             string owner = "robloxboy100058";
@@ -58,6 +53,12 @@ namespace IntNetViewer
             string currentVersion = version;
             return latestVersion.CompareTo(currentVersion) > 0;
         }
+        
+        private void checkForUpdateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CheckForUpdates();
+        }
+        #endregion
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -69,33 +70,43 @@ namespace IntNetViewer
             aboutForm.ShowDialog();
         }
 
-        private void checkForUpdateToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CheckForUpdates();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            webView21.GoBack();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            webView21.GoForward();
-        }
-
-        private void btnReload_Click(object sender, EventArgs e)
-        {
-            webView21.Reload();
-        }
-
-        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        private void toolStripTextBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                string url = textBox1.Text;
-                webView21.Source = new Uri(url);
+                string url = toolStripTextBox1.Text;
+                webBrowser1.Navigate(url);
             }
+        }
+
+        private void toolStripBtnBack_Click(object sender, EventArgs e)
+        {
+            webBrowser1.GoBack();
+        }
+
+        private void toolStripBtnFwd_Click(object sender, EventArgs e)
+        {
+            webBrowser1.GoForward();
+        }
+
+        private void toolStripBtnReload_Click(object sender, EventArgs e)
+        {
+            webBrowser1.Refresh();
+        }
+
+        private void toolStripBtnHome_Click(object sender, EventArgs e)
+        {
+            webBrowser1.Navigate("https://robloxboy1000.neocities.org");
+        }
+
+        private void toolStripBtnStop_Click(object sender, EventArgs e)
+        {
+            webBrowser1.Stop();
+        }
+
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+            webBrowser1.Navigate("https://robloxboy1000.neocities.org");
         }
     }
 }
