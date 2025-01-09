@@ -4586,6 +4586,13 @@
         ovRY/FkAAAAASUVORK5CYII=
 </value>
   </data>
+  <data name="richTextBox1.Text" xml:space="preserve">
+    <value>IntNetViewer is a web browser that was first developed as a MacOSX application, and uses CEF.
+This is all developed by one person, and would appreciate donations that are not required, but much appreciated!
+Donate: (link)
+
+Special thanks:</value>
+  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAkAEBAAAAEAIABoBAAAlgAAABgYAAABACAAiAkAAP4EAAAgIAAAAQAgAKgQAACGDgAAMDAAAAEA

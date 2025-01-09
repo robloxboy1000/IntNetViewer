@@ -14,6 +14,7 @@ namespace IntNetViewer
     public partial class SettingsForm : Form
     {
         private string configFilePath = "config.ini";
+        
         public SettingsForm()
         {
             InitializeComponent();
@@ -30,10 +31,6 @@ namespace IntNetViewer
                     {
                         textBoxHomePage.Text = line.Split('=')[1].Trim();
                     }
-                    else if (line.StartsWith("JavaScriptEnabled"))
-                    {
-                        checkBoxJavaScriptEnabled.Checked = bool.Parse(line.Split('=')[1].Trim());
-                    }
                     else if (line.StartsWith("UserAgent"))
                     {
                         textBoxUA.Text = line.Split('=')[1].Trim();
@@ -48,8 +45,7 @@ namespace IntNetViewer
             {
                 writer.WriteLine("[BrowserSettings]");
                 writer.WriteLine($"HomePage = {textBoxHomePage.Text}");
-                writer.WriteLine($"JavaScriptEnabled = {checkBoxJavaScriptEnabled.Checked}");
-                writer.WriteLine(@"CachePath = C:\myapp\cache");
+                writer.WriteLine($@"CachePath = {Environment.GetEnvironmentVariable("appdata")}\robloxboy1000\IntNetViewer\cache");
                 writer.WriteLine($"UserAgent = {textBoxUA.Text}");
             }
 

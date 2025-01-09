@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.checkBoxJavaScriptEnabled = new System.Windows.Forms.CheckBox();
             this.textBoxHomePage = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -36,16 +35,6 @@
             this.textBoxUA = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // checkBoxJavaScriptEnabled
-            // 
-            this.checkBoxJavaScriptEnabled.AutoSize = true;
-            this.checkBoxJavaScriptEnabled.Location = new System.Drawing.Point(16, 86);
-            this.checkBoxJavaScriptEnabled.Name = "checkBoxJavaScriptEnabled";
-            this.checkBoxJavaScriptEnabled.Size = new System.Drawing.Size(74, 17);
-            this.checkBoxJavaScriptEnabled.TabIndex = 1;
-            this.checkBoxJavaScriptEnabled.Text = "Javascript";
-            this.checkBoxJavaScriptEnabled.UseVisualStyleBackColor = true;
             // 
             // textBoxHomePage
             // 
@@ -85,7 +74,7 @@
             // 
             // textBoxUA
             // 
-            this.textBoxUA.Location = new System.Drawing.Point(84, 115);
+            this.textBoxUA.Location = new System.Drawing.Point(84, 79);
             this.textBoxUA.Name = "textBoxUA";
             this.textBoxUA.Size = new System.Drawing.Size(174, 20);
             this.textBoxUA.TabIndex = 6;
@@ -93,7 +82,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 118);
+            this.label3.Location = new System.Drawing.Point(13, 82);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(62, 13);
             this.label3.TabIndex = 7;
@@ -109,7 +98,6 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.checkBoxJavaScriptEnabled);
             this.Controls.Add(this.textBoxHomePage);
             this.Name = "SettingsForm";
             this.Text = "SettingsForm";
@@ -119,8 +107,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.CheckBox checkBoxJavaScriptEnabled;
         private System.Windows.Forms.TextBox textBoxHomePage;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
