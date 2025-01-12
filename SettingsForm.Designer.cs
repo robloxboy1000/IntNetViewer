@@ -34,6 +34,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.textBoxUA = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.checkBoxDarkMode = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // textBoxHomePage
@@ -88,11 +89,22 @@
             this.label3.TabIndex = 7;
             this.label3.Text = "User agent:";
             // 
+            // checkBoxDarkMode
+            // 
+            this.checkBoxDarkMode.AutoSize = true;
+            this.checkBoxDarkMode.Location = new System.Drawing.Point(16, 105);
+            this.checkBoxDarkMode.Name = "checkBoxDarkMode";
+            this.checkBoxDarkMode.Size = new System.Drawing.Size(79, 17);
+            this.checkBoxDarkMode.TabIndex = 8;
+            this.checkBoxDarkMode.Text = "Dark Mode";
+            this.checkBoxDarkMode.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(270, 450);
+            this.Controls.Add(this.checkBoxDarkMode);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBoxUA);
             this.Controls.Add(this.button1);
@@ -113,5 +125,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBoxUA;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.CheckBox checkBoxDarkMode;
     }
 }

@@ -10,7 +10,7 @@ namespace IntNetViewer
     {
         private static readonly string repoOwner = "robloxboy1000";  // Replace with your repo owner
         private static readonly string repoName = "IntNetViewer";   // Replace with your repo name
-        private static readonly string currentVersionFormatted = "v" + Application.ProductVersion; // Replace with your current version (must be "v*.*.*")
+        private static readonly string currentVersionFormatted = Application.ProductVersion; // Replace with your current version (must be "v*.*.*")
 
         public static async Task CheckForUpdates()
         {

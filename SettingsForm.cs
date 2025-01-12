@@ -35,6 +35,10 @@ namespace IntNetViewer
                     {
                         textBoxUA.Text = line.Split('=')[1].Trim();
                     }
+                    else if (line.StartsWith("DarkMode"))
+                    {
+                        checkBoxDarkMode.Checked = bool.Parse(line.Split('=')[1].Trim());
+                    }
                 }
             }
         }
@@ -45,11 +49,14 @@ namespace IntNetViewer
             {
                 writer.WriteLine("[BrowserSettings]");
                 writer.WriteLine($"HomePage = {textBoxHomePage.Text}");
-                writer.WriteLine($@"CachePath = {Environment.GetEnvironmentVariable("appdata")}\robloxboy1000\IntNetViewer\cache");
+                writer.WriteLine($@"CachePath = {Environment.GetEnvironmentVariable("appdata")}\PixlPlaya5\IntNetViewer\cache");
                 writer.WriteLine($"UserAgent = {textBoxUA.Text}");
+                writer.WriteLine("[General]");
+                writer.WriteLine($"DarkMode = {checkBoxDarkMode.Checked}");
             }
 
             MessageBox.Show("Settings saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.Close();
         }
     }
 }

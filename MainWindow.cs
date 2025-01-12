@@ -7,8 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
 
-
-
 namespace IntNetViewer
 {
     public partial class MainWindow : Form
@@ -16,22 +14,40 @@ namespace IntNetViewer
         private string configFilePath = "config.ini";
         private string homePage = "http://example.com"; // Default home page
         private TabControl tabControl;
-        
-        
-        
 
         public MainWindow()
         {
             InitializeComponent();
             InitializeCef();
-            //InitializeUI();
             InitializeBrowserTabs();
-
+            ApplyTheme();
             // Attach event handlers for tab changes
             tabControl.SelectedIndexChanged += TabControl_SelectedIndexChanged;
-
+            this.Resize += MainWindow_Resize;
         }
+        // Loads settings file
+        private Dictionary<string, string> LoadSettings()
+        {
+            var settings = new Dictionary<string, string>();
 
+            if (File.Exists(configFilePath))
+            {
+                var lines = File.ReadAllLines(configFilePath);
+                foreach (var line in lines)
+                {
+                    if (line.Contains("="))
+                    {
+                        var parts = line.Split('=');
+                        var key = parts[0].Trim();
+                        var value = parts[1].Trim();
+                        settings[key] = value;
+                    }
+                }
+            }
+
+            return settings;
+        }
+        // Initializes CEF with config file
         private void InitializeCef()
         {
             var settings = LoadSettings();
@@ -51,93 +67,42 @@ namespace IntNetViewer
             }
             homePage = settings.ContainsKey("HomePage") ? settings["HomePage"] : homePage;
         }
-        // This way of rendering UI is deprecated. Please do not uncomment this.
-       /* private void InitializeUI()
+
+
+        private void ApplyTheme()
         {
-            
+            var settings = LoadSettings();
 
-            // Initialize ToolStrip
-            navigationToolStrip = new ToolStrip();
-            navigationToolStrip.GripStyle = ToolStripGripStyle.Hidden;
+            bool isDarkMode = settings.TryGetValue("DarkMode", out string darkModeValue) &&
+                              darkModeValue.Equals("true", StringComparison.OrdinalIgnoreCase);
 
-            // Back Button
-            backButton = new ToolStripButton
+            if (isDarkMode)
             {
-                Image = Properties.Resources.back_icon, // Replace with your back icon
-                DisplayStyle = ToolStripItemDisplayStyle.Image,
-                Enabled = false
-            };
-            backButton.Click += BackButton_Click;
-            navigationToolStrip.Items.Add(backButton);
+                this.BackColor = Color.FromArgb(45, 45, 48);    // Dark background
+                this.ForeColor = Color.White;                   // Light text
 
-            // Forward Button
-            forwardButton = new ToolStripButton
+                foreach (Control ctrl in this.Controls)
+                {
+                    ApplyDarkTheme(ctrl);
+                }
+            }
+            else
             {
-                Image = Properties.Resources.forward_icon, // Replace with your forward icon
-                DisplayStyle = ToolStripItemDisplayStyle.Image,
-                Enabled = false
-            };
-            forwardButton.Click += ForwardButton_Click;
-            navigationToolStrip.Items.Add(forwardButton);
+                this.BackColor = SystemColors.Control;
+                this.ForeColor = SystemColors.ControlText;
+            }
+        }
 
-            // Refresh Button
-            refreshButton = new ToolStripButton
-            {
-                Image = Properties.Resources.refresh_icon, // Replace with your refresh icon
-                DisplayStyle = ToolStripItemDisplayStyle.Image
-            };
-            refreshButton.Click += RefreshButton_Click;
-            navigationToolStrip.Items.Add(refreshButton);
+        private void ApplyDarkTheme(Control control)
+        {
+            control.BackColor = Color.FromArgb(45, 45, 48);
+            control.ForeColor = Color.White;
 
-            // Stop Button
-            stopButton = new ToolStripButton
+            foreach (Control child in control.Controls)
             {
-                Image = Properties.Resources.stop_icon, // Replace with your stop icon
-                DisplayStyle = ToolStripItemDisplayStyle.Image,
-                Visible = false
-            };
-            stopButton.Click += StopButton_Click;
-            navigationToolStrip.Items.Add(stopButton);
-
-            // Address TextBox
-            addressTextBox = new ToolStripSpringTextBox
-            {
-                AutoSize = false,
-                Width = 400
-            };
-            addressTextBox.KeyDown += AddressTextBox_KeyDown;
-            navigationToolStrip.Items.Add(addressTextBox);
-
-            // Go Button
-            goButton = new ToolStripButton
-            {
-                Text = "Go"
-            };
-            goButton.Click += GoButton_Click;
-            navigationToolStrip.Items.Add(goButton);
-
-            // New Tab Button
-            newTabButton = new ToolStripButton
-            {
-                Text = "+",
-                DisplayStyle = ToolStripItemDisplayStyle.Text
-            };
-            newTabButton.Click += NewTabButton_Click;
-            navigationToolStrip.Items.Add(newTabButton);
-            // Settings / About Context Menu button
-            menuButton = new ToolStripDropDownButton
-            {
-                Text = "More",
-                DisplayStyle = ToolStripItemDisplayStyle.Text
-            };
-            navigationToolStrip.Items.Add(menuButton);
-
-            // Add ToolStrip to the Form
-            navigationToolStrip.Dock = DockStyle.Top;
-            
-            
-            this.Controls.Add(navigationToolStrip);
-        }*/
+                ApplyDarkTheme(child);
+            }
+        }
 
         private void InitializeBrowserTabs()
         {
@@ -388,21 +353,7 @@ namespace IntNetViewer
                 }
             }
         }
-        // Deprecated feature, do not uncomment
-        /*private void CloseTab(TabPage tabPage)
-        {
-            if (tabPage != null)
-            {
-                var browser = tabPage.Controls.OfType<ChromiumWebBrowser>().FirstOrDefault();
-                if (browser != null)
-                {
-                    browser.Dispose();
-                }
-                tabControl.TabPages.Remove(tabPage);
-                UpdateNavigationControls(); // Update navigation controls after closing
-            }
-            
-        }*/
+        
         private void ClearTabInt(int index)
         {
             // Ensure there's always at least one tab open
@@ -447,27 +398,7 @@ namespace IntNetViewer
             AddNewTab(homePage);
         }
 
-        private Dictionary<string, string> LoadSettings()
-        {
-            var settings = new Dictionary<string, string>();
-
-            if (File.Exists(configFilePath))
-            {
-                var lines = File.ReadAllLines(configFilePath);
-                foreach (var line in lines)
-                {
-                    if (line.Contains("="))
-                    {
-                        var parts = line.Split('=');
-                        var key = parts[0].Trim();
-                        var value = parts[1].Trim();
-                        settings[key] = value;
-                    }
-                }
-            }
-
-            return settings;
-        }
+        
 
         // Asyncronous button to check for updates via https://api.github.com/repos/robloxboy1000/IntNetViewer/releases/latest
         private async void checkForUpdateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -523,6 +454,10 @@ namespace IntNetViewer
             {
                 Cef.Shutdown();
             }
+        }
+        private void MainWindow_Resize(object sender, EventArgs e)
+        {
+            
         }
     }
 }
