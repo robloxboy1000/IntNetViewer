@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("PixlPlaya5")]
 [assembly: AssemblyProduct("IntNetViewer")]
-[assembly: AssemblyCopyright("© 2017-2024 PixlPlaya5")]
+[assembly: AssemblyCopyright("© 2017-2025 PixlPlaya5")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
