@@ -2,7 +2,7 @@
 **IntNetViewer** is a lightweight CEF web browser with a simple-looking UI. It is released under the current licenses of CefSharp, Chromium, and others mentioned. IntNetViewer itself does not include any license.
 
 ## Features
-* Simple to use, lightweight, no trackers or ads
+* Simple to use, lightweight, no trackers or ads (on IntNetViewer itself)
 * Secure and modern, thanks to Chromium Embedded Framework (CEF)
 * started out as a macOS app
 * and more.
