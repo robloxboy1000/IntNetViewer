@@ -12,18 +12,23 @@ namespace IntNetViewer
     public partial class MainWindow : Form
     {
         private string configFilePath = "config.ini";
-        private string homePage = "http://example.com"; // Default home page
+        private string homePage = "intnet://assets/newtab.html"; // Default home page
+        private string cachePathAlt = $"{Application.StartupPath}/cache";
         private TabControl tabControl;
+        public static MainWindow Instance;
+        private ChromiumWebBrowser browser;
 
         public MainWindow()
         {
+            Instance = this;
             InitializeComponent();
+            WindowManager.OpenWindows++;  // Increment when a new window is opened
             InitializeCef();
             InitializeBrowserTabs();
             ApplyTheme();
             // Attach event handlers for tab changes
             tabControl.SelectedIndexChanged += TabControl_SelectedIndexChanged;
-            this.Resize += MainWindow_Resize;
+
         }
         // Loads settings file
         private Dictionary<string, string> LoadSettings()
@@ -51,6 +56,7 @@ namespace IntNetViewer
         private void InitializeCef()
         {
             var settings = LoadSettings();
+            
             CefSettings cefSettings = new CefSettings();
             // Apply settings loaded from the config file
             if (settings.TryGetValue("CachePath", out string cachePath))
@@ -61,6 +67,18 @@ namespace IntNetViewer
             {
                 cefSettings.UserAgent = userAgent;
             }
+            if (settings.TryGetValue("DarkMode", out string darkModeValue) && darkModeValue.Equals("true", StringComparison.OrdinalIgnoreCase))
+            {
+                cefSettings.BackgroundColor = 0;
+                
+            }
+            cefSettings.RegisterScheme(new CefCustomScheme
+            {
+                SchemeName = "intnet",
+                SchemeHandlerFactory = new SchemeHandlerFactory()
+            });
+
+
             if (Cef.IsInitialized == null)
             {
                 Cef.Initialize(cefSettings);
@@ -76,11 +94,13 @@ namespace IntNetViewer
             bool isDarkMode = settings.TryGetValue("DarkMode", out string darkModeValue) &&
                               darkModeValue.Equals("true", StringComparison.OrdinalIgnoreCase);
 
+
             if (isDarkMode)
             {
                 this.BackColor = Color.FromArgb(45, 45, 48);    // Dark background
                 this.ForeColor = Color.White;                   // Light text
 
+                
                 foreach (Control ctrl in this.Controls)
                 {
                     ApplyDarkTheme(ctrl);
@@ -90,6 +110,8 @@ namespace IntNetViewer
             {
                 this.BackColor = SystemColors.Control;
                 this.ForeColor = SystemColors.ControlText;
+                
+                
             }
         }
 
@@ -97,7 +119,8 @@ namespace IntNetViewer
         {
             control.BackColor = Color.FromArgb(45, 45, 48);
             control.ForeColor = Color.White;
-
+            
+            
             foreach (Control child in control.Controls)
             {
                 ApplyDarkTheme(child);
@@ -122,13 +145,13 @@ namespace IntNetViewer
             tabControl.MouseUp += TabControl_MouseUp;
 
             // Add the first browser tab
-            AddNewTab(homePage);
+            AddNewTab("intnet://assets/newtab.html");
         }
 
         private void AddNewTab(string url)
         {
             var tabPage = new TabPage("New Tab");
-            var browser = new ChromiumWebBrowser(url)
+            browser = new ChromiumWebBrowser(url)
             {
                 Dock = DockStyle.Fill
             };
@@ -137,10 +160,31 @@ namespace IntNetViewer
             browser.TitleChanged += OnBrowserTitleChanged;
             browser.AddressChanged += OnBrowserAddressChanged;
             browser.LoadingStateChanged += OnBrowserLoadingStateChanged;
+            browser.FrameLoadEnd += Browser_FrameLoadEnd;
 
             tabPage.Controls.Add(browser);
             tabControl.TabPages.Add(tabPage);
             tabControl.SelectedTab = tabPage;
+        }
+
+        private void Browser_FrameLoadEnd(object sender, FrameLoadEndEventArgs e)
+        {
+            // Only inject into the main frame
+            if (e.Frame.IsMain)
+            {
+                var settings = LoadSettings();
+                bool isDarkMode = settings.TryGetValue("DarkMode", out string darkModeValue) &&
+                                  darkModeValue.Equals("true", StringComparison.OrdinalIgnoreCase);
+
+                if (isDarkMode)
+                {
+                    // Must be run on the UI thread
+                    this.Invoke(new Action(() =>
+                    {
+                        InjectDarkModeCSS();
+                    }));
+                }
+            }
         }
 
         private void TabControl_SelectedIndexChanged(object sender, EventArgs e)
@@ -246,6 +290,9 @@ namespace IntNetViewer
                 if (!url.StartsWith("http://") && !url.StartsWith("https://"))
                 {
                     url = "http://" + url;
+                }
+                else if (url.StartsWith("intnet://")) {
+                    browser.Load(url);
                 }
                 browser.Load(url);
             }
@@ -395,7 +442,7 @@ namespace IntNetViewer
 
         private void NewTabButton_Click(object sender, EventArgs e)
         {
-            AddNewTab(homePage);
+            AddNewTab("intnet://assets/newtab.html");
         }
 
         
@@ -432,14 +479,14 @@ namespace IntNetViewer
 
         private void newWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // This is not reccomended. PLEASE use tabs instead of windows.
+            // This is not recommended. PLEASE use tabs instead of windows.
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show(); // Don't show as a dialog
         }
 
         private void newTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTab(homePage);
+            AddNewTab("intnet://assets/newtab.html");
         }
 
         // This method calls Cef.Shutdown() when closed. Fix if possible. NOTE: Fixed
@@ -452,12 +499,43 @@ namespace IntNetViewer
             }
             else
             {
-                Cef.Shutdown();
+                WindowManager.OpenWindows--;  // Decrement when a window is closed
+                if (WindowManager.OpenWindows == 0)
+                {
+                    Cef.Shutdown();  // Shutdown only when no windows are open
+                }
             }
         }
-        private void MainWindow_Resize(object sender, EventArgs e)
+
+        private void pixlPlaya5OnYouTubeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddNewTab("https://youtube.com/@pixlplaya5");
+        }
+
+        private void pixlPlaya5OnGitHubToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddNewTab("https://github.com/robloxboy1000/");
+        }
+        private void InjectDarkModeCSS()
         {
             
+
+            string darkModeCSS = @"
+        const style = document.createElement('style');
+        style.innerHTML = `
+            html, body {
+                background-color: #121212 !important;
+                color: #e0e0e0 !important;
+            }
+            a { color: #bb86fc !important; }
+            img, video { filter: brightness(0.8) contrast(1.2); }
+            * { border-color: #444 !important; }
+        `;
+        document.head.appendChild(style);
+    ";
+
+            // Inject JavaScript that appends the CSS to the page
+            browser.ExecuteScriptAsync(darkModeCSS);
         }
     }
 }

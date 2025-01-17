@@ -36,3 +36,36 @@ For observer stack traces, build with `dcheck_always_on=true`.
 [0808/000333.043:WARNING:resource_util.cc(99)] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.
 [0810/231949.650:WARNING:resource_util.cc(99)] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.
 [0825/003233.378:WARNING:resource_util.cc(99)] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.
+[0111/222413.936:ERROR:context.cc(164)] The cache_path directory (C:\Users\%USERNAME%\AppData\Local\PixlPlaya5\IntNetViewer) could not be created.
+[0111/222414.261:ERROR:context.cc(179)] The cache_path is invalid. Defaulting to in-memory storage.
+[0111/222414.278:WARNING:resource_util.cc(83)] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.
+[0111/222512.986:ERROR:context.cc(164)] The cache_path directory (C:\Users\%USERNAME%\AppData\Local\PixlPlaya5\IntNetViewer) could not be created.
+[0111/222512.986:ERROR:context.cc(179)] The cache_path is invalid. Defaulting to in-memory storage.
+[0111/222512.997:WARNING:resource_util.cc(83)] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.
+[0111/223045.336:ERROR:context.cc(164)] The cache_path directory (C:\Users\%USERNAME%\AppData\Local\PixlPlaya5\IntNetViewer) could not be created.
+[0111/223045.336:ERROR:context.cc(179)] The cache_path is invalid. Defaulting to in-memory storage.
+[0111/223045.346:WARNING:resource_util.cc(83)] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.
+[0111/223225.259:ERROR:context.cc(164)] The cache_path directory (C:\Users\%USERNAME%\AppData\Local\PixlPlaya5\IntNetViewer) could not be created.
+[0111/223225.259:ERROR:context.cc(179)] The cache_path is invalid. Defaulting to in-memory storage.
+[0111/223225.268:WARNING:resource_util.cc(83)] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.
+[0111/223528.923:ERROR:context.cc(164)] The cache_path directory (C:\Users\%USERNAME%\AppData\Local\PixlPlaya5\IntNetViewer) could not be created.
+[0111/223528.924:ERROR:context.cc(179)] The cache_path is invalid. Defaulting to in-memory storage.
+[0111/223528.938:WARNING:resource_util.cc(83)] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.
+[0111/223602.870:ERROR:context.cc(164)] The cache_path directory (C:\Users\%USERNAME%\AppData\Local\PixlPlaya5\IntNetViewer) could not be created.
+[0111/223602.870:ERROR:context.cc(179)] The cache_path is invalid. Defaulting to in-memory storage.
+[0111/223602.883:WARNING:resource_util.cc(83)] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.
+[0111/223646.381:ERROR:context.cc(164)] The cache_path directory (C:\Users\%USERNAME%\AppData\Local\PixlPlaya5\IntNetViewer) could not be created.
+[0111/223646.381:ERROR:context.cc(179)] The cache_path is invalid. Defaulting to in-memory storage.
+[0111/223646.390:WARNING:resource_util.cc(83)] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.
+[0111/224416.073:ERROR:context.cc(164)] The cache_path directory (C:\Users\%USERNAME%\AppData\Local\PixlPlaya5\IntNetViewer) could not be created.
+[0111/224416.074:ERROR:context.cc(179)] The cache_path is invalid. Defaulting to in-memory storage.
+[0111/224416.080:WARNING:resource_util.cc(83)] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.
+[0116/111219.590:ERROR:context.cc(164)] The cache_path directory (C:\Users\%USERNAME%\AppData\Local\PixlPlaya5\IntNetViewer) could not be created.
+[0116/111219.658:ERROR:context.cc(179)] The cache_path is invalid. Defaulting to in-memory storage.
+[0116/111220.427:WARNING:resource_util.cc(83)] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.
+[0116/112939.433:ERROR:context.cc(164)] The cache_path directory (C:\Users\%USERNAME%\AppData\Local\PixlPlaya5\IntNetViewer) could not be created.
+[0116/112939.433:ERROR:context.cc(179)] The cache_path is invalid. Defaulting to in-memory storage.
+[0116/112939.440:WARNING:resource_util.cc(83)] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.
+[0117/001047.976:ERROR:context.cc(164)] The cache_path directory (C:\Users\%USERNAME%\AppData\Local\PixlPlaya5\IntNetViewer) could not be created.
+[0117/001048.001:ERROR:context.cc(179)] The cache_path is invalid. Defaulting to in-memory storage.
+[0117/001048.570:WARNING:resource_util.cc(83)] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.

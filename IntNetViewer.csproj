@@ -139,6 +139,8 @@
     <Compile Include="About_New.Designer.cs">
       <DependentUpon>About_New.cs</DependentUpon>
     </Compile>
+    <Compile Include="BrowserConfig.cs" />
+    <Compile Include="CustomSchemeHandler.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,6 +154,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SchemeHandlerFactory.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsForm.cs">
       <SubType>Form</SubType>

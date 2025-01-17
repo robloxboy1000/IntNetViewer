@@ -1,0 +1,29 @@
+﻿<html>
+<head>
+</head>
+<body>
+	IntNetViewer Error Page (for testing)
+	<p id="errorShortDescText"></p>
+	<script>
+	// re-wrote by ChatGPT for vanilla JavaScript
+	
+  // Function to get URL parameters
+  function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+      vars[key] = decodeURIComponent(value);
+    });
+    return vars;
+  }
+
+  // Get URL parameters
+  var urlVars = getUrlVars();
+
+  // Show error
+  var errorShortDescText = document.getElementById('errorShortDescText');
+  if (errorShortDescText && urlVars["error"]) {
+    errorShortDescText.innerHTML = "Error:&nbsp;<b>" + urlVars["error"] + "</b>";
+  }
+</script>
+</body>
+</html>

@@ -64,5 +64,11 @@ namespace IntNetViewer
                 // Application.Exit();
             }
         }
+
+
+    }
+    public static class WindowManager
+    {
+        public static int OpenWindows = 0;
     }
 }
