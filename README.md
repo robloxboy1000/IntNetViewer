@@ -1,5 +1,9 @@
 # IntNetViewer
-**IntNetViewer** is a lightweight CEF web browser with a simple-looking UI. It is released under the current licenses of CefSharp, Chromium, and others mentioned. IntNetViewer itself does not include any license.
+**IntNetViewer** is a lightweight CEF web browser with a simple-looking UI.
+
+## Notes
+This program does not work with macOS WineHQ, nor Linux WINE.\
+IntNetViewer does not include any license.
 
 ## Features
 * Simple to use, lightweight, no trackers or ads (on IntNetViewer itself)
@@ -7,10 +11,6 @@
 * started out as a macOS app
 * and more.
 
-## System requirments
-System requirements are the same as the latest version of CefSharp. If your OS is lower than Windows 10, (ex. Windows 7) you may need the following:
-
-* [.NET Framework 4.8 (IntNetViewer is built under .NET Framework 4.8.)](https://dotnet.microsoft.com/download/dotnet-framework/net48)
 
 ## How to use
 1. Download the latest build [here](https://github.com/robloxboy1000/IntNetViewer/releases/latest)
