@@ -15,7 +15,7 @@ IntNetViewer does not include any license.
 ## How to use
 1. Download the latest build [here](https://github.com/robloxboy1000/IntNetViewer/releases/latest)
 2. Extract into a folder
-3. Run `IntNetViewer.exe`
+3. Run `int.exe`
 4. Use as a regular web browser
 
 ## How to build
@@ -24,7 +24,7 @@ IntNetViewer does not include any license.
 3. Make your changes
 4. Choose the `Debug` configuration and `x64` platform/CPU
 5. Build the solution
-6. `IntNetViewer.exe` is now in `bin\x64\Debug\`
+6. `int.exe` is now in `bin\x64\Debug\`
 
 ## Want "lighter?"
 [LiteSurf](https://github.com/robloxboy100058/litesurf)
