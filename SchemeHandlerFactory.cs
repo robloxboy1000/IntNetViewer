@@ -14,4 +14,5 @@ namespace IntNetViewer
             return new CustomSchemeHandler(MainWindow.Instance);
         }
     }
+
 }

@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+<title>History</title>	
+</head>
+	<body>
+	<h2>History</h2>
+	<div id="linkContainer"></div>
+	<script>
+        async function loadTextFile() {
+            try {
+                const response = await fetch('intnet://assets/history.txt'); // Load the text file
+                const text = await response.text();
+                const lines = text.split('\n'); // Split file into lines
+
+                const container = document.getElementById('linkContainer');
+                lines.forEach((line, index) => {
+                    if (line.trim()) { // Ignore empty lines
+                        const link = document.createElement('a');
+                        link.href = line.trim(); // Set link destination
+                        link.textContent = `Link ${index + 1}: ${line.trim()}`; // Display text
+                        link.target = "_blank"; // Open in a new tab
+                        link.style.display = "block"; // Display each link in a new line
+                        container.appendChild(link);
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading text file:', error);
+            }
+        }
+
+        loadTextFile();
+    </script>
+	</body>
+</html>
+

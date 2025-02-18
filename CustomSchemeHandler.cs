@@ -66,8 +66,29 @@ namespace IntNetViewer
                     return true;
                 }
             }
+            if (uri.Host == "data")
+            {
+                fileName = appPath + uri.Host + fileName;
+                if (File.Exists(fileName))
+                {
+                    Task.Factory.StartNew(() => {
+                        using (callback)
+                        {
+                            FileStream fStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                            mimeType = ResourceHandler.GetMimeType(Path.GetExtension(fileName));
+                            
+                            stream = fStream;
+                            callback.Continue();
+                        }
+                    });
 
-            
+                    // handle the request at a later time
+                    handleRequest = false;
+                    return true;
+                }
+            }
+
+
 
 
             // by default reject

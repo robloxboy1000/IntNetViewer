@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.textBoxHomePage = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -35,6 +36,12 @@
             this.textBoxUA = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.checkBoxDarkMode = new System.Windows.Forms.CheckBox();
+            this.checkBoxHome = new System.Windows.Forms.CheckBox();
+            this.checkBoxGPUAccel = new System.Windows.Forms.CheckBox();
+            this.checkBoxShowFPS = new System.Windows.Forms.CheckBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.checkBoxWarn = new System.Windows.Forms.CheckBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // textBoxHomePage
@@ -71,7 +78,7 @@
             this.button1.TabIndex = 5;
             this.button1.Text = "Save";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // textBoxUA
             // 
@@ -99,11 +106,65 @@
             this.checkBoxDarkMode.Text = "Dark Mode";
             this.checkBoxDarkMode.UseVisualStyleBackColor = true;
             // 
+            // checkBoxHome
+            // 
+            this.checkBoxHome.AutoSize = true;
+            this.checkBoxHome.Location = new System.Drawing.Point(16, 128);
+            this.checkBoxHome.Name = "checkBoxHome";
+            this.checkBoxHome.Size = new System.Drawing.Size(115, 17);
+            this.checkBoxHome.TabIndex = 9;
+            this.checkBoxHome.Text = "Show home button";
+            this.checkBoxHome.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxGPUAccel
+            // 
+            this.checkBoxGPUAccel.AutoSize = true;
+            this.checkBoxGPUAccel.Location = new System.Drawing.Point(16, 166);
+            this.checkBoxGPUAccel.Name = "checkBoxGPUAccel";
+            this.checkBoxGPUAccel.Size = new System.Drawing.Size(111, 17);
+            this.checkBoxGPUAccel.TabIndex = 10;
+            this.checkBoxGPUAccel.Text = "GPU Acceleration";
+            this.checkBoxGPUAccel.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxShowFPS
+            // 
+            this.checkBoxShowFPS.AutoSize = true;
+            this.checkBoxShowFPS.Location = new System.Drawing.Point(16, 190);
+            this.checkBoxShowFPS.Name = "checkBoxShowFPS";
+            this.checkBoxShowFPS.Size = new System.Drawing.Size(184, 17);
+            this.checkBoxShowFPS.TabIndex = 11;
+            this.checkBoxShowFPS.Text = "Show FPS Counter (WebGL only)";
+            this.checkBoxShowFPS.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Black;
+            this.pictureBox1.Location = new System.Drawing.Point(13, 152);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(245, 1);
+            this.pictureBox1.TabIndex = 12;
+            this.pictureBox1.TabStop = false;
+            // 
+            // checkBoxWarn
+            // 
+            this.checkBoxWarn.AutoSize = true;
+            this.checkBoxWarn.Location = new System.Drawing.Point(16, 214);
+            this.checkBoxWarn.Name = "checkBoxWarn";
+            this.checkBoxWarn.Size = new System.Drawing.Size(95, 17);
+            this.checkBoxWarn.TabIndex = 13;
+            this.checkBoxWarn.Text = "Warn on close";
+            this.checkBoxWarn.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(270, 450);
+            this.Controls.Add(this.checkBoxWarn);
+            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.checkBoxShowFPS);
+            this.Controls.Add(this.checkBoxGPUAccel);
+            this.Controls.Add(this.checkBoxHome);
             this.Controls.Add(this.checkBoxDarkMode);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBoxUA);
@@ -111,8 +172,10 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxHomePage);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SettingsForm";
-            this.Text = "SettingsForm";
+            this.Text = "Settings";
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -126,5 +189,10 @@
         private System.Windows.Forms.TextBox textBoxUA;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox checkBoxDarkMode;
+        private System.Windows.Forms.CheckBox checkBoxHome;
+        private System.Windows.Forms.CheckBox checkBoxGPUAccel;
+        private System.Windows.Forms.CheckBox checkBoxShowFPS;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.CheckBox checkBoxWarn;
     }
 }

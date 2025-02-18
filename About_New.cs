@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CefSharp;
+using System.IO;
 
 namespace IntNetViewer
 {
@@ -16,7 +18,12 @@ namespace IntNetViewer
         public About_New()
         {
             InitializeComponent();
-            this.label2.Text = String.Format("Version {0}", AssemblyVersion);
+            this.label2.Text = "PixlPlaya5";
+            this.label4.Text = AssemblyVersion;
+            this.label6.Text = Cef.CefSharpVersion.ToString();
+            this.label8.Text = GetBuildDate();
+            this.archLabel.Text = Environment.Is64BitProcess ? "x64" : "x86";
+            this.label12.Text = Environment.OSVersion.VersionString;
         }
         public string AssemblyVersion
         {
@@ -24,6 +31,13 @@ namespace IntNetViewer
             {
                 return Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
+        }
+        public static string GetBuildDate()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var filePath = assembly.Location;
+            var buildDate = File.GetLastWriteTime(filePath);
+            return buildDate.ToString("yyyy-MM-dd HH:mm:ss");
         }
     }
 }

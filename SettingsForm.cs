@@ -13,7 +13,7 @@ namespace IntNetViewer
 {
     public partial class SettingsForm : Form
     {
-        private string configFilePath = "config.ini";
+        private readonly string configFilePath = "config.ini";
         
         public SettingsForm()
         {
@@ -39,20 +39,40 @@ namespace IntNetViewer
                     {
                         checkBoxDarkMode.Checked = bool.Parse(line.Split('=')[1].Trim());
                     }
+                    else if (line.StartsWith("EnableHomeButton"))
+                    {
+                        checkBoxHome.Checked = bool.Parse(line.Split('=')[1].Trim());
+                    }
+                    else if (line.StartsWith("WarnOnExit"))
+                    {
+                        checkBoxWarn.Checked = bool.Parse(line.Split('=')[1].Trim());
+                    }
+                    else if (line.StartsWith("GPUAcceleration"))
+                    {
+                        checkBoxGPUAccel.Checked = bool.Parse(line.Split('=')[1].Trim());
+                    }
+                    else if (line.StartsWith("ShowFPSCounter"))
+                    {
+                        checkBoxShowFPS.Checked = bool.Parse(line.Split('=')[1].Trim());
+                    }
                 }
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             using (StreamWriter writer = new StreamWriter(configFilePath))
             {
                 writer.WriteLine("[BrowserSettings]");
                 writer.WriteLine($"HomePage = {textBoxHomePage.Text}");
-                writer.WriteLine($@"CachePath = {Environment.GetEnvironmentVariable("appdata")}\PixlPlaya5\IntNetViewer\cache");
+                writer.WriteLine($@"CachePath = ./cache/");
                 writer.WriteLine($"UserAgent = {textBoxUA.Text}");
+                writer.WriteLine($"GPUAcceleration = {checkBoxGPUAccel}");
+                writer.WriteLine($"ShowFPSCounter = {checkBoxShowFPS}");
                 writer.WriteLine("[General]");
                 writer.WriteLine($"DarkMode = {checkBoxDarkMode.Checked}");
+                writer.WriteLine($"EnableHomeButton = {checkBoxHome.Checked}");
+                writer.WriteLine($"WarnOnExit = {checkBoxWarn.Checked}");
             }
 
             MessageBox.Show("Settings saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
