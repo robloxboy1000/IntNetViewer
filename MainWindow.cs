@@ -4,13 +4,12 @@ using CefSharp;
 using CefSharp.WinForms;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Media;
 using WeifenLuo.WinFormsUI.Docking;
-using IntNetViewer.Properties;
 using System.Net;
+using System.Text.RegularExpressions;
 
 
 namespace IntNetViewer
@@ -24,7 +23,7 @@ namespace IntNetViewer
         private string homePage = "intnet://assets/newtab.html"; // Default home page
         private DockPanel dockPanel;
         public static MainWindow Instance;
-
+        public string appPath = Application.StartupPath;
         private readonly List<string> history = new List<string>();
         public HostHandler host;
         private DownloadHandler dHandler;
@@ -38,28 +37,23 @@ namespace IntNetViewer
         private FormWindowState oldWindowState;
         private FormBorderStyle oldBorderStyle;
         public string pageTitle;
-        private bool weebMode;
         private Icon favicon;
-        private BrowserTab newTab;
 
-        public MainWindow(string[] args)
+        public MainWindow()
         {
             Instance = this;
             InitializeComponent();
             WindowManager.OpenWindows++;  // Increment when a new window is opened
             InitializeCef();
             InitializeBrowserTabs();
-            ApplyTheme();
+            
             EnableHomeButton();
             LoadHistoryFromFile();
             // Attach event handlers for tab changes
             //dockPanel.SelectedIndexChanged += TabControl_SelectedIndexChanged;
             dockPanel.ActiveDocumentChanged += DockPanel_ActiveDocumentChanged;
 
-            if (args.Length > 0)
-            {
-                Console.WriteLine("MainWindow: Arguments received: " + string.Join(", ", args));
-            }
+            
 
         }
         private void DockPanel_ActiveDocumentChanged(object sender, EventArgs e)
@@ -199,8 +193,9 @@ namespace IntNetViewer
             });
             cefSettings.IgnoreCertificateErrors = true;
             cefSettings.WindowlessRenderingEnabled = true;
+
             
-            
+
             if (settings.TryGetValue(settings["GPUAcceleration"], out string gpuAccelerationValue) && gpuAccelerationValue.Equals("false", StringComparison.OrdinalIgnoreCase))
             {
                 cefSettings.CefCommandLineArgs.Add("disable-gpu", "1");
@@ -236,8 +231,8 @@ namespace IntNetViewer
             {
                 this.BackColor = Color.FromArgb(45, 45, 48);    // Dark background
                 this.ForeColor = Color.White;                   // Light text
-
                 
+
                 foreach (Control ctrl in this.Controls)
                 {
                     ApplyDarkTheme(ctrl);
@@ -313,8 +308,19 @@ namespace IntNetViewer
 
         public void AddNewTab(string url)
         {
-            var theme = new VS2015LightTheme();
-            dockPanel.Theme = theme;
+            var settings = LoadSettings();
+            bool isDarkMode = settings.TryGetValue("DarkMode", out string darkModeValue) && darkModeValue.Equals("true", StringComparison.OrdinalIgnoreCase);
+            if (isDarkMode)
+            {
+                var theme = new VS2015DarkTheme();
+                dockPanel.Theme = theme;
+            }
+            else
+            {
+                var theme = new VS2015LightTheme();
+                dockPanel.Theme = theme;
+            }
+            
             var newTab = new BrowserTab(url);
             newTab.Show(dockPanel, DockState.Document);
             var browser = GetCurrentBrowser();
@@ -504,7 +510,7 @@ namespace IntNetViewer
                     this.Invoke(new Action(() =>
                     {
                         addressTextBox.Text = string.Empty;
-                        searchPanel.Visible = true;
+                        //searchPanel.Visible = true;
                     }));
                     
                 }
@@ -512,7 +518,7 @@ namespace IntNetViewer
                 {
                     this.Invoke(new Action(() =>
                     {
-                        searchPanel.Visible = false;
+                        //searchPanel.Visible = false;
                         addressTextBox.Text = browser.Address;
                     }));
                 }
@@ -578,22 +584,36 @@ namespace IntNetViewer
                     Console.WriteLine("Internal URL: " + url);
                     browser.Load(url);
                 }
-                else if (!url.StartsWith("http://") && !url.StartsWith("https://"))
-                {
-                    Console.WriteLine("External URL: " + url);
-                    url = "http://" + url;
-                    browser.Load(url);
-                }
-                
                 else
                 {
-                    Console.WriteLine("External URL: " + url);
-                    browser.Load(url);
+                    string processedUrl = EnsureValidUrl(url);
+                    Console.WriteLine(processedUrl);
+                    Console.WriteLine("External URL (Processed): " + processedUrl);
+                    browser.Load(processedUrl);
                 }
                 if (!history.Contains(url))
                 {
                     history.Add(url);
                 }
+            }
+        }
+        static string EnsureValidUrl(string input)
+        {
+            // Regex for checking if the string ends with a known TLD
+            string tldPattern = @"\.(com|org|net|edu|gov|mil|int|io|co|uk|us|info|biz|tv|xyz|ca|de|fr|au|jp|cn|ru|in|br|za|eu|me|cc|us|[a-z]{2,})$";
+            if (Regex.IsMatch(input, tldPattern, RegexOptions.IgnoreCase))
+            {
+                // If input has a TLD but is missing a scheme, add "http://"
+                if (!input.StartsWith("http://") && !input.StartsWith("https://"))
+                {
+                    return "http://" + input;
+                }
+                return input;
+            }
+            else
+            {
+                // If no TLD is found, assume it's a search query
+                return "https://www.google.com/search?q=" + Uri.EscapeDataString(input);
             }
         }
 
@@ -695,24 +715,12 @@ namespace IntNetViewer
 
                 if (isDarkMode)
                 {
-                    // Get the doctype of the loaded page
-                    string doctype = await GetDocTypeAsync(e.Frame);
-
-                    if (doctype == "HTML5")
-                    {
-
+                    
                         // Use the DevTools client to force dark mode
                         var devToolsClient = browser.GetDevToolsClient();
                         await devToolsClient.Emulation.SetAutoDarkModeOverrideAsync(true);
-                        Console.WriteLine($"DevTools Forced dark mode was used. String: {doctype}");
-                    }
-                    else
-                    {
                         
-                        // Inject custom Dark Mode CSS for older doctypes or missing doctype
-                        InjectDarkModeCSS();
-                        Console.WriteLine($"CSS Dark Mode used. String: {doctype}");
-                    }
+                    
                 }
             }
             if (!history.Contains(e.Url))
@@ -721,34 +729,7 @@ namespace IntNetViewer
             }
             UpdateAddressBar();
         }
-        private async Task<string> GetDocTypeAsync(IFrame frame)
-        {
-            var script = @"
-        (() => {
-            if (document.doctype) {
-                const publicId = document.doctype.publicId || '';
-                const systemId = document.doctype.systemId || '';
-                const name = document.doctype.name || '';
-
-                if (name.toLowerCase() === 'html' && !publicId && !systemId) {
-                    return 'HTML5';
-                } else {
-                    return 'Older';
-                }
-            } else {
-                return 'NoDoctype';
-            }
-        })();
-    ";
-
-            var response = await frame.EvaluateScriptAsync(script);
-            if (response.Success && response.Result != null)
-            {
-                return response.Result.ToString();
-            }
-
-            return "Unknown";
-        }
+        
 
         // Tab control
         
@@ -783,6 +764,7 @@ namespace IntNetViewer
 
         private async void MainWindow_Load(object sender, EventArgs e)
         {
+            ApplyTheme();
             InitHotkeys();
 
 #if DEBUG
@@ -803,9 +785,6 @@ namespace IntNetViewer
             await UpdateChecker.CheckForUpdates();
         }
 
-        // this is not used.
-        
-
         private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Open the settings form
@@ -816,7 +795,7 @@ namespace IntNetViewer
         private void NewWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // This is not recommended. PLEASE use tabs instead of windows. Note: this has been fixed using a counter of open windows.
-            MainWindow mainWindow = new MainWindow(null);
+            MainWindow mainWindow = new MainWindow();
             mainWindow.Show(); // Don't show as a dialog
         }
 
@@ -976,6 +955,7 @@ namespace IntNetViewer
             ClearHistory();
         }
 
+        /*
         private void SearchTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             var browser = GetCurrentBrowser();
@@ -984,12 +964,16 @@ namespace IntNetViewer
                 browser.Load($"https://www.google.com/search?q={searchTextBox.Text}&udm=14"); // "udm=14" is a custom Google search parameter to only show web results (no images, videos, AI, etc.)
                 searchPanel.Visible = false;
             }
-        }
+        }*/
 
         private void BookmarksToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!File.Exists("./assets/bookmarks.html"))
+            {
+                BookmarkManager.ExportBookmarksToHtml();
+            }
             var browser = GetCurrentBrowser();
-            browser.Load($"file:///{Path.GetFullPath("bookmarks.html")}");
+            browser.Load($"intnet://assets/bookmarks.html");
         }
 
         private void AddBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
@@ -999,61 +983,6 @@ namespace IntNetViewer
             bookmarks.Add(new Bookmark { Name = pageTitle, Url = browser.Address });
             BookmarkManager.SaveBookmarks(bookmarks);
             BookmarkManager.ExportBookmarksToHtml();
-        }
-
-        private void WeeabooToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SoundPlayer player = new SoundPlayer();
-            if (!weebMode)
-            {
-                // warning
-                DialogResult dialogResult = MessageBox.Show("This will uwu-ify IntNetViewer. Continue?", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (dialogResult == DialogResult.Yes)
-                {
-                    // bgm
-                    
-                    player.SoundLocation = "./assets/eek.wav";
-                    player.LoadAsync();
-                    player.PlayLooping();
-
-                    // change UI
-                    this.BackColor = Color.HotPink;
-                    this.ForeColor = Color.White;
-                    foreach (Control ctrl in this.Controls)
-                    {
-                        ApplyPinkTheme(ctrl);
-                    }
-                    weebMode = true;
-
-                }
-                else
-                {
-                    return;
-                }
-            }
-            else
-            {
-                player.Stop();
-                // change UI
-                this.BackColor = SystemColors.Control;
-                this.ForeColor = SystemColors.ControlText;
-                foreach (Control ctrl in this.Controls)
-                {
-                    ApplyDefaultTheme(ctrl);
-                }
-                weebMode = false;
-            }
-        }
-        private void ApplyPinkTheme(Control control)
-        {
-            control.BackColor = Color.HotPink;
-            control.ForeColor = Color.White;
-
-
-            foreach (Control child in control.Controls)
-            {
-                ApplyPinkTheme(child);
-            }
         }
         private void ApplyDefaultTheme(Control control)
         {

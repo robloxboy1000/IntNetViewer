@@ -50,8 +50,6 @@ namespace IntNetViewer
             this.notificationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.secretToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.weeabooToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openDownloadsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,9 +57,6 @@ namespace IntNetViewer
             this.pixlPlaya5OnYouTubeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pixlPlaya5OnGitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.searchPanel = new System.Windows.Forms.Panel();
-            this.searchTextBox = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.addressTextBox = new System.Windows.Forms.TextBox();
@@ -70,15 +65,14 @@ namespace IntNetViewer
             this.cefToolTipStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripContainer3 = new System.Windows.Forms.ToolStripContainer();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.backButton = new System.Windows.Forms.Button();
-            this.forwardButton = new System.Windows.Forms.Button();
-            this.stopButton = new System.Windows.Forms.Button();
-            this.refreshButton = new System.Windows.Forms.Button();
-            this.labelLoading = new System.Windows.Forms.Label();
             this.homeToolStripButton = new System.Windows.Forms.Button();
+            this.labelLoading = new System.Windows.Forms.Label();
+            this.refreshButton = new System.Windows.Forms.Button();
+            this.stopButton = new System.Windows.Forms.Button();
+            this.forwardButton = new System.Windows.Forms.Button();
+            this.backButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.searchPanel.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStripContainer3.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer3.SuspendLayout();
@@ -153,7 +147,6 @@ namespace IntNetViewer
             this.debugToolStripMenuItem,
             this.clearHistoryToolStripMenuItem,
             this.addBookmarkToolStripMenuItem,
-            this.secretToolStripMenuItem,
             this.openDownloadsToolStripMenuItem});
             this.moreToolStripMenuItem.Name = "moreToolStripMenuItem";
             this.moreToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
@@ -245,21 +238,6 @@ namespace IntNetViewer
             this.addBookmarkToolStripMenuItem.Text = "Add Bookmark";
             this.addBookmarkToolStripMenuItem.Click += new System.EventHandler(this.AddBookmarkToolStripMenuItem_Click);
             // 
-            // secretToolStripMenuItem
-            // 
-            this.secretToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.weeabooToolStripMenuItem});
-            this.secretToolStripMenuItem.Name = "secretToolStripMenuItem";
-            this.secretToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-            this.secretToolStripMenuItem.Text = "secret";
-            // 
-            // weeabooToolStripMenuItem
-            // 
-            this.weeabooToolStripMenuItem.Name = "weeabooToolStripMenuItem";
-            this.weeabooToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
-            this.weeabooToolStripMenuItem.Text = "oh man";
-            this.weeabooToolStripMenuItem.Click += new System.EventHandler(this.WeeabooToolStripMenuItem_Click);
-            // 
             // openDownloadsToolStripMenuItem
             // 
             this.openDownloadsToolStripMenuItem.Name = "openDownloadsToolStripMenuItem";
@@ -309,7 +287,6 @@ namespace IntNetViewer
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.Controls.Add(this.searchPanel);
             this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.addressTextBox);
@@ -318,37 +295,6 @@ namespace IntNetViewer
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(784, 21);
             this.panel1.TabIndex = 2;
-            // 
-            // searchPanel
-            // 
-            this.searchPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchPanel.Controls.Add(this.searchTextBox);
-            this.searchPanel.Controls.Add(this.label2);
-            this.searchPanel.Location = new System.Drawing.Point(0, 0);
-            this.searchPanel.Name = "searchPanel";
-            this.searchPanel.Size = new System.Drawing.Size(673, 21);
-            this.searchPanel.TabIndex = 7;
-            this.searchPanel.Visible = false;
-            // 
-            // searchTextBox
-            // 
-            this.searchTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchTextBox.Location = new System.Drawing.Point(54, 0);
-            this.searchTextBox.Name = "searchTextBox";
-            this.searchTextBox.Size = new System.Drawing.Size(619, 20);
-            this.searchTextBox.TabIndex = 1;
-            this.searchTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SearchTextBox_KeyPress);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(4, 4);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(44, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Search:";
             // 
             // button2
             // 
@@ -437,35 +383,24 @@ namespace IntNetViewer
             this.panel2.Size = new System.Drawing.Size(784, 26);
             this.panel2.TabIndex = 7;
             // 
-            // backButton
+            // homeToolStripButton
             // 
-            this.backButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.backButton.Location = new System.Drawing.Point(8, 3);
-            this.backButton.Name = "backButton";
-            this.backButton.Size = new System.Drawing.Size(75, 20);
-            this.backButton.TabIndex = 0;
-            this.backButton.Text = "Back";
-            this.backButton.UseVisualStyleBackColor = true;
-            this.backButton.Click += new System.EventHandler(this.BackButton_Click);
+            this.homeToolStripButton.Location = new System.Drawing.Point(251, 3);
+            this.homeToolStripButton.Name = "homeToolStripButton";
+            this.homeToolStripButton.Size = new System.Drawing.Size(75, 20);
+            this.homeToolStripButton.TabIndex = 5;
+            this.homeToolStripButton.Text = "Home";
+            this.homeToolStripButton.UseVisualStyleBackColor = true;
+            this.homeToolStripButton.Click += new System.EventHandler(this.HomeToolStripButton_Click);
             // 
-            // forwardButton
+            // labelLoading
             // 
-            this.forwardButton.Location = new System.Drawing.Point(89, 3);
-            this.forwardButton.Name = "forwardButton";
-            this.forwardButton.Size = new System.Drawing.Size(75, 20);
-            this.forwardButton.TabIndex = 1;
-            this.forwardButton.Text = "Forward";
-            this.forwardButton.UseVisualStyleBackColor = true;
-            this.forwardButton.Click += new System.EventHandler(this.ForwardButton_Click);
-            // 
-            // stopButton
-            // 
-            this.stopButton.Location = new System.Drawing.Point(170, 4);
-            this.stopButton.Name = "stopButton";
-            this.stopButton.Size = new System.Drawing.Size(75, 20);
-            this.stopButton.TabIndex = 2;
-            this.stopButton.Text = "Stop";
-            this.stopButton.UseVisualStyleBackColor = true;
+            this.labelLoading.AutoSize = true;
+            this.labelLoading.Location = new System.Drawing.Point(332, 7);
+            this.labelLoading.Name = "labelLoading";
+            this.labelLoading.Size = new System.Drawing.Size(50, 13);
+            this.labelLoading.TabIndex = 4;
+            this.labelLoading.Text = "loading...";
             // 
             // refreshButton
             // 
@@ -477,24 +412,35 @@ namespace IntNetViewer
             this.refreshButton.UseVisualStyleBackColor = true;
             this.refreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
             // 
-            // labelLoading
+            // stopButton
             // 
-            this.labelLoading.AutoSize = true;
-            this.labelLoading.Location = new System.Drawing.Point(332, 7);
-            this.labelLoading.Name = "labelLoading";
-            this.labelLoading.Size = new System.Drawing.Size(50, 13);
-            this.labelLoading.TabIndex = 4;
-            this.labelLoading.Text = "loading...";
+            this.stopButton.Location = new System.Drawing.Point(170, 4);
+            this.stopButton.Name = "stopButton";
+            this.stopButton.Size = new System.Drawing.Size(75, 20);
+            this.stopButton.TabIndex = 2;
+            this.stopButton.Text = "Stop";
+            this.stopButton.UseVisualStyleBackColor = true;
             // 
-            // homeToolStripButton
+            // forwardButton
             // 
-            this.homeToolStripButton.Location = new System.Drawing.Point(251, 3);
-            this.homeToolStripButton.Name = "homeToolStripButton";
-            this.homeToolStripButton.Size = new System.Drawing.Size(75, 20);
-            this.homeToolStripButton.TabIndex = 5;
-            this.homeToolStripButton.Text = "Home";
-            this.homeToolStripButton.UseVisualStyleBackColor = true;
-            this.homeToolStripButton.Click += new System.EventHandler(this.HomeToolStripButton_Click);
+            this.forwardButton.Location = new System.Drawing.Point(89, 3);
+            this.forwardButton.Name = "forwardButton";
+            this.forwardButton.Size = new System.Drawing.Size(75, 20);
+            this.forwardButton.TabIndex = 1;
+            this.forwardButton.Text = "Forward";
+            this.forwardButton.UseVisualStyleBackColor = true;
+            this.forwardButton.Click += new System.EventHandler(this.ForwardButton_Click);
+            // 
+            // backButton
+            // 
+            this.backButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.backButton.Location = new System.Drawing.Point(8, 3);
+            this.backButton.Name = "backButton";
+            this.backButton.Size = new System.Drawing.Size(75, 20);
+            this.backButton.TabIndex = 0;
+            this.backButton.Text = "Back";
+            this.backButton.UseVisualStyleBackColor = true;
+            this.backButton.Click += new System.EventHandler(this.BackButton_Click);
             // 
             // MainWindow
             // 
@@ -518,8 +464,6 @@ namespace IntNetViewer
             this.menuStrip1.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.searchPanel.ResumeLayout(false);
-            this.searchPanel.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.toolStripContainer3.TopToolStripPanel.ResumeLayout(false);
@@ -562,12 +506,7 @@ namespace IntNetViewer
         private ToolStripContainer toolStripContainer3;
         private ToolStripMenuItem legacyModeToolStripMenuItem;
         private ToolStripMenuItem clearHistoryToolStripMenuItem;
-        private Panel searchPanel;
-        private TextBox searchTextBox;
-        private Label label2;
         private ToolStripMenuItem addBookmarkToolStripMenuItem;
-        private ToolStripMenuItem secretToolStripMenuItem;
-        private ToolStripMenuItem weeabooToolStripMenuItem;
         private ToolStripMenuItem openDownloadsToolStripMenuItem;
         private ToolStripMenuItem writeLineToConsoleToolStripMenuItem;
         private ToolStripMenuItem writeLineToConsoleDifferentMethodToolStripMenuItem;

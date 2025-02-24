@@ -5,78 +5,64 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Reflection;
+using System.IO;
 
 
 namespace IntNetViewer
 {
     internal static class Program
     {
+        
 
-        [DllImport("kernel32.dll")]
-        private static extern bool AllocConsole();
-
-        [DllImport("kernel32.dll")]
-        private static extern bool AttachConsole(int dwProcessId);
-
-        private const int ATTACH_PARENT_PROCESS = -1;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main(string[] args)
+        static void Main()
         {
-            // bool isConsoleMode = false;
-
-            // Attach to existing console if run from CMD, otherwise create a new one
-            if (AttachConsole(ATTACH_PARENT_PROCESS))
-            {
-                //isConsoleMode = true;
-            }
-            else
-            {
-                AllocConsole();
-                //isConsoleMode = true;
-            }
+            
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+            
             // Add the event handler for handling UI thread exceptions
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
             // Add the event handler for handling non-UI thread exceptions
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             
-            if (args.Length > 0)
-            {
-                if (args[0] == "--version" || args[0] == "-i")
-                {
-                    ShowVersion();
-                    return;
-                }
-                else if (args[0] == "--help" || args[0] == "-h")
-                {
-                    ShowUsage();
-                    return;
-                }
-                else if (args[0] == "--verbose" || args[0] == "-v")
-                {
-                    AllocConsole(); // Attach a new console window
-                    Console.WriteLine("Verbose mode enabled.");
-                }
-                
-            }
-            if (args.Length == 0)
-            {
-                Console.WriteLine("No arguments were provided.");
-            }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow(args));
+            Application.Run(new MainWindow());
 
-            // Optional: Keep console open if running in console mode
-            // if (isConsoleMode)
-            // {
-            //     Console.WriteLine("Press any key to exit...");
-            //     Console.ReadKey();
-            // }
 
+        }
+        static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            
+            try
+            {
+                string assemblyPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, new AssemblyName(args.Name).Name + ".dll");
+#if DEBUG
+                Console.WriteLine($"Attempting to load {args.Name}, {assemblyPath}");
+#endif
+
+                if (!File.Exists(assemblyPath))
+                {
+#if DEBUG
+                    Console.WriteLine($"Assembly not found: {assemblyPath}");
+#endif
+                    return null;
+                }
+                return File.Exists(assemblyPath) ? Assembly.LoadFile(assemblyPath) : null;
+                
+            }
+            catch (Exception)
+            {
+#if DEBUG
+                Console.WriteLine($"Error loading assembly: {ex.Message}");
+#endif
+                return null;
+            }
 
         }
         // Event handler for UI thread exceptions
@@ -101,16 +87,31 @@ namespace IntNetViewer
                     MessageBox.Show("This feature is not implemented yet.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 // Log the exception, show a message box, or perform other error handling
-                MessageBox.Show("An unexpected error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                if (ex is InvalidOperationException)
+                else if (ex is FileNotFoundException)
+                {
+                    MessageBox.Show("An important file was not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else if (ex is DllNotFoundException)
+                {
+                    MessageBox.Show("A required library was not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else if (ex is InvalidOperationException)
                 {
                     // Log the serious error if necessary
 
                     // Exit the application immediately
-                    
+
                     Application.Exit();
                 }
+                else
+                {
+                    // Any other exception
+                    // Log the exception, display it, etc
+                    MessageBox.Show("An unexpected error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                }
+
+                
                 // For serious errors, consider exiting the application
                 // Application.Exit();
             }
@@ -124,13 +125,15 @@ namespace IntNetViewer
             Console.WriteLine("Options:");
             Console.WriteLine("  --version, -i       Show version information");
             Console.WriteLine("  --help, -h          Show this help message");
-            Console.WriteLine("  --console, -v       use AllocConsole() to show Console.WriteLine()'s and CEF console in a command window");
+            Console.WriteLine("  --noconsole, -nc    Disable showing console at launch (broken)");
         }
 
         static void ShowVersion()
         {
             Console.WriteLine($"IntNetViewer {Application.ProductVersion}");
         }
+
+
     }
 
 

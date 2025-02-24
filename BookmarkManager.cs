@@ -11,7 +11,7 @@ namespace IntNetViewer
     public class BookmarkManager
     {
         private static string filePath = "bookmarks.json";
-        private static string htmlFilePath = "bookmarks.html";
+        private static string htmlFilePath = "./assets/bookmarks.html";
 
         public static List<Bookmark> LoadBookmarks()
         {
