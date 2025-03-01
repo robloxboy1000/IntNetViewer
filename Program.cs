@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Reflection;
 using System.IO;
+using System.Runtime.ExceptionServices;
 
 
 namespace IntNetViewer
@@ -21,9 +22,10 @@ namespace IntNetViewer
         [STAThread]
         static void Main()
         {
-            
+            Assembly.LoadFrom(Path.GetFullPath("CefSharp.Core.Runtime.dll"));
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-            
+            AppDomain.CurrentDomain.FirstChanceException += FirstChanceException;
+
             // Add the event handler for handling UI thread exceptions
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
             // Add the event handler for handling non-UI thread exceptions
@@ -35,6 +37,14 @@ namespace IntNetViewer
             Application.Run(new MainWindow());
 
 
+        }
+        static void FirstChanceException(object sender, FirstChanceExceptionEventArgs e)
+        {
+            Console.WriteLine(e.Exception.Message);
+            if (e.Exception is System.IO.FileNotFoundException fnfEx)
+            {
+                File.AppendAllText("AssemblyBindingLog.txt", fnfEx.ToString() + Environment.NewLine);
+            }
         }
         static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
@@ -56,7 +66,7 @@ namespace IntNetViewer
                 return File.Exists(assemblyPath) ? Assembly.LoadFile(assemblyPath) : null;
                 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 #if DEBUG
                 Console.WriteLine($"Error loading assembly: {ex.Message}");
@@ -84,16 +94,16 @@ namespace IntNetViewer
             {
                 if (ex is NotImplementedException)
                 {
-                    MessageBox.Show("This feature is not implemented yet.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"This feature is not implemented yet.\r\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 // Log the exception, show a message box, or perform other error handling
                 else if (ex is FileNotFoundException)
                 {
-                    MessageBox.Show("An important file was not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"An important file was not found.\r\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else if (ex is DllNotFoundException)
                 {
-                    MessageBox.Show("A required library was not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"A required library was not found.\r\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else if (ex is InvalidOperationException)
                 {
@@ -107,7 +117,7 @@ namespace IntNetViewer
                 {
                     // Any other exception
                     // Log the exception, display it, etc
-                    MessageBox.Show("An unexpected error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"An unexpected error occurred: \r\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 }
 
