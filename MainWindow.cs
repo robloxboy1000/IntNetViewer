@@ -1,15 +1,20 @@
-﻿using System;
-using System.Windows.Forms;
-using CefSharp;
+﻿using CefSharp;
+using CefSharp.Handler;
 using CefSharp.WinForms;
-using System.IO;
+using IntNetViewer.Properties;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Threading.Tasks;
+using System.IO;
 using System.Media;
-using WeifenLuo.WinFormsUI.Docking;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+
+
 
 
 namespace IntNetViewer
@@ -19,7 +24,8 @@ namespace IntNetViewer
     /// </summary>
     public partial class MainWindow : Form
     {
-        private readonly string configFilePath = "config.ini";
+        #region Local Variables
+        private readonly string configFilePath = "config.cfg";
         private string homePage = "intnet://assets/newtab.html"; // Default home page
         private DockPanel dockPanel;
         public static MainWindow Instance;
@@ -32,13 +38,20 @@ namespace IntNetViewer
         public Dictionary<int, DownloadItem> downloads;
         public Dictionary<int, string> downloadNames;
         public List<int> downloadCancelRequests;
-        public Timer ifCefdidntinit = new Timer();
         private bool isFullScreen = false;
         private FormWindowState oldWindowState;
         private FormBorderStyle oldBorderStyle;
         public string pageTitle;
         private Icon favicon;
-
+        private int backButtonHoldTime = 0;
+        private const int HoldThreshold = 500; // 500ms for long press
+        private DateTime lastPing;
+        private System.Windows.Forms.Timer watchdogTimer;
+        #endregion
+        #region Constructor
+        /// <summary>
+        /// MainWindow constructor
+        /// </summary>
         public MainWindow()
         {
             Instance = this;
@@ -46,762 +59,55 @@ namespace IntNetViewer
             WindowManager.OpenWindows++;  // Increment when a new window is opened
             InitializeCef();
             InitializeBrowserTabs();
-            
+
             EnableHomeButton();
             LoadHistoryFromFile();
             // Attach event handlers for tab changes
             //dockPanel.SelectedIndexChanged += TabControl_SelectedIndexChanged;
             dockPanel.ActiveDocumentChanged += DockPanel_ActiveDocumentChanged;
 
-            
 
         }
-        private void DockPanel_ActiveDocumentChanged(object sender, EventArgs e)
-        {
-            UpdateNavigationControls();
-            UpdateAddressBar();
-        }
-        private void InitHotkeys()
-        {
-
-            
-            KeyboardHandler.AddHotKey(this, ToggleFullscreen, Keys.F11);
-
-
-        }
-        public void ToggleFullscreen()
-        {
-            var browser = GetCurrentBrowser();
-            if (!isFullScreen)
-            {
-                oldWindowState = this.WindowState;
-                oldBorderStyle = this.FormBorderStyle;
-                this.FormBorderStyle = FormBorderStyle.None;
-                this.WindowState = FormWindowState.Maximized;
-                isFullScreen = true;
-                toolStripContainer3.Visible = false;
-                panel2.Visible = false;
-                panel1.Visible = false;
-                statusStrip1.Visible = false;
-                dockPanel.Dock = DockStyle.Fill;
-                dockPanel.Location = new Point(0, 0);
-                browser.BringToFront();
-                dockPanel.Visible = true;
-                browser.Dock = DockStyle.Fill;
-            }
-            else
-            {
-                this.FormBorderStyle = oldBorderStyle;
-                this.WindowState = oldWindowState;
-                isFullScreen = false;
-                toolStripContainer3.Visible = true;
-                panel2.Visible = true;
-                panel1.Visible = true;
-                statusStrip1.Visible = true;
-                dockPanel.Dock = DockStyle.None;
-                dockPanel.Location = new Point(0, 72);
-                dockPanel.Size = new Size(784, 467);
-                dockPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-                dockPanel.Visible = true;
-                browser.Dock = DockStyle.Fill;
-            }
-        }
-        private void WaitToSaveHistory()
-        {
-            Timer timer = new Timer
-            {
-                Interval = 1000
-            };
-            timer.Tick += (sender, e) =>
-            {
-                SaveHistoryToFile();
-                timer.Stop();
-            };
-        }
-
-        private void SaveHistoryToFile()
-        {
-            File.WriteAllLines("./assets/history.txt", history);
-        }
-
-        private void LoadHistoryFromFile()
-        {
-            if (File.Exists("./assets/history.txt"))
-            {
-                history.AddRange(File.ReadAllLines("./assets/history.txt"));
-            }
-            else
-            {
-                File.Create("./assets/history.txt");
-            }
-        }
-        private void ClearHistory()
-        {
-            history.Clear();
-            SaveHistoryToFile();
-        }
-
-        // Loads settings file
-        private Dictionary<string, string> LoadSettings()
-        {
-            var settings = new Dictionary<string, string>();
-
-            if (File.Exists(configFilePath))
-            {
-                var lines = File.ReadAllLines(configFilePath);
-                foreach (var line in lines)
-                {
-                    if (line.Contains("="))
-                    {
-                        var parts = line.Split('=');
-                        var key = parts[0].Trim();
-                        var value = parts[1].Trim();
-                        settings[key] = value;
-                    }
-                }
-            }
-
-            return settings;
-        }
-        // Initializes CEF with config file
-        private void InitializeCef()
-        {
-            var settings = LoadSettings();
-            
-            CefSettings cefSettings = new CefSettings();
-            // Apply settings loaded from the config file
-            if (settings.TryGetValue("CachePath", out string cachePath))
-            {
-                cefSettings.CachePath = Path.GetFullPath(cachePath);
-            }
-            if (settings.TryGetValue("UserAgent", out string userAgent))
-            {
-                cefSettings.UserAgent = userAgent;
-            }
-            if (settings.TryGetValue("DarkMode", out string darkModeValue) && darkModeValue.Equals("true", StringComparison.OrdinalIgnoreCase))
-            {
-                cefSettings.BackgroundColor = 0;
-            }
-            cefSettings.RegisterScheme(new CefCustomScheme
-            {
-                SchemeName = "intnet",
-                SchemeHandlerFactory = new SchemeHandlerFactory(),
-                IsStandard = true, // Ensures it's treated like a normal protocol
-                IsCorsEnabled = true, // Allows Fetch API to work
-                IsFetchEnabled = true, // Allows Fetch API to work
-                IsCSPBypassing = true // Allows bypassing CSP
-            });
-            cefSettings.IgnoreCertificateErrors = true;
-            cefSettings.WindowlessRenderingEnabled = true;
-
-            
-
-            if (settings.TryGetValue(settings["GPUAcceleration"], out string gpuAccelerationValue) && gpuAccelerationValue.Equals("false", StringComparison.OrdinalIgnoreCase))
-            {
-                cefSettings.CefCommandLineArgs.Add("disable-gpu", "1");
-            }
-            if (settings.TryGetValue(settings["ShowFPSCounter"], out string fpsValue) && fpsValue.Equals("true", StringComparison.OrdinalIgnoreCase))
-            {
-                cefSettings.CefCommandLineArgs.Add("show-fps-counter", "1");
-            }
-
-            if (Cef.IsInitialized == null)
-            {
-                Cef.Initialize(cefSettings);
-            }
-            homePage = settings.ContainsKey("HomePage") ? settings["HomePage"] : homePage;
-            dHandler = new DownloadHandler(this);
-            InitDownloads();
-            host = new HostHandler(this);
-            mHandler = new ContextMenuHandler(this);
-            lHandler = new LifeSpanHandler(this);
-
-        }
-
-
-        private void ApplyTheme()
-        {
-            var settings = LoadSettings();
-
-            bool isDarkMode = settings.TryGetValue("DarkMode", out string darkModeValue) &&
-                              darkModeValue.Equals("true", StringComparison.OrdinalIgnoreCase);
-
-
-            if (isDarkMode)
-            {
-                this.BackColor = Color.FromArgb(45, 45, 48);    // Dark background
-                this.ForeColor = Color.White;                   // Light text
-                
-
-                foreach (Control ctrl in this.Controls)
-                {
-                    ApplyDarkTheme(ctrl);
-                }
-            }
-            else
-            {
-                this.BackColor = SystemColors.Control;
-                this.ForeColor = SystemColors.ControlText;
-                
-                
-            }
-        }
-
-        private void EnableHomeButton()
-        {
-            var settings = LoadSettings();
-
-            bool isHomeButtonEnabled = settings.TryGetValue("EnableHomeButton", out string enabledValue) &&
-                              enabledValue.Equals("true", StringComparison.OrdinalIgnoreCase);
-
-            if (isHomeButtonEnabled)
-            {
-                homeToolStripButton.Visible = true;
-            }
-            else {
-                homeToolStripButton.Visible = false;
-            }
-
-        }
-
-        private void ApplyDarkTheme(Control control)
-        {
-            control.BackColor = Color.FromArgb(45, 45, 48);
-            control.ForeColor = Color.White;
-            
-            
-            foreach (Control child in control.Controls)
-            {
-                ApplyDarkTheme(child);
-            }
-        }
-
-        private void InitializeBrowserTabs()
-        {
-            // Create the TabControl
-            dockPanel = new DockPanel
-            {
-                Dock = DockStyle.None,
-                Location = new Point(0, 72),
-                Size = new Size(784, 467),
-                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom,
-            };
-            this.Controls.Add(dockPanel);
-
-            // Configure TabControl for OwnerDraw (for close buttons)
-            //dockPanel.DrawMode = TabDrawMode.OwnerDrawFixed;
-            //dockPanel.DrawItem += TabControl_DrawItem;
-            //dockPanel.MouseUp += TabControl_MouseUp;
-            dockPanel.ContentRemoved += DockPanel_ContentRemoved;
-
-            // Add the first browser tab
-            AddNewTab("intnet://assets/newtab.html");
-        }
-
-        private void DockPanel_ContentRemoved(object sender, DockContentEventArgs e)
-        {
-            if (dockPanel.Contents.Count == 0)
-            {
-                Application.Exit();
-            }
-        }
-
-        public void AddNewTab(string url)
-        {
-            var settings = LoadSettings();
-            bool isDarkMode = settings.TryGetValue("DarkMode", out string darkModeValue) && darkModeValue.Equals("true", StringComparison.OrdinalIgnoreCase);
-            if (isDarkMode)
-            {
-                var theme = new VS2015DarkTheme();
-                dockPanel.Theme = theme;
-            }
-            else
-            {
-                var theme = new VS2015LightTheme();
-                dockPanel.Theme = theme;
-            }
-            
-            var newTab = new BrowserTab(url);
-            newTab.Show(dockPanel, DockState.Document);
-            var browser = GetCurrentBrowser();
-            //DockContent tab = new DockContent();
-            //browser = new ChromiumWebBrowser(url)
-            //{
-            //    Dock = DockStyle.Fill,
-            //};
-            //browser.BringToFront();
-            // Attach event handlers
-            browser.TitleChanged += OnBrowserTitleChanged;
-            browser.AddressChanged += OnBrowserAddressChanged;
-            browser.LoadingStateChanged += OnBrowserLoadingStateChanged;
-            browser.FrameLoadEnd += Browser_FrameLoadEnd;
-            browser.StatusMessage += Browser_StatusMessage;
-            browser.DownloadHandler = dHandler;
-            browser.LifeSpanHandler = lHandler;
-
-            browser.MenuHandler = mHandler;
-            // get the favicon
-            
-                
-            
-                
-                
-            
-            
-            
-
-            //tab.Controls.Add(browser);
-            //tab.Show(dockPanel, DockState.Document);
-
-
-
-            if (!history.Contains(url))
-            {
-                history.Add(url);
-            }
-            if (url.StartsWith(BrowserConfig.InternalURL + ":"))
-            {
-                
-                browser.JavascriptObjectRepository.Register("host", host, true);
-            }
-        }
-        void DownloadFavicon(string url)
-        {
-            using (WebClient client = new WebClient())
-            {
-                try
-                {
-                    byte[] imageData = client.DownloadData(url);
-                    using (MemoryStream ms = new MemoryStream(imageData))
-                    {
-                        using (Bitmap bmp = new Bitmap(ms))
-                        {
-                            IntPtr hIcon = bmp.GetHicon();
-                            Icon icon = Icon.FromHandle(hIcon);
-
-                            // Example: Set the icon to a Form
-                            favicon = icon;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error downloading favicon: " + ex.Message);
-                }
-            }
-        }
-        private void InitDownloads()
-        {
-            downloads = new Dictionary<int, DownloadItem>();
-            downloadNames = new Dictionary<int, string>();
-            downloadCancelRequests = new List<int>();
-        }
-
-        public Dictionary<int, DownloadItem> Downloads
-        {
-            get
-            {
-                return downloads;
-            }
-        }
-
-        public void UpdateDownloadItem(DownloadItem item)
-        {
-            lock (downloads)
-            {
-
-                // SuggestedFileName comes full only in the first attempt so keep it somewhere
-                if (item.SuggestedFileName != "")
-                {
-                    downloadNames[item.Id] = item.SuggestedFileName;
-                }
-
-                // Set it back if it is empty
-                if (item.SuggestedFileName == "" && downloadNames.ContainsKey(item.Id))
-                {
-                    item.SuggestedFileName = downloadNames[item.Id];
-                }
-
-                downloads[item.Id] = item;
-
-                //UpdateSnipProgress();
-            }
-        }
-
-        public string CalcDownloadPath(DownloadItem item)
-        {
-            return item.SuggestedFileName;
-        }
-
-        public bool DownloadsInProgress()
-        {
-            foreach (DownloadItem item in downloads.Values)
-            {
-                if (item.IsInProgress)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
+        #endregion
+        #region UI/ Main UI Initialization
         /// <summary>
-        /// open a new tab with the downloads URL
+        /// Event happens when MainWindow is loaded
         /// </summary>
-        private void BtnDownloads_Click(object sender, EventArgs e)
-        {
-            OpenDownloadsTab();
-        }
-        
-        public void OpenDownloadsTab()
-        {
-            this.Invoke(new Action(() =>
-            {
-                
-                    AddNewTab("intnet://assets/downloads.html");
-                
-            }));
-
-        }
-        public List<int> CancelRequests
-        {
-            get
-            {
-                return downloadCancelRequests;
-            }
-        }
-        private void Browser_StatusMessage(object sender, StatusMessageEventArgs e)
-        {
-            if (e.Value != null)
-            {
-                this.Invoke(new Action(() =>
-                {
-                    cefToolTipStatusLabel.Text = e.Value.ToString();
-                }));
-            }
-        }
-
-        private void UpdateNavigationControls()
-        {
-            var browser = GetCurrentBrowser();
-            if (browser != null)
-            {
-                backButton.Enabled = browser.CanGoBack;
-                forwardButton.Enabled = browser.CanGoForward;
-                stopButton.Visible = browser.IsLoading;
-                refreshButton.Visible = !browser.IsLoading;
-            }
-            else
-            {
-                backButton.Enabled = false;
-                forwardButton.Enabled = false;
-                stopButton.Visible = false;
-                refreshButton.Visible = false;
-            }
-        }
-
-        private void UpdateAddressBar()
-        {
-            var browser = GetCurrentBrowser();
-            if (browser != null)
-            {
-                if (browser.Address == "intnet://assets/newtab.html")
-                {
-                    this.Invoke(new Action(() =>
-                    {
-                        addressTextBox.Text = string.Empty;
-                        //searchPanel.Visible = true;
-                    }));
-                    
-                }
-                else
-                {
-                    this.Invoke(new Action(() =>
-                    {
-                        //searchPanel.Visible = false;
-                        addressTextBox.Text = browser.Address;
-                    }));
-                }
-            }
-            else
-            {
-                addressTextBox.Text = string.Empty;
-            }
-        }
-
-        private ChromiumWebBrowser GetCurrentBrowser()
-        {
-            return dockPanel.ActiveDocument is BrowserTab activeTab ? activeTab.Browser : null;
-        }
-
-        private void BackButton_Click(object sender, EventArgs e)
-        {
-            var browser = GetCurrentBrowser();
-            browser?.Back();
-        }
-
-        private void ForwardButton_Click(object sender, EventArgs e)
-        {
-            var browser = GetCurrentBrowser();
-            browser?.Forward();
-        }
-
-        private void RefreshButton_Click(object sender, EventArgs e)
-        {
-            var browser = GetCurrentBrowser();
-            browser?.Reload();
-        }
-
-        private void StopButton_Click(object sender, EventArgs e)
-        {
-            var browser = GetCurrentBrowser();
-            browser?.Stop();
-        }
-
-        private void GoButton_Click(object sender, EventArgs e)
-        {
-            NavigateToAddress();
-        }
-
-        private void AddressTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.SuppressKeyPress = true;
-                NavigateToAddress();
-            }
-        }
-
-        private void NavigateToAddress()
-        {
-            var browser = GetCurrentBrowser();
-            if (browser != null)
-            {
-                string url = addressTextBox.Text.Trim();
-
-                if (url.StartsWith("intnet:"))
-                {
-                    Console.WriteLine("Internal URL: " + url);
-                    browser.Load(url);
-                }
-                else
-                {
-                    string processedUrl = EnsureValidUrl(url);
-                    Console.WriteLine(processedUrl);
-                    Console.WriteLine("External URL (Processed): " + processedUrl);
-                    browser.Load(processedUrl);
-                }
-                if (!history.Contains(url))
-                {
-                    history.Add(url);
-                }
-            }
-        }
-        static string EnsureValidUrl(string input)
-        {
-            // Regex for checking if the string ends with a known TLD
-            string tldPattern = @"\.(com|org|net|edu|gov|mil|int|io|co|uk|us|info|biz|tv|xyz|ca|de|fr|au|jp|cn|ru|in|br|za|eu|me|cc|us|[a-z]{2,})$";
-            if (Regex.IsMatch(input, tldPattern, RegexOptions.IgnoreCase))
-            {
-                // If input has a TLD but is missing a scheme, add "http://"
-                if (!input.StartsWith("http://") && !input.StartsWith("https://"))
-                {
-                    return "http://" + input;
-                }
-                return input;
-            }
-            else
-            {
-                // If no TLD is found, assume it's a search query
-                return "https://www.google.com/search?q=" + Uri.EscapeDataString(input);
-            }
-        }
-
-        // Cef Subscribed events
-        private void OnBrowserTitleChanged(object sender, TitleChangedEventArgs e)
-        {
-            if (!(sender is ChromiumWebBrowser browser))
-                return;
-
-            if (!(browser.Parent is BrowserTab tabPage))
-                return;
-
-            this.Invoke(new Action(() =>
-            {
-                tabPage.Text = e.Title.Length > 20 ? e.Title.Substring(0, 20) + "..." : e.Title;
-                tabPage.ToolTipText = e.Title;
-                this.Text = $"{e.Title.Trim()} - IntNetViewer";
-                pageTitle = e.Title;
-            }));
-        }
-        private void OnBrowserAddressChanged(object sender, AddressChangedEventArgs e)
-        {
-            if (!(sender is ChromiumWebBrowser browser))
-                return;
-
-            // Update the address bar if this browser is the active tab
-            if (GetCurrentBrowser() == browser)
-            {
-                this.Invoke(new Action(() =>
-                {
-                    addressTextBox.Text = e.Address;
-                }));
-            }
-        }
-        private void OnBrowserLoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
-        {
-            if (!(sender is ChromiumWebBrowser browser))
-                return;
-
-            // Update navigation buttons and stop button visibility
-            this.Invoke(new Action(() =>
-            {
-                if (GetCurrentBrowser() == browser)
-                {
-                    backButton.Enabled = e.CanGoBack;
-                    forwardButton.Enabled = e.CanGoForward;
-                    stopButton.Visible = e.IsLoading;
-                    refreshButton.Visible = !e.IsLoading;
-                }
-            }));
-            this.Invoke(new Action(() =>
-            {
-                if (e.IsLoading)
-                { 
-                    labelLoading.Visible = true;
-                }
-                else
-                {
-                    labelLoading.Visible = false;
-                }
-            }));
-        }
-        private async void Browser_FrameLoadEnd(object sender, FrameLoadEndEventArgs e)
-        {
-            var browser = GetCurrentBrowser();
-            var tab = (BrowserTab)browser.Parent;
-            // Only inject into the main frame
-            if (e.Frame.IsMain)
-            {
-                Console.WriteLine("Getting favicon...");
-                await browser.GetMainFrame().EvaluateScriptAsync(@"
-    (function() {
-        var links = document.getElementsByTagName('link');
-        for (var i = 0; i < links.length; i++) {
-            if (links[i].rel.includes('icon')) {
-                return links[i].href;
-            }
-        }
-        return './assets/favicon.ico'; // Default favicon location
-    })();
-").ContinueWith(task =>
-                {
-                    if (!task.IsCompleted || task.Result?.Success != true) return;
-
-                    string faviconUrl = task.Result.Result?.ToString();
-                    if (!string.IsNullOrEmpty(faviconUrl))
-                    {
-                        DownloadFavicon(faviconUrl);
-                        Console.WriteLine("Favicon URL: " + faviconUrl);
-
-                    }
-                });
-                this.Invoke((MethodInvoker)(() => tab.Icon = favicon));
-                this.Invoke((MethodInvoker)(() => this.Icon = favicon));
-                Console.WriteLine("Favicon: " + favicon);
-                var settings = LoadSettings();
-                bool isDarkMode = settings.TryGetValue("DarkMode", out string darkModeValue) &&
-                                  darkModeValue.Equals("true", StringComparison.OrdinalIgnoreCase);
-
-                if (isDarkMode)
-                {
-                    
-                        // Use the DevTools client to force dark mode
-                        var devToolsClient = browser.GetDevToolsClient();
-                        await devToolsClient.Emulation.SetAutoDarkModeOverrideAsync(true);
-                        
-                    
-                }
-            }
-            if (!history.Contains(e.Url))
-            {
-                history.Add(e.Url);
-            }
-            UpdateAddressBar();
-        }
-        
-
-        // Tab control
-        
-        
-        
-        
-        
-
-        private void NewTabButton_Click(object sender, EventArgs e)
-        {
-            AddNewTab("intnet://assets/newtab.html");
-        }
-
-        
-
-        // Asyncronous button to check for updates via https://api.github.com/repos/robloxboy1000/IntNetViewer/releases/latest
-        private async void CheckForUpdateToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            await UpdateChecker.CheckForUpdates();
-        }
-
-        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            About_New aboutForm = new About_New();
-            aboutForm.ShowDialog();
-        }
-
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void MainWindow_Load(object sender, EventArgs e)
         {
+            List<Bookmark> bookmarks = BookmarkManager.LoadBookmarks();
+            PopulateBookmarks(bookmarks, toolStrip1);
             ApplyTheme();
             InitHotkeys();
-
 #if DEBUG
             debugToolStripMenuItem.Visible = true;
 #endif
             if (Cef.IsInitialized == null || Cef.IsInitialized == false)
             {
-                ifCefdidntinit.Start();
+
                 this.MaximizeBox = false;
                 this.MinimizeBox = false;
             }
-            else 
+            else
             {
                 this.MaximizeBox = true;
                 this.MinimizeBox = true;
             }
             // check for updates automatically via https://api.github.com/repos/robloxboy1000/IntNetViewer/releases/latest
             await UpdateChecker.CheckForUpdates();
-        }
+            lastPing = DateTime.Now;
 
-        private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // Open the settings form
-            SettingsForm settingsForm = new SettingsForm();
-            settingsForm.ShowDialog(); // Show as a modal dialog
-        }
+            System.Windows.Forms.Timer uiTimer = new System.Windows.Forms.Timer();
+            uiTimer.Interval = 1000; // every second
+            uiTimer.Tick += (s, args) => lastPing = DateTime.Now;
+            uiTimer.Start();
 
-        private void NewWindowToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // This is not recommended. PLEASE use tabs instead of windows. Note: this has been fixed using a counter of open windows.
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show(); // Don't show as a dialog
-        }
-
-        private void NewTabToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AddNewTab("intnet://assets/newtab.html");
+            watchdogTimer = new System.Windows.Forms.Timer();
+            watchdogTimer.Interval = 5000; // check every 5 seconds
+            watchdogTimer.Tick += WatchdogTimer_Tick;
+            watchdogTimer.Start();
         }
 
         // This method calls Cef.Shutdown() when closed. Fix if possible. NOTE: Fixed
@@ -847,42 +153,403 @@ namespace IntNetViewer
                 }
             }
         }
+        /// <summary>
+        /// Loads settings file "config.cfg"; if file is not found, create new file with default settings.
+        /// </summary>
+        /// <returns></returns>
+        private Dictionary<string, string> LoadSettings()
+        {
+            var settings = new Dictionary<string, string>();
+
+            if (File.Exists(configFilePath))
+            {
+                var lines = File.ReadAllLines(configFilePath);
+                foreach (var line in lines)
+                {
+                    if (line.Contains("="))
+                    {
+                        var parts = line.Split('=');
+                        var key = parts[0].Trim();
+                        var value = parts[1].Trim();
+                        settings[key] = value;
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Config file not found. Creating a new one.", "Config file not found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                try
+                {
+                    using (StreamWriter writer = new StreamWriter(configFilePath))
+                    {
+                        writer.WriteLine("[BrowserSettings]");
+                        writer.WriteLine($"HomePage = http://google.com");
+                        writer.WriteLine($@"CachePath = ./cache/");
+                        writer.WriteLine($"UserAgent = Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{Cef.ChromiumVersion} Safari/537.36");
+                        writer.WriteLine($"GPUAcceleration = true");
+                        writer.WriteLine($"ShowFPSCounter = false");
+                        writer.WriteLine("[General]");
+                        writer.WriteLine($"DarkMode = false");
+                        writer.WriteLine($"EnableHomeButton = true");
+                        writer.WriteLine($"WarnOnExit = true");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error creating config file: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                var lines = File.ReadAllLines(configFilePath);
+                foreach (var line in lines)
+                {
+                    if (line.Contains("="))
+                    {
+                        var parts = line.Split('=');
+                        var key = parts[0].Trim();
+                        var value = parts[1].Trim();
+                        settings[key] = value;
+                    }
+                }
+            }
+
+            return settings;
+        }
+        /// <summary>
+        /// Initialize hotkeys
+        /// </summary>
+        private void InitHotkeys()
+        {
+            KeyboardHandler.AddHotKey(this, ToggleFullscreen, Keys.F11);
+            KeyboardHandler.AddHotKey(this, no, Keys.E);
+        }
+        /// <summary>
+        /// Plays the Valve "Can't Interact" sound effect when E is pressed.
+        /// </summary>
+        private void no()
+        {
+            if (addressTextBox.Focused)
+            {
+
+            }
+            else if (mainCefPanel.Focused)
+            {
+                if (!mainCefPanel.Focused)
+                {
+                    mainCefPanel.Focus();
+                }
+            }
+            else
+            {
+                SoundPlayer mediaPlayer = new SoundPlayer();
+                mediaPlayer.SoundLocation = Path.GetFullPath("./assets/wpn_denyselect.wav");
+                mediaPlayer.Play();
+                Console.WriteLine("[Can't Interact]");
+            }
+
+        }
+        /// <summary>
+        /// Changes MainWindow styles for fullscreen (broken)
+        /// </summary>
+        public void ToggleFullscreen()
+        {
+            var browser = GetCurrentBrowser();
+            if (!isFullScreen)
+            {
+                oldWindowState = this.WindowState;
+                oldBorderStyle = this.FormBorderStyle;
+                this.FormBorderStyle = FormBorderStyle.None;
+                this.WindowState = FormWindowState.Maximized;
+                isFullScreen = true;
+            }
+            else
+            {
+                this.FormBorderStyle = oldBorderStyle;
+                this.WindowState = oldWindowState;
+                isFullScreen = false;
+            }
+        }
+        /// <summary>
+        /// This event is used when IntNetViewer is closing; waits for CEF to finish disposing before saving history
+        /// </summary>
+        private void WaitToSaveHistory()
+        {
+            System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer
+            {
+                Interval = 1000
+            };
+            timer.Tick += (sender, e) =>
+            {
+                SaveHistoryToFile();
+                timer.Stop();
+            };
+        }
+        /// <summary>
+        /// Save history traditionally
+        /// </summary>
+        private void SaveHistoryToFile()
+        {
+            File.WriteAllLines("./assets/history.txt", history);
+        }
+        /// <summary>
+        /// Loads history.txt, Creates new history.txt if file isn't found
+        /// </summary>
+        private void LoadHistoryFromFile()
+        {
+            if (File.Exists("./assets/history.txt"))
+            {
+                history.AddRange(File.ReadAllLines("./assets/history.txt"));
+            }
+            else
+            {
+                File.Create("./assets/history.txt");
+            }
+        }
+        /// <summary>
+        /// Clears the history. Pretty simple.
+        /// </summary>
+        private void ClearHistory()
+        {
+            history.Clear();
+            SaveHistoryToFile();
+        }
+        private void ApplyTheme()
+        {
+            var settings = LoadSettings();
+
+            bool isDarkMode = settings.TryGetValue("DarkMode", out string darkModeValue) &&
+                              darkModeValue.Equals("true", StringComparison.OrdinalIgnoreCase);
+
+
+            if (isDarkMode)
+            {
+                this.BackColor = System.Drawing.Color.FromArgb(45, 45, 48);    // Dark background
+                this.ForeColor = System.Drawing.Color.White;                   // Light text
+
+
+                foreach (Control ctrl in this.Controls)
+                {
+                    ApplyDarkTheme(ctrl);
+                }
+            }
+            else
+            {
+                this.BackColor = SystemColors.Control;
+                this.ForeColor = SystemColors.ControlText;
+
+
+            }
+        }
+
+        private void EnableHomeButton()
+        {
+            var settings = LoadSettings();
+
+            bool isHomeButtonEnabled = settings.TryGetValue("EnableHomeButton", out string enabledValue) &&
+                              enabledValue.Equals("true", StringComparison.OrdinalIgnoreCase);
+
+            if (isHomeButtonEnabled)
+            {
+                homeToolStripButton.Visible = true;
+            }
+            else
+            {
+                homeToolStripButton.Visible = false;
+            }
+
+        }
+
+        private void ApplyDarkTheme(Control control)
+        {
+            control.BackColor = System.Drawing.Color.FromArgb(45, 45, 48);
+            control.ForeColor = System.Drawing.Color.White;
+
+
+            foreach (Control child in control.Controls)
+            {
+                ApplyDarkTheme(child);
+            }
+        }
+        private void BtnDownloads_Click(object sender, EventArgs e)
+        {
+            OpenDownloadsTab();
+        }
+        private void BackButton_Click(object sender, EventArgs e)
+        {
+            var browser = GetCurrentBrowser();
+            browser?.Back();
+        }
+
+        private void ForwardButton_Click(object sender, EventArgs e)
+        {
+            var browser = GetCurrentBrowser();
+            browser?.Forward();
+        }
+
+        private void RefreshButton_Click(object sender, EventArgs e)
+        {
+            var browser = GetCurrentBrowser();
+            browser?.Reload();
+        }
+
+        private void StopButton_Click(object sender, EventArgs e)
+        {
+            var browser = GetCurrentBrowser();
+            browser?.Stop();
+        }
+
+        private void GoButton_Click(object sender, EventArgs e)
+        {
+            NavigateToAddress();
+        }
+
+        private void AddressTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                NavigateToAddress();
+            }
+        }
+        private void NewTabButton_Click(object sender, EventArgs e)
+        {
+            AddNewTab("intnet://assets/newtab.html");
+        }
+
+        // Asyncronous button to check for updates via https://api.github.com/repos/robloxboy1000/IntNetViewer/releases/latest
+        private async void CheckForUpdateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            await UpdateChecker.CheckForUpdates();
+        }
+
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            About_New aboutForm = new About_New();
+            aboutForm.ShowDialog();
+        }
+        private void WatchdogTimer_Tick(object sender, EventArgs e)
+        {
+            if ((DateTime.Now - lastPing).TotalSeconds > 5)
+            {
+                // UI thread hasn't responded in 5 seconds
+                Console.WriteLine("The app is not responding...");
+            }
+        }
+
+        private void PopulateBookmarks(List<Bookmark> bookmarks, ToolStrip toolStrip)
+        {
+            toolStrip.Items.Clear(); // Clear existing items
+
+            foreach (var bookmark in bookmarks)
+            {
+                if (!string.IsNullOrEmpty(bookmark.Url))
+                {
+                    // It's a regular bookmark
+                    var button = new ToolStripButton(bookmark.Name);
+                    button.Tag = bookmark.Url; // Store URL for navigation
+                    button.Click += BookmarkButton_Click;
+                    toolStrip.Items.Add(button);
+                }
+                else if (bookmark.Children != null && bookmark.Children.Count > 0)
+                {
+                    // It's a folder
+                    var dropdown = new ToolStripDropDownButton(bookmark.Name);
+                    AddFolderItems(dropdown, bookmark.Children);
+                    toolStrip.Items.Add(dropdown);
+                }
+            }
+        }
+
+        private void AddFolderItems(ToolStripDropDownButton dropdown, List<Bookmark> children)
+        {
+            foreach (var child in children)
+            {
+                if (!string.IsNullOrEmpty(child.Url))
+                {
+                    var item = new ToolStripMenuItem(child.Name);
+                    item.Tag = child.Url;
+                    item.Click += BookmarkButton_Click;
+                    dropdown.DropDownItems.Add(item);
+                }
+                else if (child.Children != null && child.Children.Count > 0)
+                {
+                    var subFolder = new ToolStripMenuItem(child.Name);
+                    AddSubFolderItems(subFolder, child.Children);
+                    dropdown.DropDownItems.Add(subFolder);
+                }
+            }
+        }
+
+        private void AddSubFolderItems(ToolStripMenuItem menuItem, List<Bookmark> children)
+        {
+            foreach (var child in children)
+            {
+                if (!string.IsNullOrEmpty(child.Url))
+                {
+                    var item = new ToolStripMenuItem(child.Name);
+                    item.Tag = child.Url;
+                    item.Click += BookmarkButton_Click;
+                    menuItem.DropDownItems.Add(item);
+                }
+                else if (child.Children != null && child.Children.Count > 0)
+                {
+                    var subFolder = new ToolStripMenuItem(child.Name);
+                    AddSubFolderItems(subFolder, child.Children);
+                    menuItem.DropDownItems.Add(subFolder);
+                }
+            }
+        }
+
+        private void BookmarkButton_Click(object sender, EventArgs e)
+        {
+            var item = sender as ToolStripItem;
+            string url = item.Tag as string;
+            if (!string.IsNullOrEmpty(url))
+            {
+                var cefBrowser = GetCurrentBrowser();
+                cefBrowser?.Load(url);
+            }
+        }
+
+        private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Open the settings form
+            SettingsForm settingsForm = new SettingsForm();
+            settingsForm.ShowDialog(); // Show as a modal dialog
+        }
+
+        private void NewWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // This is not recommended. PLEASE use tabs instead of windows. Note: this has been fixed using a counter of open windows.
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show(); // Don't show as a dialog
+        }
+
+        private void NewTabToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddNewTab("intnet://assets/newtab.html");
+        }
+
+        
 
         private void PixlPlaya5OnYouTubeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var browser = GetCurrentBrowser();
             browser?.Load("https://youtube.com/@pixlplaya5");
-            
+
         }
 
         private void PixlPlaya5OnGitHubToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var browser = GetCurrentBrowser();
             browser?.Load("https://github.com/robloxboy1000/");
-            
-        }
-        private void InjectDarkModeCSS()
-        {
-            var browser = GetCurrentBrowser();
 
-            string darkModeCSS = @"
-        const style = document.createElement('style');
-        style.innerHTML = `
-            html, body {
-                background-color: #121212 !important;
-                color: #e0e0e0 !important;
-            }
-            a { color: #bb86fc !important; }
-            img, video { filter: brightness(0.8) contrast(1.2); }
-            * { border-color: #444 !important; }
-        `;
-        document.head.appendChild(style);
-    ";
-            
-            // Inject JavaScript that appends the CSS to the page
-            browser.ExecuteScriptAsync(darkModeCSS);
         }
-
         private void HomeToolStripButton_Click(object sender, EventArgs e)
         {
             ChromiumWebBrowser browser = GetCurrentBrowser();
@@ -898,7 +565,7 @@ namespace IntNetViewer
         private void HistoryToolStripMenuItem_MouseEnter(object sender, EventArgs e)
         {
             historyToolStripMenuItem.DropDownItems.Clear();
-            
+
             foreach (string url in history)
             {
                 historyToolStripMenuItem.DropDownItems.Add(url.Length > 50 ? url.Substring(0, 50) + "..." : url);
@@ -924,21 +591,6 @@ namespace IntNetViewer
             var browser = GetCurrentBrowser();
             browser?.ShowDevTools();
         }
-
-        internal void RefreshActiveTab()
-        {
-            var browser = GetCurrentBrowser();
-            browser?.Reload();
-        }
-
-        internal void CloseActiveTab()
-        {
-            if (dockPanel.ActiveDocument is BrowserTab activeTab)
-            {
-                activeTab.Close();
-            }
-        }
-
         private void FullscreenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToggleFullscreen();
@@ -954,17 +606,6 @@ namespace IntNetViewer
         {
             ClearHistory();
         }
-
-        /*
-        private void SearchTextBox_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            var browser = GetCurrentBrowser();
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-                browser.Load($"https://www.google.com/search?q={searchTextBox.Text}&udm=14"); // "udm=14" is a custom Google search parameter to only show web results (no images, videos, AI, etc.)
-                searchPanel.Visible = false;
-            }
-        }*/
 
         private void BookmarksToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -984,6 +625,7 @@ namespace IntNetViewer
             BookmarkManager.SaveBookmarks(bookmarks);
             BookmarkManager.ExportBookmarksToHtml();
         }
+
         private void ApplyDefaultTheme(Control control)
         {
             control.BackColor = SystemColors.Control;
@@ -1006,25 +648,619 @@ namespace IntNetViewer
             Console.Write("Hello, World!\r\n");
         }
 
-        private void InitializeNotifyIcon(string title, string text)
-        {
-            var notifyIcon = new NotifyIcon
-            {
-                Icon = SystemIcons.Information, // Use a built-in system icon
-                Visible = true, // Make the icon visible in the system tray
-                BalloonTipTitle = title,
-                BalloonTipText = text,
-                BalloonTipIcon = ToolTipIcon.Info,
-                
-            };
 
-            // Show the notification
-            notifyIcon.ShowBalloonTip(3000); // Display for 3 seconds
-        }
 
         private void NotificationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            InitializeNotifyIcon("IntNetViewer", "test");
+            Notify.NotifyIcon("IntNetViewer", "This is a test notification.", Resources.IntNetViewerIconImage, false);
         }
+
+        private void testErrorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("This is a test error.");
+        }
+
+        private void backButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            backButtonHoldTime = 0;
+            holdTimer.Start();
+        }
+
+        private void backButton_MouseUp(object sender, MouseEventArgs e)
+        {
+            holdTimer.Stop();
+
+            if (backButtonHoldTime < HoldThreshold)
+            {
+                // Quick click: go back in history
+                var webBrowser = GetCurrentBrowser();
+                if (webBrowser.CanGoBack)
+                    webBrowser?.Back();
+            }
+            else
+            {
+                // Already showed history popup during hold
+            }
+        }
+
+        private void holdTimer_Tick(object sender, EventArgs e)
+        {
+            backButtonHoldTime += holdTimer.Interval;
+
+            if (backButtonHoldTime >= HoldThreshold)
+            {
+                holdTimer.Stop();
+                ShowHistoryMenu();
+            }
+        }
+        private void ShowHistoryMenu()
+        {
+            historyMenu.Items.Clear();
+
+            // If you're using the same `history` list from before:
+            foreach (string url in history)
+            {
+                var menuItem = new ToolStripMenuItem(url);
+                menuItem.Click += (s, e) =>
+                {
+                    var webBrowser = GetCurrentBrowser();
+                    webBrowser?.Load(url);
+                };
+                historyMenu.Items.Add(menuItem);
+            }
+
+            // Show the menu below the Back button
+            Point menuLocation = backButton.PointToScreen(new Point(0, backButton.Height));
+            historyMenu.Show(menuLocation);
+        }
+
+        private void importantNotificationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Notify.NotifyIcon("IntNetViewer", "This is a test notification that'll be here indefinitely.", Resources.IntNetViewerIconImage, true);
+        }
+
+        private void uwuifyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("TODO: Change theme to pink on click");
+        }
+
+        private void yippeeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("TODO: Play 'Yippee' sound effect on click");
+        }
+
+        private void gasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("This does nothing.");
+        }
+
+        private void MainWindow_Shown(object sender, EventArgs e)
+        {
+#if DEBUG
+            DialogResult dialogResult = MessageBox.Show("Can you see this window?", "DEBUG", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialogResult == DialogResult.Yes)
+            {
+                return;
+            }
+            else
+            {
+                Application.Restart();
+            }
+#endif
+        }
+
+        private void dlWithoutChromiumToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StandaloneDLFormLoader form = new StandaloneDLFormLoader();
+            form.Show();
+        }
+
+        private void getAppPathToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("App Path: " + appPath);
+        }
+
+        private async void hangUiThreadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            await Task.Run(() => Thread.Sleep(5000));
+        }
+
+        private void testVideoPlayerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            VideoPlayerLoader loader = new VideoPlayerLoader();
+            loader.Show();
+        }
+        #endregion
+        #region Cef/Dockpanel related stuff
+        /// <summary>
+        /// Called on tab switched
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DockPanel_ActiveDocumentChanged(object sender, EventArgs e)
+        {
+            UpdateNavigationControls();
+            UpdateAddressBar();
+        }
+
+        /// <summary>
+        /// Initializes CEF with config file.
+        /// </summary>
+        private void InitializeCef()
+        {
+            try
+            {
+                var settings = LoadSettings();
+                CefSettings cefSettings = new CefSettings();
+                // Apply settings loaded from the config file
+                if (settings.TryGetValue("CachePath", out string cachePath))
+                {
+                    cefSettings.CachePath = Path.GetFullPath(cachePath);
+                }
+                if (settings.TryGetValue("UserAgent", out string userAgent))
+                {
+                    cefSettings.UserAgent = userAgent;
+                }
+                if (settings.TryGetValue("DarkMode", out string darkModeValue) && darkModeValue.Equals("true", StringComparison.OrdinalIgnoreCase))
+                {
+                    cefSettings.BackgroundColor = 0;
+                }
+                cefSettings.RegisterScheme(new CefCustomScheme
+                {
+                    SchemeName = "intnet",
+                    SchemeHandlerFactory = new SchemeHandlerFactory(),
+                    IsStandard = true, // Ensures it's treated like a normal protocol
+                    IsCorsEnabled = true, // Allows Fetch API to work
+                    IsFetchEnabled = true, // Allows Fetch API to work
+                    IsCSPBypassing = true // Allows bypassing CSP
+                });
+                cefSettings.IgnoreCertificateErrors = true;
+                cefSettings.WindowlessRenderingEnabled = true;
+                if (settings.TryGetValue(settings["GPUAcceleration"], out string gpuAccelerationValue) && gpuAccelerationValue.Equals("false", StringComparison.OrdinalIgnoreCase))
+                {
+                    cefSettings.CefCommandLineArgs.Add("disable-gpu", "1");
+                }
+                if (settings.TryGetValue(settings["ShowFPSCounter"], out string fpsValue) && fpsValue.Equals("true", StringComparison.OrdinalIgnoreCase))
+                {
+                    cefSettings.CefCommandLineArgs.Add("show-fps-counter", "1");
+                }
+                if (Cef.IsInitialized == null)
+                {
+                    Cef.Initialize(cefSettings);
+                }
+                homePage = settings.ContainsKey("HomePage") ? settings["HomePage"] : homePage;
+                dHandler = new DownloadHandler(this);
+                InitDownloads();
+                host = new HostHandler(this);
+                mHandler = new ContextMenuHandler(this);
+                lHandler = new LifeSpanHandler(this);
+                //lHandler.OnBeforePopup += LHandler_OnBeforePopUp;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error initializing CEF, {ex.Message}");
+            }
+        }
+
+        private void InitializeBrowserTabs()
+        {
+            // Create the TabControl
+            dockPanel = new DockPanel
+            {
+                Dock = DockStyle.Fill,
+            };
+            mainCefPanel.Controls.Add(dockPanel);
+            dockPanel.ContentRemoved += DockPanel_ContentRemoved;
+
+            // Add the first browser tab
+            AddNewTab("intnet://assets/newtab.html");
+        }
+
+        private void DockPanel_ContentRemoved(object sender, DockContentEventArgs e)
+        {
+            if (dockPanel.Contents.Count == 0)
+            {
+                Application.Exit();
+            }
+            else
+            {
+                UpdateNavigationControls();
+                UpdateAddressBar();
+            }
+        }
+
+        public void AddNewTab(string url)
+        {
+            var settings = LoadSettings();
+            bool isDarkMode = settings.TryGetValue("DarkMode", out string darkModeValue) && darkModeValue.Equals("true", StringComparison.OrdinalIgnoreCase);
+            if (isDarkMode)
+            {
+                var theme = new VS2015DarkTheme();
+                dockPanel.Theme = theme;
+            }
+            else
+            {
+                var theme = new VS2015LightTheme();
+                dockPanel.Theme = theme;
+            }
+
+            var newTab = new BrowserTab(url);
+            newTab.Show(dockPanel, DockState.Document);
+            var browser = GetCurrentBrowser();
+
+            // Attach event handlers
+            browser.TitleChanged += OnBrowserTitleChanged;
+            browser.AddressChanged += OnBrowserAddressChanged;
+            browser.LoadingStateChanged += OnBrowserLoadingStateChanged;
+            browser.FrameLoadEnd += Browser_FrameLoadEnd;
+            browser.StatusMessage += Browser_StatusMessage;
+            browser.DownloadHandler = dHandler;
+            browser.LifeSpanHandler = lHandler;
+            browser.MenuHandler = mHandler;
+            browser.JsDialogHandler = new JsDialogHandler();
+            browser.RequestHandler = new CustomRequestHandler();
+            browser.DragHandler = new DragHandler();
+            browser.KeyboardHandler = new KeyboardHandler(this);
+
+
+            if (!history.Contains(url))
+            {
+                history.Add(url);
+            }
+            if (url.StartsWith(BrowserConfig.InternalURL + ":"))
+            {
+                browser.JavascriptObjectRepository.Register("host", host, true);
+            }
+        }
+
+        void DownloadFavicon(string url)
+        {
+            using (WebClient client = new WebClient())
+            {
+                try
+                {
+                    byte[] imageData = client.DownloadData(url);
+                    using (MemoryStream ms = new MemoryStream(imageData))
+                    {
+                        using (Bitmap bmp = new Bitmap(ms))
+                        {
+                            IntPtr hIcon = bmp.GetHicon();
+                            Icon icon = Icon.FromHandle(hIcon);
+                            favicon = icon;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error downloading favicon: " + ex.Message);
+                }
+            }
+        }
+        private void InitDownloads()
+        {
+            downloads = new Dictionary<int, DownloadItem>();
+            downloadNames = new Dictionary<int, string>();
+            downloadCancelRequests = new List<int>();
+        }
+
+        public Dictionary<int, DownloadItem> Downloads
+        {
+            get
+            {
+                return downloads;
+            }
+        }
+
+        public void UpdateDownloadItem(DownloadItem item)
+        {
+            lock (downloads)
+            {
+                // SuggestedFileName comes full only in the first attempt so keep it somewhere
+                if (item.SuggestedFileName != "")
+                {
+                    downloadNames[item.Id] = item.SuggestedFileName;
+                }
+                // Set it back if it is empty
+                if (item.SuggestedFileName == "" && downloadNames.ContainsKey(item.Id))
+                {
+                    item.SuggestedFileName = downloadNames[item.Id];
+                }
+                downloads[item.Id] = item;
+            }
+        }
+
+        public string CalcDownloadPath(DownloadItem item)
+        {
+            return item.SuggestedFileName;
+        }
+
+        public bool DownloadsInProgress()
+        {
+            foreach (DownloadItem item in downloads.Values)
+            {
+                if (item.IsInProgress)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        
+
+        public void OpenDownloadsTab()
+        {
+            this.Invoke(new Action(() =>
+            {
+                AddNewTab("intnet://assets/downloads.html");
+            }));
+        }
+        public List<int> CancelRequests
+        {
+            get
+            {
+                return downloadCancelRequests;
+            }
+        }
+        private void Browser_StatusMessage(object sender, StatusMessageEventArgs e)
+        {
+            if (e.Value != null)
+            {
+                this.Invoke(new Action(() =>
+                {
+                    cefToolTipStatusLabel.Text = e.Value.ToString();
+                }));
+            }
+        }
+        
+        private void UpdateNavigationControls()
+        {
+            var browser = GetCurrentBrowser();
+            if (browser != null)
+            {
+                backButton.Enabled = browser.CanGoBack;
+                forwardButton.Enabled = browser.CanGoForward;
+                stopButton.Visible = browser.IsLoading;
+                refreshButton.Visible = !browser.IsLoading;
+            }
+            else
+            {
+                backButton.Enabled = false;
+                forwardButton.Enabled = false;
+                stopButton.Visible = false;
+                refreshButton.Visible = false;
+            }
+        }
+
+        private void UpdateAddressBar()
+        {
+            var browser = GetCurrentBrowser();
+            if (browser != null)
+            {
+                if (browser.Address == "intnet://assets/newtab.html")
+                {
+                    this.Invoke(new Action(() =>
+                    {
+                        addressTextBox.Text = string.Empty;
+                    }));
+                }
+                else
+                {
+                    this.Invoke(new Action(() =>
+                    {
+                        addressTextBox.Text = browser.Address;
+                    }));
+                }
+            }
+            else
+            {
+                addressTextBox.Text = string.Empty;
+            }
+        }
+
+        private ChromiumWebBrowser GetCurrentBrowser()
+        {
+            return dockPanel.ActiveDocument is BrowserTab activeTab ? activeTab.Browser : null;
+        }
+
+        
+
+        private void NavigateToAddress()
+        {
+            var browser = GetCurrentBrowser();
+            if (browser != null)
+            {
+                string url = addressTextBox.Text.Trim();
+                if (url.StartsWith("intnet:"))
+                {
+                    Console.WriteLine("Internal URL: " + url);
+                    browser.Load(url);
+                }
+                if (url.StartsWith("chrome:"))
+                {
+                    Console.WriteLine("Internal (Chrome) URL: " + url);
+                    browser.Load(url);
+                }
+                else
+                {
+                    string processedUrl = EnsureValidUrl(url);
+                    Console.WriteLine(processedUrl);
+                    Console.WriteLine("External URL (Processed): " + processedUrl);
+                    browser.Load(processedUrl);
+                }
+                if (!history.Contains(url))
+                {
+                    history.Add(url);
+                }
+            }
+        }
+        static string EnsureValidUrl(string input)
+        {
+            string tldPattern = @"\.(com|org|net|edu|gov|mil|int|io|co|uk|us|info|biz|tv|xyz|ca|de|fr|au|jp|cn|ru|in|br|za|eu|me|cc|us|dev|[a-z]{2,})($|/|\?|:)";
+
+            // URL is assumed to have scheme
+
+            // Check if the string ends with a known TLD
+            if (Regex.IsMatch(input.Trim(), tldPattern, RegexOptions.IgnoreCase))
+            {
+                return input;
+            }
+
+            else
+            {
+                Console.WriteLine("No TLD was found.");
+                // If no TLD is found, assume it's a search query
+                return "https://www.google.com/search?q=" + Uri.EscapeDataString(input);
+            }
+
+            // Regex for checking if the string ends with a known TLD
+
+
+
+        }
+
+        // Cef Subscribed events
+        private void OnBrowserTitleChanged(object sender, TitleChangedEventArgs e)
+        {
+            if (!(sender is ChromiumWebBrowser browser))
+                return;
+            if (!(browser.Parent is BrowserTab tabPage))
+                return;
+            this.Invoke(new Action(() =>
+            {
+                tabPage.Text = e.Title.Length > 20 ? e.Title.Substring(0, 20) + "..." : e.Title;
+                tabPage.ToolTipText = e.Title;
+                this.Text = $"{e.Title.Trim()} - IntNetViewer";
+                pageTitle = e.Title;
+            }));
+        }
+        private void OnBrowserAddressChanged(object sender, AddressChangedEventArgs e)
+        {
+            if (!(sender is ChromiumWebBrowser browser))
+                return;
+            // Update the address bar if this browser is the active tab
+            if (GetCurrentBrowser() == browser)
+            {
+                this.Invoke(new Action(() =>
+                {
+                    addressTextBox.Text = e.Address;
+                }));
+            }
+        }
+        private void OnBrowserLoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
+        {
+            if (!(sender is ChromiumWebBrowser browser))
+                return;
+            // Update navigation buttons and stop button visibility
+            this.Invoke(new Action(() =>
+            {
+                if (GetCurrentBrowser() == browser)
+                {
+                    backButton.Enabled = e.CanGoBack;
+                    forwardButton.Enabled = e.CanGoForward;
+                    stopButton.Visible = e.IsLoading;
+                    refreshButton.Visible = !e.IsLoading;
+                }
+            }));
+            this.Invoke(new Action(() =>
+            {
+                if (e.IsLoading)
+                {
+                    labelLoading.Visible = true;
+                }
+                else
+                {
+                    labelLoading.Visible = false;
+                }
+            }));
+        }
+        private async void Browser_FrameLoadEnd(object sender, FrameLoadEndEventArgs e)
+        {
+            var browser = GetCurrentBrowser();
+            var tab = (BrowserTab)browser.Parent;
+            // Only inject into the main frame
+            if (e.Frame.IsMain)
+            {
+                Console.WriteLine("Getting favicon...");
+                await browser.GetMainFrame().EvaluateScriptAsync(@"
+                    (function() {
+                            var links = document.getElementsByTagName('link');
+                            for (var i = 0; i < links.length; i++) {
+                            if (links[i].rel.includes('icon')) {
+                                return links[i].href;
+                            }
+                        }
+                        return './assets/favicon.ico'; // Default favicon location
+                    })();
+                ").ContinueWith(task =>
+                {
+                    if (!task.IsCompleted || task.Result?.Success != true) return;
+                    string faviconUrl = task.Result.Result?.ToString();
+                    if (!string.IsNullOrEmpty(faviconUrl))
+                    {
+                        DownloadFavicon(faviconUrl);
+                        Console.WriteLine("Favicon URL: " + faviconUrl);
+                    }
+                });
+                this.Invoke((MethodInvoker)(() => tab.Icon = favicon));
+                this.Invoke((MethodInvoker)(() => this.Icon = favicon));
+                var settings = LoadSettings();
+                bool isDarkMode = settings.TryGetValue("DarkMode", out string darkModeValue) &&
+                                  darkModeValue.Equals("true", StringComparison.OrdinalIgnoreCase);
+
+                if (isDarkMode)
+                {
+                    // Use the DevTools client to force dark mode
+                    var devToolsClient = browser.GetDevToolsClient();
+                    await devToolsClient.Emulation.SetAutoDarkModeOverrideAsync(true);
+                }
+            }
+            if (!history.Contains(e.Url))
+            {
+                history.Add(e.Url);
+            }
+            UpdateAddressBar();
+        }
+
+        
+
+        
+        
+        private void InjectDarkModeCSS()
+        {
+            var browser = GetCurrentBrowser();
+
+            string darkModeCSS = @"
+        const style = document.createElement('style');
+        style.innerHTML = `
+            html, body {
+                background-color: #121212 !important;
+                color: #e0e0e0 !important;
+            }
+            a { color: #bb86fc !important; }
+            img, video { filter: brightness(0.8) contrast(1.2); }
+            * { border-color: #444 !important; }
+        `;
+        document.head.appendChild(style);
+    ";
+
+            // Inject JavaScript that appends the CSS to the page
+            browser.ExecuteScriptAsync(darkModeCSS);
+        }
+        internal void RefreshActiveTab()
+        {
+            var browser = GetCurrentBrowser();
+            browser?.Reload();
+        }
+
+        internal void CloseActiveTab()
+        {
+            if (dockPanel.ActiveDocument is BrowserTab activeTab)
+            {
+                activeTab.Close();
+            }
+        }
+
+        #endregion
     }
 }

@@ -5,17 +5,12 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Forms;
 
 namespace IntNetViewer
 {
-    public class CustomRequestHandler : IRequestHandler
+    class CustomRequestHandler : IRequestHandler
     {
-        public CustomRequestHandler()
-        {
-        }
-
         public bool GetAuthCredentials(IWebBrowser chromiumWebBrowser, IBrowser browser, string originUrl, bool isProxy, string host, int port, string realm, string scheme, IAuthCallback callback)
         {
             return false;
@@ -46,9 +41,27 @@ namespace IntNetViewer
             return false;
         }
 
+        public bool OnRenderProcessExited(IWebBrowser chromiumWebBrowser, IBrowser browser, CefTerminationStatus status)
+        {
+            // This runs on a CEF thread, so use Invoke if interacting with UI
+            ((Control)chromiumWebBrowser).Invoke(new Action(() =>
+            {
+                MessageBox.Show($"Renderer process exited! Status: {status}. The app will close.", "Renderer Exited", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit(); // or gracefully close browser/form
+            }));
+
+            return false;
+        }
+
         public void OnRenderProcessTerminated(IWebBrowser chromiumWebBrowser, IBrowser browser, CefTerminationStatus status, int errorCode, string errorMessage)
         {
-            
+            // This runs on a CEF thread, so use Invoke if interacting with UI
+            ((Control)chromiumWebBrowser).Invoke(new Action(() =>
+            {
+                MessageBox.Show($"Renderer process terminated! Status: {status}, ErrorCode: {errorCode}, ErrorMessage: {errorMessage}. The app will close.", "Renderer Terminated", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit(); // or gracefully close browser/form
+            }));
+
         }
 
         public void OnRenderViewReady(IWebBrowser chromiumWebBrowser, IBrowser browser)

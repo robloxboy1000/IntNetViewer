@@ -31,7 +31,7 @@ namespace IntNetViewer
 
 			// open popup in new tab!
 			newBrowser = null;
-			myForm.AddNewTab(targetUrl);
+			myForm.Invoke(new System.Action(() => myForm.AddNewTab(targetUrl)));
 
 			return true;
 

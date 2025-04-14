@@ -1,4 +1,5 @@
-﻿using CefSharp.WinForms;
+﻿using CefSharp;
+using CefSharp.WinForms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace IntNetViewer
             this.Text = "New Tab";
             this.CloseButtonVisible = true;
             this.ShowIcon = true;
-            this.Icon = Properties.Resources.Icon_512pt2x;
+            this.Icon = Properties.Resources.IntNetViewerIcon;
             // Create and add the Chromium browser
             Browser = new ChromiumWebBrowser(url)
             {

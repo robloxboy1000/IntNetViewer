@@ -100,18 +100,27 @@ namespace IntNetViewer {
 
 				// check if my hotkey
 				int mod = ((int)modifiers);
-				
+                bool ctrlDown = mod.IsBitmaskOn((int)CefEventFlags.ControlDown);
+                bool shiftDown = mod.IsBitmaskOn((int)CefEventFlags.ShiftDown);
+                bool altDown = mod.IsBitmaskOn((int)CefEventFlags.AltDown);
 
-				// per registered hotkey
-				foreach (BrowserHotKey key in Hotkeys) {
-					if (key.KeyCode == windowsKeyCode) {
-						key.Callback();
-					}
-				}
+                // per registered hotkey
+                foreach (BrowserHotKey key in Hotkeys)
+                {
+                    if (key.KeyCode == windowsKeyCode)
+                    {
+                        if (key.Ctrl == ctrlDown && key.Shift == shiftDown && key.Alt == altDown)
+                        {
+                            myForm.InvokeOnParent(delegate () {
+                                key.Callback();
+                            });
+                        }
+                    }
+                }
 
-				//Debug.WriteLine(String.Format("OnKeyEvent: KeyType: {0} 0x{1:X} Modifiers: {2}", type, windowsKeyCode, modifiers));
+                //Debug.WriteLine(String.Format("OnKeyEvent: KeyType: {0} 0x{1:X} Modifiers: {2}", type, windowsKeyCode, modifiers));
 
-			}
+            }
 
 			return false;
 		}

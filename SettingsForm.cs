@@ -13,7 +13,7 @@ namespace IntNetViewer
 {
     public partial class SettingsForm : Form
     {
-        private readonly string configFilePath = "config.ini";
+        private readonly string configFilePath = "config.cfg";
         
         public SettingsForm()
         {
@@ -67,15 +67,15 @@ namespace IntNetViewer
                 writer.WriteLine($"HomePage = {textBoxHomePage.Text}");
                 writer.WriteLine($@"CachePath = ./cache/");
                 writer.WriteLine($"UserAgent = {textBoxUA.Text}");
-                writer.WriteLine($"GPUAcceleration = {checkBoxGPUAccel}");
-                writer.WriteLine($"ShowFPSCounter = {checkBoxShowFPS}");
+                writer.WriteLine($"GPUAcceleration = {checkBoxGPUAccel.Checked}");
+                writer.WriteLine($"ShowFPSCounter = {checkBoxShowFPS.Checked}");
                 writer.WriteLine("[General]");
                 writer.WriteLine($"DarkMode = {checkBoxDarkMode.Checked}");
                 writer.WriteLine($"EnableHomeButton = {checkBoxHome.Checked}");
                 writer.WriteLine($"WarnOnExit = {checkBoxWarn.Checked}");
             }
 
-            MessageBox.Show("Settings saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Settings saved successfully!\r\nYou must restart IntNetViewer for settings to take effect.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
     }

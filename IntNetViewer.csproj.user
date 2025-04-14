@@ -1,7 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <PublishUrlHistory>C:\Users\chris\Downloads\intnetviewer1.2\|C:\Users\chris\Downloads\uwunetviewer1.1\|C:\Users\chris\Documents\ftp\intnetviewer\download\1.1\|C:\Users\chris\Documents\ftp\intnetviewer\download\1.0.6\|ftp://185.27.134.11:990/htdocs/sites/intnetviewer/download/1.0.6/</PublishUrlHistory>
+    <PublishUrlHistory>C:\Users\Owner\Documents\WebSite\inv4.3\|C:\Users\Owner\Documents\WebSite\|C:\Users\chris\Downloads\intnetviewer1.2\|C:\Users\chris\Downloads\uwunetviewer1.1\|C:\Users\chris\Documents\ftp\intnetviewer\download\1.1\</PublishUrlHistory>
     <InstallUrlHistory>http://robloxboy100058.github.io/rb1000/sites/intnetviewer/download/1.1/|http://robloxboy100058.github.io/rb1000/sites/intnetviewer/download/1.0.6/|http://robloxboy1000.infinityfree.com/sites/intnetviewer/download/1.0.6/|http://robloxboy1000.infinityfree.com/sites/intnetviewer/download/|https://github.com/robloxboy100058/IntNetViewer-Windows/releases/</InstallUrlHistory>
     <SupportUrlHistory />
     <UpdateUrlHistory />
@@ -9,8 +9,13 @@
     <ErrorReportUrlHistory />
     <FallbackCulture>en-US</FallbackCulture>
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
+    <ProjectView>ShowAllFiles</ProjectView>
   </PropertyGroup>
   <PropertyGroup>
     <EnableSecurityDebugging>false</EnableSecurityDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <StartArguments>
+    </StartArguments>
   </PropertyGroup>
 </Project>

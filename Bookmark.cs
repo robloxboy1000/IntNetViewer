@@ -9,6 +9,7 @@ namespace IntNetViewer
     public class Bookmark
     {
         public string Name { get; set; }
-        public string Url { get; set; }
+        public string Url { get; set; }   // Null or empty if it's a folder
+        public List<Bookmark> Children { get; set; } = new List<Bookmark>(); // Sub-bookmarks
     }
 }

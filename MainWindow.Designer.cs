@@ -30,6 +30,7 @@ namespace IntNetViewer
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,6 +49,12 @@ namespace IntNetViewer
             this.writeLineToConsoleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.writeLineToConsoleDifferentMethodToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notificationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.testErrorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importantNotificationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dlWithoutChromiumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.getAppPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hangUiThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.testVideoPlayerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openDownloadsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,12 +78,19 @@ namespace IntNetViewer
             this.stopButton = new System.Windows.Forms.Button();
             this.forwardButton = new System.Windows.Forms.Button();
             this.backButton = new System.Windows.Forms.Button();
+            this.mainCefPanel = new System.Windows.Forms.Panel();
+            this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.holdTimer = new System.Windows.Forms.Timer(this.components);
+            this.historyMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStripContainer3.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer3.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
+            this.toolStripContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -107,35 +121,35 @@ namespace IntNetViewer
             // newWindowToolStripMenuItem
             // 
             this.newWindowToolStripMenuItem.Name = "newWindowToolStripMenuItem";
-            this.newWindowToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.newWindowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.newWindowToolStripMenuItem.Text = "New window";
             this.newWindowToolStripMenuItem.Click += new System.EventHandler(this.NewWindowToolStripMenuItem_Click);
             // 
             // newTabToolStripMenuItem
             // 
             this.newTabToolStripMenuItem.Name = "newTabToolStripMenuItem";
-            this.newTabToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.newTabToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.newTabToolStripMenuItem.Text = "New tab";
             this.newTabToolStripMenuItem.Click += new System.EventHandler(this.NewTabToolStripMenuItem_Click);
             // 
             // checkForUpdateToolStripMenuItem
             // 
             this.checkForUpdateToolStripMenuItem.Name = "checkForUpdateToolStripMenuItem";
-            this.checkForUpdateToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.checkForUpdateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.checkForUpdateToolStripMenuItem.Text = "Check for update";
             this.checkForUpdateToolStripMenuItem.Click += new System.EventHandler(this.CheckForUpdateToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
@@ -155,7 +169,7 @@ namespace IntNetViewer
             // historyToolStripMenuItem
             // 
             this.historyToolStripMenuItem.Name = "historyToolStripMenuItem";
-            this.historyToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.historyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.historyToolStripMenuItem.Text = "History";
             this.historyToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.HistoryToolStripMenuItem_DropDownItemClicked);
             this.historyToolStripMenuItem.Click += new System.EventHandler(this.HistoryToolStripMenuItem_Click);
@@ -164,7 +178,7 @@ namespace IntNetViewer
             // bookmarksToolStripMenuItem
             // 
             this.bookmarksToolStripMenuItem.Name = "bookmarksToolStripMenuItem";
-            this.bookmarksToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.bookmarksToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.bookmarksToolStripMenuItem.Text = "Bookmarks";
             this.bookmarksToolStripMenuItem.Click += new System.EventHandler(this.BookmarksToolStripMenuItem_Click);
             // 
@@ -176,9 +190,15 @@ namespace IntNetViewer
             this.legacyModeToolStripMenuItem,
             this.writeLineToConsoleToolStripMenuItem,
             this.writeLineToConsoleDifferentMethodToolStripMenuItem,
-            this.notificationToolStripMenuItem});
+            this.notificationToolStripMenuItem,
+            this.testErrorToolStripMenuItem,
+            this.importantNotificationToolStripMenuItem,
+            this.dlWithoutChromiumToolStripMenuItem,
+            this.getAppPathToolStripMenuItem,
+            this.hangUiThreadToolStripMenuItem,
+            this.testVideoPlayerToolStripMenuItem});
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-            this.debugToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.debugToolStripMenuItem.Text = "Debug";
             this.debugToolStripMenuItem.Visible = false;
             // 
@@ -224,24 +244,66 @@ namespace IntNetViewer
             this.notificationToolStripMenuItem.Text = "notification";
             this.notificationToolStripMenuItem.Click += new System.EventHandler(this.NotificationToolStripMenuItem_Click);
             // 
+            // testErrorToolStripMenuItem
+            // 
+            this.testErrorToolStripMenuItem.Name = "testErrorToolStripMenuItem";
+            this.testErrorToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
+            this.testErrorToolStripMenuItem.Text = "Test error";
+            this.testErrorToolStripMenuItem.Click += new System.EventHandler(this.testErrorToolStripMenuItem_Click);
+            // 
+            // importantNotificationToolStripMenuItem
+            // 
+            this.importantNotificationToolStripMenuItem.Name = "importantNotificationToolStripMenuItem";
+            this.importantNotificationToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
+            this.importantNotificationToolStripMenuItem.Text = "important notification";
+            this.importantNotificationToolStripMenuItem.Click += new System.EventHandler(this.importantNotificationToolStripMenuItem_Click);
+            // 
+            // dlWithoutChromiumToolStripMenuItem
+            // 
+            this.dlWithoutChromiumToolStripMenuItem.Name = "dlWithoutChromiumToolStripMenuItem";
+            this.dlWithoutChromiumToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
+            this.dlWithoutChromiumToolStripMenuItem.Text = "dl without chromium";
+            this.dlWithoutChromiumToolStripMenuItem.Click += new System.EventHandler(this.dlWithoutChromiumToolStripMenuItem_Click);
+            // 
+            // getAppPathToolStripMenuItem
+            // 
+            this.getAppPathToolStripMenuItem.Name = "getAppPathToolStripMenuItem";
+            this.getAppPathToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
+            this.getAppPathToolStripMenuItem.Text = "get app path";
+            this.getAppPathToolStripMenuItem.Click += new System.EventHandler(this.getAppPathToolStripMenuItem_Click);
+            // 
+            // hangUiThreadToolStripMenuItem
+            // 
+            this.hangUiThreadToolStripMenuItem.Name = "hangUiThreadToolStripMenuItem";
+            this.hangUiThreadToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
+            this.hangUiThreadToolStripMenuItem.Text = "hang ui thread";
+            this.hangUiThreadToolStripMenuItem.Click += new System.EventHandler(this.hangUiThreadToolStripMenuItem_Click);
+            // 
+            // testVideoPlayerToolStripMenuItem
+            // 
+            this.testVideoPlayerToolStripMenuItem.Name = "testVideoPlayerToolStripMenuItem";
+            this.testVideoPlayerToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
+            this.testVideoPlayerToolStripMenuItem.Text = "test video player";
+            this.testVideoPlayerToolStripMenuItem.Click += new System.EventHandler(this.testVideoPlayerToolStripMenuItem_Click);
+            // 
             // clearHistoryToolStripMenuItem
             // 
             this.clearHistoryToolStripMenuItem.Name = "clearHistoryToolStripMenuItem";
-            this.clearHistoryToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.clearHistoryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.clearHistoryToolStripMenuItem.Text = "Clear History";
             this.clearHistoryToolStripMenuItem.Click += new System.EventHandler(this.ClearHistoryToolStripMenuItem_Click);
             // 
             // addBookmarkToolStripMenuItem
             // 
             this.addBookmarkToolStripMenuItem.Name = "addBookmarkToolStripMenuItem";
-            this.addBookmarkToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.addBookmarkToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addBookmarkToolStripMenuItem.Text = "Add Bookmark";
             this.addBookmarkToolStripMenuItem.Click += new System.EventHandler(this.AddBookmarkToolStripMenuItem_Click);
             // 
             // openDownloadsToolStripMenuItem
             // 
             this.openDownloadsToolStripMenuItem.Name = "openDownloadsToolStripMenuItem";
-            this.openDownloadsToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.openDownloadsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openDownloadsToolStripMenuItem.Text = "Open downloads";
             this.openDownloadsToolStripMenuItem.Click += new System.EventHandler(this.BtnDownloads_Click);
             // 
@@ -420,6 +482,7 @@ namespace IntNetViewer
             this.stopButton.TabIndex = 2;
             this.stopButton.Text = "Stop";
             this.stopButton.UseVisualStyleBackColor = true;
+            this.stopButton.Click += new System.EventHandler(this.StopButton_Click);
             // 
             // forwardButton
             // 
@@ -441,6 +504,57 @@ namespace IntNetViewer
             this.backButton.Text = "Back";
             this.backButton.UseVisualStyleBackColor = true;
             this.backButton.Click += new System.EventHandler(this.BackButton_Click);
+            this.backButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.backButton_MouseDown);
+            this.backButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.backButton_MouseUp);
+            // 
+            // mainCefPanel
+            // 
+            this.mainCefPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.mainCefPanel.Location = new System.Drawing.Point(0, 95);
+            this.mainCefPanel.Name = "mainCefPanel";
+            this.mainCefPanel.Size = new System.Drawing.Size(784, 443);
+            this.mainCefPanel.TabIndex = 8;
+            // 
+            // toolStripContainer1
+            // 
+            this.toolStripContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolStripContainer1.BottomToolStripPanelVisible = false;
+            // 
+            // toolStripContainer1.ContentPanel
+            // 
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(784, 1);
+            this.toolStripContainer1.LeftToolStripPanelVisible = false;
+            this.toolStripContainer1.Location = new System.Drawing.Point(0, 71);
+            this.toolStripContainer1.Name = "toolStripContainer1";
+            this.toolStripContainer1.RightToolStripPanelVisible = false;
+            this.toolStripContainer1.Size = new System.Drawing.Size(784, 26);
+            this.toolStripContainer1.TabIndex = 9;
+            this.toolStripContainer1.Text = "toolStripContainer1";
+            // 
+            // toolStripContainer1.TopToolStripPanel
+            // 
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip1.Location = new System.Drawing.Point(3, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(111, 25);
+            this.toolStrip1.TabIndex = 0;
+            // 
+            // holdTimer
+            // 
+            this.holdTimer.Interval = 50;
+            this.holdTimer.Tick += new System.EventHandler(this.holdTimer_Tick);
+            // 
+            // historyMenu
+            // 
+            this.historyMenu.Name = "contextMenuStrip1";
+            this.historyMenu.Size = new System.Drawing.Size(61, 4);
             // 
             // MainWindow
             // 
@@ -448,6 +562,8 @@ namespace IntNetViewer
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.toolStripContainer1);
+            this.Controls.Add(this.mainCefPanel);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.toolStripContainer3);
             this.Controls.Add(this.panel1);
@@ -460,6 +576,7 @@ namespace IntNetViewer
             this.Text = "IntNetViewer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
             this.Load += new System.EventHandler(this.MainWindow_Load);
+            this.Shown += new System.EventHandler(this.MainWindow_Shown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -472,6 +589,10 @@ namespace IntNetViewer
             this.toolStripContainer3.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
+            this.toolStripContainer1.TopToolStripPanel.PerformLayout();
+            this.toolStripContainer1.ResumeLayout(false);
+            this.toolStripContainer1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -518,6 +639,17 @@ namespace IntNetViewer
         private Button backButton;
         private Label labelLoading;
         private Button homeToolStripButton;
+        private Panel mainCefPanel;
+        private ToolStripMenuItem testErrorToolStripMenuItem;
+        private ToolStripContainer toolStripContainer1;
+        private ToolStrip toolStrip1;
+        private Timer holdTimer;
+        private ContextMenuStrip historyMenu;
+        private ToolStripMenuItem importantNotificationToolStripMenuItem;
+        private ToolStripMenuItem dlWithoutChromiumToolStripMenuItem;
+        private ToolStripMenuItem getAppPathToolStripMenuItem;
+        private ToolStripMenuItem hangUiThreadToolStripMenuItem;
+        private ToolStripMenuItem testVideoPlayerToolStripMenuItem;
     }
 }
 

@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("PixlPlaya5")]
 [assembly: AssemblyProduct("IntNetViewer")]
-[assembly: AssemblyCopyright("© 2017-2024 PixlPlaya5")]
+[assembly: AssemblyCopyright("© 2017-2025 PixlPlaya5")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -34,6 +34,6 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("4.3.1")]
-[assembly: AssemblyFileVersion("4.3.1")]
+[assembly: AssemblyVersion("4.5.0")]
+[assembly: AssemblyFileVersion("4.5.0")]
 [assembly: NeutralResourcesLanguage("en-US")]

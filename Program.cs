@@ -14,7 +14,7 @@ namespace IntNetViewer
 {
     internal static class Program
     {
-        
+        private static readonly string errorLinesFilePath = "errorlines.txt";
 
         /// <summary>
         /// The main entry point for the application.
@@ -22,7 +22,7 @@ namespace IntNetViewer
         [STAThread]
         static void Main()
         {
-            Assembly.LoadFrom(Path.GetFullPath("CefSharp.Core.Runtime.dll"));
+            Assembly.LoadFrom(Application.StartupPath+"/CefSharp.Core.Runtime.dll");
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             AppDomain.CurrentDomain.FirstChanceException += FirstChanceException;
 
@@ -37,6 +37,12 @@ namespace IntNetViewer
             Application.Run(new MainWindow());
 
 
+        }
+        static string GetRandomErrorString()
+        {
+            string[] errorLines = File.ReadAllLines(errorLinesFilePath);
+            Random rand = new Random();
+            return errorLines[rand.Next(0, errorLines.Length)];
         }
         static void FirstChanceException(object sender, FirstChanceExceptionEventArgs e)
         {
@@ -66,7 +72,12 @@ namespace IntNetViewer
                 return File.Exists(assemblyPath) ? Assembly.LoadFile(assemblyPath) : null;
                 
             }
-            catch (Exception ex)
+            catch (Exception
+            #if DEBUG
+            ex
+            #endif
+            )
+
             {
 #if DEBUG
                 Console.WriteLine($"Error loading assembly: {ex.Message}");
@@ -94,16 +105,16 @@ namespace IntNetViewer
             {
                 if (ex is NotImplementedException)
                 {
-                    MessageBox.Show($"This feature is not implemented yet.\r\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"This feature is not implemented yet.\r\n{ex.Message}", GetRandomErrorString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 // Log the exception, show a message box, or perform other error handling
                 else if (ex is FileNotFoundException)
                 {
-                    MessageBox.Show($"An important file was not found.\r\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"An important file was not found.\r\n{ex.Message}", GetRandomErrorString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else if (ex is DllNotFoundException)
                 {
-                    MessageBox.Show($"A required library was not found.\r\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"A required library was not found.\r\n{ex.Message}", GetRandomErrorString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else if (ex is InvalidOperationException)
                 {
@@ -117,7 +128,7 @@ namespace IntNetViewer
                 {
                     // Any other exception
                     // Log the exception, display it, etc
-                    MessageBox.Show($"An unexpected error occurred: \r\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"An unexpected error occurred: \r\n{ex.Message}", GetRandomErrorString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 }
 
