@@ -1,2 +1,5 @@
 packages/
 .vs/
+/bin
+/notes.txt
+/obj
