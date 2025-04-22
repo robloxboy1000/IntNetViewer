@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 using System.IO;
 using System.Runtime.ExceptionServices;
+using System.Windows.Forms.Design;
 
 
 namespace IntNetViewer
@@ -15,15 +16,171 @@ namespace IntNetViewer
     internal static class Program
     {
         private static readonly string errorLinesFilePath = "errorlines.txt";
+        public static bool noCef = false;
 
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
-            Assembly.LoadFrom(Application.StartupPath+"/CefSharp.Core.Runtime.dll");
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+            if (Environment.OSVersion.Version.Major < 10)
+            {
+                MessageBox.Show("This application requires Windows 10 or higher.\r\nTo bypass this error, open with \"--nocef\" in CMD.", GetRandomErrorString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            // Check if the application is already running
+            if (System.Diagnostics.Process.GetProcessesByName(System.Diagnostics.Process.GetCurrentProcess().ProcessName).Length > 1)
+            {
+                MessageBox.Show("The application is already running.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (args.Contains("--nocef"))
+            {
+                Console.WriteLine("CEFSharp will not be initialized. Use only for debugging.");
+                MessageBox.Show("CEFSharp will not be initialized. Use only for debugging.", "Debug Mode", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                noCef = true;
+            }
+            else
+            {
+                Console.WriteLine("Debug mode disabled.");
+            }
+            string[] dlls = Directory.GetFiles(Application.StartupPath, "*.dll", SearchOption.TopDirectoryOnly);
+            foreach (string dll in dlls)
+            {
+                
+                if (noCef)
+                {
+                    if (dll.Contains("CefSharp.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("CefSharp.Core.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("CefSharp.WinForms.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("CefSharp.BrowserSubprocess.Core.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("CefSharp.Core.Runtime.dll"))
+                    {
+                        // dont load
+                    }
+                    // These are loaded by CEF, no need to preload
+                    else if (dll.Contains("chrome_elf.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("d3dcompiler_47.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("dxcompiler.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("dxil.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("libcef.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("libEGL.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("libGLESv2.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("vk_swiftshader.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("vulkan-1.dll"))
+                    {
+                        // dont load
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Loading " + dll);
+                        try
+                        {
+                            Assembly.LoadFrom(dll);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"An error occurred while loading assembly.\r\n{ex.Message}", GetRandomErrorString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            Console.WriteLine($"Error loading assembly: {ex.Message}");
+                        }
+                    }
+                }
+                // Load other required DLLs
+                else
+                {
+                    // These are loaded by CEF, no need to preload
+                    if (dll.Contains("chrome_elf.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("d3dcompiler_47.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("dxcompiler.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("dxil.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("libcef.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("libEGL.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("libGLESv2.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("vk_swiftshader.dll"))
+                    {
+                        // dont load
+                    }
+                    else if (dll.Contains("vulkan-1.dll"))
+                    {
+                        // dont load
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Loading " + dll);
+                        try
+                        {
+                            Assembly.LoadFrom(dll);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"An error occurred while loading assembly.\r\n{ex.Message}", GetRandomErrorString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            Console.WriteLine($"Error loading assembly: {ex.Message}");
+                        }
+                    }
+                        
+                }
+                
+            }
+            
+            // AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             AppDomain.CurrentDomain.FirstChanceException += FirstChanceException;
 
             // Add the event handler for handling UI thread exceptions
@@ -52,40 +209,7 @@ namespace IntNetViewer
                 File.AppendAllText("AssemblyBindingLog.txt", fnfEx.ToString() + Environment.NewLine);
             }
         }
-        static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            
-            try
-            {
-                string assemblyPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, new AssemblyName(args.Name).Name + ".dll");
-#if DEBUG
-                Console.WriteLine($"Attempting to load {args.Name}, {assemblyPath}");
-#endif
-
-                if (!File.Exists(assemblyPath))
-                {
-#if DEBUG
-                    Console.WriteLine($"Assembly not found: {assemblyPath}");
-#endif
-                    return null;
-                }
-                return File.Exists(assemblyPath) ? Assembly.LoadFile(assemblyPath) : null;
-                
-            }
-            catch (Exception
-            #if DEBUG
-            ex
-            #endif
-            )
-
-            {
-#if DEBUG
-                Console.WriteLine($"Error loading assembly: {ex.Message}");
-#endif
-                return null;
-            }
-
-        }
+        
         // Event handler for UI thread exceptions
         static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
         {
@@ -118,41 +242,25 @@ namespace IntNetViewer
                 }
                 else if (ex is InvalidOperationException)
                 {
-                    // Log the serious error if necessary
-
-                    // Exit the application immediately
-
-                    Application.Exit();
+                    MessageBox.Show($"An invalid operation was attempted.\r\n{ex.Message}", GetRandomErrorString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    System.Environment.Exit(1);
+                }
+                else if (ex is System.IO.FileLoadException)
+                {
+                    MessageBox.Show($"An error occurred while loading a file.\r\n{ex.Message}", GetRandomErrorString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {
                     // Any other exception
                     // Log the exception, display it, etc
                     MessageBox.Show($"An unexpected error occurred: \r\n{ex.Message}", GetRandomErrorString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
-
                 }
 
-                
-                // For serious errors, consider exiting the application
-                // Application.Exit();
             }
             
         }
 
-        static void ShowUsage()
-        {
-            Console.WriteLine($"IntNetViewer {Application.ProductVersion}");
-            Console.WriteLine("Usage: int.exe [options]");
-            Console.WriteLine("Options:");
-            Console.WriteLine("  --version, -i       Show version information");
-            Console.WriteLine("  --help, -h          Show this help message");
-            Console.WriteLine("  --noconsole, -nc    Disable showing console at launch (broken)");
-        }
-
-        static void ShowVersion()
-        {
-            Console.WriteLine($"IntNetViewer {Application.ProductVersion}");
-        }
+        
 
 
     }

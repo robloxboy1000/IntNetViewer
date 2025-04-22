@@ -83,6 +83,7 @@ namespace IntNetViewer
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.holdTimer = new System.Windows.Forms.Timer(this.components);
             this.historyMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.restartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -121,35 +122,35 @@ namespace IntNetViewer
             // newWindowToolStripMenuItem
             // 
             this.newWindowToolStripMenuItem.Name = "newWindowToolStripMenuItem";
-            this.newWindowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newWindowToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.newWindowToolStripMenuItem.Text = "New window";
             this.newWindowToolStripMenuItem.Click += new System.EventHandler(this.NewWindowToolStripMenuItem_Click);
             // 
             // newTabToolStripMenuItem
             // 
             this.newTabToolStripMenuItem.Name = "newTabToolStripMenuItem";
-            this.newTabToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newTabToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.newTabToolStripMenuItem.Text = "New tab";
             this.newTabToolStripMenuItem.Click += new System.EventHandler(this.NewTabToolStripMenuItem_Click);
             // 
             // checkForUpdateToolStripMenuItem
             // 
             this.checkForUpdateToolStripMenuItem.Name = "checkForUpdateToolStripMenuItem";
-            this.checkForUpdateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.checkForUpdateToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.checkForUpdateToolStripMenuItem.Text = "Check for update";
             this.checkForUpdateToolStripMenuItem.Click += new System.EventHandler(this.CheckForUpdateToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
@@ -196,7 +197,8 @@ namespace IntNetViewer
             this.dlWithoutChromiumToolStripMenuItem,
             this.getAppPathToolStripMenuItem,
             this.hangUiThreadToolStripMenuItem,
-            this.testVideoPlayerToolStripMenuItem});
+            this.testVideoPlayerToolStripMenuItem,
+            this.restartToolStripMenuItem});
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
             this.debugToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.debugToolStripMenuItem.Text = "Debug";
@@ -556,6 +558,13 @@ namespace IntNetViewer
             this.historyMenu.Name = "contextMenuStrip1";
             this.historyMenu.Size = new System.Drawing.Size(61, 4);
             // 
+            // restartToolStripMenuItem
+            // 
+            this.restartToolStripMenuItem.Name = "restartToolStripMenuItem";
+            this.restartToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
+            this.restartToolStripMenuItem.Text = "restart";
+            this.restartToolStripMenuItem.Click += new System.EventHandler(this.restartToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -650,6 +659,7 @@ namespace IntNetViewer
         private ToolStripMenuItem getAppPathToolStripMenuItem;
         private ToolStripMenuItem hangUiThreadToolStripMenuItem;
         private ToolStripMenuItem testVideoPlayerToolStripMenuItem;
+        private ToolStripMenuItem restartToolStripMenuItem;
     }
 }
 

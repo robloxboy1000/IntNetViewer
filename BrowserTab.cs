@@ -12,7 +12,8 @@ namespace IntNetViewer
 {
     public class BrowserTab : DockContent
     {
-        public ChromiumWebBrowser Browser { get; private set; }
+        public ChromiumWebBrowser cefBrowser { get; private set; }
+        public WebBrowser webBrowser { get; private set; } // For fallback if CEF is not available
 
         public BrowserTab(string url)
         {
@@ -21,18 +22,37 @@ namespace IntNetViewer
             this.CloseButtonVisible = true;
             this.ShowIcon = true;
             this.Icon = Properties.Resources.IntNetViewerIcon;
-            // Create and add the Chromium browser
-            Browser = new ChromiumWebBrowser(url)
+            if (Program.noCef)
             {
-                Dock = DockStyle.Fill
-            };
-            this.Controls.Add(Browser);
+                webBrowser = new WebBrowser
+                {
+                    Dock = DockStyle.Fill,
+                    ScriptErrorsSuppressed = true,
+                    AllowWebBrowserDrop = false
+                };
+                this.Controls.Add(webBrowser);
+                webBrowser.DocumentTitleChanged += (sender, args) =>
+                {
+                    this.Invoke((MethodInvoker)(() => this.Text = webBrowser.DocumentTitle));
+                };
+                webBrowser.Navigate(url);
+            }
+            else
+            {
+                // Create and add the Chromium browser
+                cefBrowser = new ChromiumWebBrowser(url)
+                {
+                    Dock = DockStyle.Fill
+                };
+                this.Controls.Add(cefBrowser);
 
-            // Set tab title when page loads
-            Browser.TitleChanged += (sender, args) =>
-            {
-                this.Invoke((MethodInvoker)(() => this.Text = args.Title));
-            };
+                // Set tab title when page loads
+                cefBrowser.TitleChanged += (sender, args) =>
+                {
+                    this.Invoke((MethodInvoker)(() => this.Text = args.Title));
+                };
+            }
+                
         }
     }
 }
