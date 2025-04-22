@@ -46,8 +46,6 @@ namespace IntNetViewer
         private Icon favicon;
         private int backButtonHoldTime = 0;
         private const int HoldThreshold = 500; // 500ms for long press
-        private DateTime lastPing;
-        private System.Windows.Forms.Timer watchdogTimer;
         #endregion
         #region Constructor
         /// <summary>
@@ -120,17 +118,7 @@ namespace IntNetViewer
                 
                 // check for updates automatically via https://api.github.com/repos/robloxboy1000/IntNetViewer/releases/latest
                 await UpdateChecker.CheckForUpdates();
-                lastPing = DateTime.Now;
-
-                System.Windows.Forms.Timer uiTimer = new System.Windows.Forms.Timer();
-                uiTimer.Interval = 1000; // every second
-                uiTimer.Tick += (s, args) => lastPing = DateTime.Now;
-                uiTimer.Start();
-
-                watchdogTimer = new System.Windows.Forms.Timer();
-                watchdogTimer.Interval = 5000; // check every 5 seconds
-                watchdogTimer.Tick += WatchdogTimer_Tick;
-                watchdogTimer.Start();
+                
             }
             catch (Exception ex)
             {
@@ -578,14 +566,7 @@ namespace IntNetViewer
             About_New aboutForm = new About_New();
             aboutForm.ShowDialog();
         }
-        private void WatchdogTimer_Tick(object sender, EventArgs e)
-        {
-            if ((DateTime.Now - lastPing).TotalSeconds > 5)
-            {
-                // UI thread hasn't responded in 5 seconds
-                Console.WriteLine("The app is not responding...");
-            }
-        }
+        
 
         private void PopulateBookmarks(List<Bookmark> bookmarks, ToolStrip toolStrip)
         {
