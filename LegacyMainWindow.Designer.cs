@@ -106,40 +106,35 @@
             // 
             // backButton
             // 
-            this.backButton.Image = global::IntNetViewer.Properties.Resources.back_icon;
-            this.backButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+
             this.backButton.Name = "backButton";
             this.backButton.Size = new System.Drawing.Size(52, 22);
             this.backButton.Text = "Back";
             // 
             // forwardButton
             // 
-            this.forwardButton.Image = global::IntNetViewer.Properties.Resources.forward_icon;
-            this.forwardButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            
             this.forwardButton.Name = "forwardButton";
             this.forwardButton.Size = new System.Drawing.Size(70, 22);
             this.forwardButton.Text = "Forward";
             // 
             // refreshButton
             // 
-            this.refreshButton.Image = global::IntNetViewer.Properties.Resources.refresh_icon;
-            this.refreshButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(66, 22);
             this.refreshButton.Text = "Refresh";
             // 
             // stopButton
             // 
-            this.stopButton.Image = global::IntNetViewer.Properties.Resources.stop_icon;
-            this.stopButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            
             this.stopButton.Name = "stopButton";
             this.stopButton.Size = new System.Drawing.Size(51, 22);
             this.stopButton.Text = "Stop";
             // 
             // homeToolStripButton
             // 
-            this.homeToolStripButton.Image = global::IntNetViewer.Properties.Resources.home;
-            this.homeToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            
             this.homeToolStripButton.Name = "homeToolStripButton";
             this.homeToolStripButton.Size = new System.Drawing.Size(60, 22);
             this.homeToolStripButton.Text = "Home";

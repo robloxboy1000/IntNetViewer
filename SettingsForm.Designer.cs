@@ -31,6 +31,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.txtBxFGColor = new System.Windows.Forms.TextBox();
+            this.txtBxBGColor = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.chkBxUseAppDataAsCache = new System.Windows.Forms.CheckBox();
             this.label9 = new System.Windows.Forms.Label();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
@@ -55,15 +59,15 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxHomePage = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.txtBxBGColor = new System.Windows.Forms.TextBox();
-            this.txtBxFGColor = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -79,6 +83,9 @@
             // panel1
             // 
             this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.pictureBox5);
+            this.panel1.Controls.Add(this.comboBox1);
+            this.panel1.Controls.Add(this.label10);
             this.panel1.Controls.Add(this.txtBxFGColor);
             this.panel1.Controls.Add(this.txtBxBGColor);
             this.panel1.Controls.Add(this.label5);
@@ -112,10 +119,42 @@
             this.panel1.Size = new System.Drawing.Size(269, 409);
             this.panel1.TabIndex = 15;
             // 
+            // txtBxFGColor
+            // 
+            this.txtBxFGColor.Location = new System.Drawing.Point(101, 342);
+            this.txtBxFGColor.Name = "txtBxFGColor";
+            this.txtBxFGColor.Size = new System.Drawing.Size(137, 20);
+            this.txtBxFGColor.TabIndex = 50;
+            // 
+            // txtBxBGColor
+            // 
+            this.txtBxBGColor.Location = new System.Drawing.Point(101, 318);
+            this.txtBxBGColor.Name = "txtBxBGColor";
+            this.txtBxBGColor.Size = new System.Drawing.Size(137, 20);
+            this.txtBxBGColor.TabIndex = 49;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(15, 345);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(79, 13);
+            this.label5.TabIndex = 48;
+            this.label5.Text = "FG Color in hex";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(15, 321);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(80, 13);
+            this.label4.TabIndex = 47;
+            this.label4.Text = "BG Color in hex";
+            // 
             // chkBxUseAppDataAsCache
             // 
             this.chkBxUseAppDataAsCache.AutoSize = true;
-            this.chkBxUseAppDataAsCache.Location = new System.Drawing.Point(15, 146);
+            this.chkBxUseAppDataAsCache.Location = new System.Drawing.Point(15, 169);
             this.chkBxUseAppDataAsCache.Name = "chkBxUseAppDataAsCache";
             this.chkBxUseAppDataAsCache.Size = new System.Drawing.Size(147, 17);
             this.chkBxUseAppDataAsCache.TabIndex = 46;
@@ -135,7 +174,7 @@
             // pictureBox4
             // 
             this.pictureBox4.BackColor = System.Drawing.Color.Black;
-            this.pictureBox4.Location = new System.Drawing.Point(13, 481);
+            this.pictureBox4.Location = new System.Drawing.Point(13, 504);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(226, 1);
             this.pictureBox4.TabIndex = 41;
@@ -144,7 +183,7 @@
             // txtBxProxyPort
             // 
             this.txtBxProxyPort.Enabled = false;
-            this.txtBxProxyPort.Location = new System.Drawing.Point(83, 451);
+            this.txtBxProxyPort.Location = new System.Drawing.Point(83, 474);
             this.txtBxProxyPort.Name = "txtBxProxyPort";
             this.txtBxProxyPort.Size = new System.Drawing.Size(155, 20);
             this.txtBxProxyPort.TabIndex = 40;
@@ -152,7 +191,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(15, 454);
+            this.label8.Location = new System.Drawing.Point(15, 477);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(29, 13);
             this.label8.TabIndex = 39;
@@ -161,7 +200,7 @@
             // txtBxProxy
             // 
             this.txtBxProxy.Enabled = false;
-            this.txtBxProxy.Location = new System.Drawing.Point(83, 423);
+            this.txtBxProxy.Location = new System.Drawing.Point(83, 446);
             this.txtBxProxy.Name = "txtBxProxy";
             this.txtBxProxy.Size = new System.Drawing.Size(155, 20);
             this.txtBxProxy.TabIndex = 38;
@@ -169,7 +208,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(15, 426);
+            this.label7.Location = new System.Drawing.Point(15, 449);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(32, 13);
             this.label7.TabIndex = 37;
@@ -184,7 +223,7 @@
             "https",
             "socks4",
             "socks5"});
-            this.cbBxHost.Location = new System.Drawing.Point(83, 394);
+            this.cbBxHost.Location = new System.Drawing.Point(83, 417);
             this.cbBxHost.Name = "cbBxHost";
             this.cbBxHost.Size = new System.Drawing.Size(155, 21);
             this.cbBxHost.TabIndex = 36;
@@ -192,7 +231,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(15, 397);
+            this.label6.Location = new System.Drawing.Point(15, 420);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(34, 13);
             this.label6.TabIndex = 35;
@@ -201,7 +240,7 @@
             // chkBxEnableProxy
             // 
             this.chkBxEnableProxy.AutoSize = true;
-            this.chkBxEnableProxy.Location = new System.Drawing.Point(15, 371);
+            this.chkBxEnableProxy.Location = new System.Drawing.Point(15, 394);
             this.chkBxEnableProxy.Name = "chkBxEnableProxy";
             this.chkBxEnableProxy.Size = new System.Drawing.Size(87, 17);
             this.chkBxEnableProxy.TabIndex = 34;
@@ -212,7 +251,7 @@
             // pictureBox3
             // 
             this.pictureBox3.BackColor = System.Drawing.Color.Black;
-            this.pictureBox3.Location = new System.Drawing.Point(13, 359);
+            this.pictureBox3.Location = new System.Drawing.Point(13, 382);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(226, 1);
             this.pictureBox3.TabIndex = 33;
@@ -221,7 +260,7 @@
             // chkBxAllowCustomTheme
             // 
             this.chkBxAllowCustomTheme.AutoSize = true;
-            this.chkBxAllowCustomTheme.Location = new System.Drawing.Point(15, 274);
+            this.chkBxAllowCustomTheme.Location = new System.Drawing.Point(15, 297);
             this.chkBxAllowCustomTheme.Name = "chkBxAllowCustomTheme";
             this.chkBxAllowCustomTheme.Size = new System.Drawing.Size(120, 17);
             this.chkBxAllowCustomTheme.TabIndex = 32;
@@ -232,7 +271,7 @@
             // pictureBox2
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.Black;
-            this.pictureBox2.Location = new System.Drawing.Point(12, 258);
+            this.pictureBox2.Location = new System.Drawing.Point(12, 281);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(226, 1);
             this.pictureBox2.TabIndex = 26;
@@ -241,7 +280,7 @@
             // checkBoxWarn
             // 
             this.checkBoxWarn.AutoSize = true;
-            this.checkBoxWarn.Location = new System.Drawing.Point(15, 231);
+            this.checkBoxWarn.Location = new System.Drawing.Point(15, 254);
             this.checkBoxWarn.Name = "checkBoxWarn";
             this.checkBoxWarn.Size = new System.Drawing.Size(95, 17);
             this.checkBoxWarn.TabIndex = 25;
@@ -251,7 +290,7 @@
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Black;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 169);
+            this.pictureBox1.Location = new System.Drawing.Point(12, 192);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(226, 1);
             this.pictureBox1.TabIndex = 24;
@@ -260,7 +299,7 @@
             // checkBoxShowFPS
             // 
             this.checkBoxShowFPS.AutoSize = true;
-            this.checkBoxShowFPS.Location = new System.Drawing.Point(15, 207);
+            this.checkBoxShowFPS.Location = new System.Drawing.Point(15, 230);
             this.checkBoxShowFPS.Name = "checkBoxShowFPS";
             this.checkBoxShowFPS.Size = new System.Drawing.Size(184, 17);
             this.checkBoxShowFPS.TabIndex = 23;
@@ -270,7 +309,7 @@
             // checkBoxGPUAccel
             // 
             this.checkBoxGPUAccel.AutoSize = true;
-            this.checkBoxGPUAccel.Location = new System.Drawing.Point(15, 183);
+            this.checkBoxGPUAccel.Location = new System.Drawing.Point(15, 206);
             this.checkBoxGPUAccel.Name = "checkBoxGPUAccel";
             this.checkBoxGPUAccel.Size = new System.Drawing.Size(111, 17);
             this.checkBoxGPUAccel.TabIndex = 22;
@@ -280,7 +319,7 @@
             // checkBoxHome
             // 
             this.checkBoxHome.AutoSize = true;
-            this.checkBoxHome.Location = new System.Drawing.Point(15, 123);
+            this.checkBoxHome.Location = new System.Drawing.Point(15, 146);
             this.checkBoxHome.Name = "checkBoxHome";
             this.checkBoxHome.Size = new System.Drawing.Size(115, 17);
             this.checkBoxHome.TabIndex = 21;
@@ -290,7 +329,7 @@
             // checkBoxDarkMode
             // 
             this.checkBoxDarkMode.AutoSize = true;
-            this.checkBoxDarkMode.Location = new System.Drawing.Point(15, 100);
+            this.checkBoxDarkMode.Location = new System.Drawing.Point(15, 123);
             this.checkBoxDarkMode.Name = "checkBoxDarkMode";
             this.checkBoxDarkMode.Size = new System.Drawing.Size(79, 17);
             this.checkBoxDarkMode.TabIndex = 20;
@@ -300,7 +339,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 77);
+            this.label3.Location = new System.Drawing.Point(12, 100);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(62, 13);
             this.label3.TabIndex = 19;
@@ -308,7 +347,7 @@
             // 
             // textBoxUA
             // 
-            this.textBoxUA.Location = new System.Drawing.Point(83, 74);
+            this.textBoxUA.Location = new System.Drawing.Point(83, 97);
             this.textBoxUA.Name = "textBoxUA";
             this.textBoxUA.Size = new System.Drawing.Size(155, 20);
             this.textBoxUA.TabIndex = 18;
@@ -339,37 +378,31 @@
             this.textBoxHomePage.Size = new System.Drawing.Size(155, 20);
             this.textBoxHomePage.TabIndex = 15;
             // 
-            // label4
+            // label10
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(15, 298);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(80, 13);
-            this.label4.TabIndex = 47;
-            this.label4.Text = "BG Color in hex";
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(12, 76);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(68, 13);
+            this.label10.TabIndex = 52;
+            this.label10.Text = "Search Engi:";
             // 
-            // label5
+            // comboBox1
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(15, 322);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(79, 13);
-            this.label5.TabIndex = 48;
-            this.label5.Text = "FG Color in hex";
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(83, 71);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(155, 21);
+            this.comboBox1.TabIndex = 53;
             // 
-            // txtBxBGColor
+            // pictureBox5
             // 
-            this.txtBxBGColor.Location = new System.Drawing.Point(101, 295);
-            this.txtBxBGColor.Name = "txtBxBGColor";
-            this.txtBxBGColor.Size = new System.Drawing.Size(137, 20);
-            this.txtBxBGColor.TabIndex = 49;
-            // 
-            // txtBxFGColor
-            // 
-            this.txtBxFGColor.Location = new System.Drawing.Point(101, 319);
-            this.txtBxFGColor.Name = "txtBxFGColor";
-            this.txtBxFGColor.Size = new System.Drawing.Size(137, 20);
-            this.txtBxFGColor.TabIndex = 50;
+            this.pictureBox5.BackColor = System.Drawing.Color.Black;
+            this.pictureBox5.Location = new System.Drawing.Point(13, 37);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(226, 1);
+            this.pictureBox5.TabIndex = 54;
+            this.pictureBox5.TabStop = false;
             // 
             // SettingsForm
             // 
@@ -387,6 +420,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -422,5 +456,8 @@
         private System.Windows.Forms.TextBox txtBxBGColor;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.PictureBox pictureBox5;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label10;
     }
 }

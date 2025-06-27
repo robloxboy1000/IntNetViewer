@@ -1,22 +1,18 @@
 ﻿using CefSharp;
 using CefSharp.Handler;
 using CefSharp.WinForms;
-using IntNetViewer.Properties;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Media;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
-
-
-
 
 namespace IntNetViewer
 {
@@ -25,13 +21,12 @@ namespace IntNetViewer
     /// </summary>
     public partial class MainWindow : Form
     {
-        #region Local Variables
         private readonly string configFilePath = "config.cfg";
         private string homePage = "intnet://assets/newtab.html"; // Default home page
         private DockPanel dockPanel;
         public static MainWindow Instance;
         public string appPath = Application.StartupPath;
-        private readonly List<string> history = new List<string>();
+        public readonly List<string> history = new List<string>();
         public HostHandler host;
         private DownloadHandler dHandler;
         private LifeSpanHandler lHandler;
@@ -46,8 +41,8 @@ namespace IntNetViewer
         private Icon favicon;
         private int backButtonHoldTime = 0;
         private const int HoldThreshold = 500; // 500ms for long press
-        #endregion
-        #region Constructor
+        private int oldCefWidth;
+        private int oldCefHeight;
         /// <summary>
         /// MainWindow constructor
         /// </summary>
@@ -56,14 +51,18 @@ namespace IntNetViewer
             Instance = this;
             InitializeComponent();
             WindowManager.OpenWindows++;  // Increment when a new window is opened
+            var autoComplete = new AutoCompleteStringCollection();
+            autoComplete.AddRange(history.ToArray());
+            addressComboBox.AutoCompleteCustomSource = autoComplete;
             if (Program.noCef)
             {
                 // If noCef is true, don't initialize CEF
-                
                 // plan to use compatible web browser control
                 InitializeBrowserTabs();
                 // Attach event handlers for tab changes
                 dockPanel.ActiveDocumentChanged += DockPanel_ActiveDocumentChanged;
+                EnableHomeButton();
+                LoadHistoryFromFile();
             }
             else
             {
@@ -71,15 +70,19 @@ namespace IntNetViewer
                 InitializeBrowserTabs();
                 // Attach event handlers for tab changes
                 dockPanel.ActiveDocumentChanged += DockPanel_ActiveDocumentChanged;
+                EnableHomeButton();
+                LoadHistoryFromFile();
             }
-                
-            
-            EnableHomeButton();
-            LoadHistoryFromFile();
-            
+            if (!Program.AreCefSharpLibrariesLoaded())
+            {
+                MessageBox.Show("CefSharp libraries are not loaded. Please check your installation.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(1);
+            }
         }
-        #endregion
-        #region UI/ Main UI Initialization
+        private void ExitWithoutCallingFormClosingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
+        }
         /// <summary>
         /// Event happens when MainWindow is loaded
         /// </summary>
@@ -93,9 +96,18 @@ namespace IntNetViewer
                 PopulateBookmarks(bookmarks, toolStrip1);
                 ApplyTheme();
                 InitHotkeys();
+                if (Program.debug)
+                {
+                    debugToolStripMenuItem.Visible = true;
+                }
+                else
+                {
 #if DEBUG
-                debugToolStripMenuItem.Visible = true;
+                    debugToolStripMenuItem.Visible = true;
+#else
+                    debugToolStripMenuItem.Visible = false;
 #endif
+                }
                 if (Program.noCef)
                 {
                     this.Text = "IntNetViewer (Legacy Mode)";
@@ -105,7 +117,6 @@ namespace IntNetViewer
                     this.Text = "IntNetViewer";
                     if (Cef.IsInitialized == null || Cef.IsInitialized == false)
                     {
-
                         this.MaximizeBox = false;
                         this.MinimizeBox = false;
                     }
@@ -115,24 +126,29 @@ namespace IntNetViewer
                         this.MinimizeBox = true;
                     }
                 }
-                
                 // check for updates automatically via https://api.github.com/repos/robloxboy1000/IntNetViewer/releases/latest
                 await UpdateChecker.CheckForUpdates();
-                
+                Console.WriteLine("Saving history every 5 minutes...");
+                ActionHandler.DoActionEverySetTime(SaveHistoryAsync, false, 300000); // Save history every 5 minutes
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading MainWindow: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
-
+        private void CloseAllTabs()
+        {
+            foreach (var content in dockPanel.Contents.ToList())
+            {
+                content.DockHandler.Close();
+            }
+        }
         // This method calls Cef.Shutdown() when closed. Fix if possible. NOTE: Fixed
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (Program.noCef)
             {
-
+                SaveHistoryAsync();
                 var settings = LoadSettings();
                 bool closeWarnMe = settings.TryGetValue("WarnOnExit", out string WarnValue) &&
                                       WarnValue.Equals("true", StringComparison.OrdinalIgnoreCase); ;
@@ -145,68 +161,104 @@ namespace IntNetViewer
                     }
                     else
                     {
+                        CloseAllTabs();
                         // use "WaitToSaveHistory();" instead of "SaveHistoryToFile();" to save history before closing to let CEF dispose all resources
                         WindowManager.OpenWindows--;  // Decrement when a window is closed
                         if (WindowManager.OpenWindows == 0)
                         {
-                              // Shutdown only when no windows are open
-                            WaitToSaveHistory();
+                            // Shutdown only when no windows are open
+
                         }
                     }
                 }
                 else
                 {
+                    CloseAllTabs();
                     WindowManager.OpenWindows--;  // Decrement when a window is closed
                     if (WindowManager.OpenWindows == 0)
                     {
-                          // Shutdown only when no windows are open
-                        WaitToSaveHistory();
+                        // Shutdown only when no windows are open
+
                     }
                 }
             }
             else
             {
-                // ask user if they are sure
-                if (DownloadsInProgress())
+                try
                 {
-                    if (MessageBox.Show("Downloads are in progress. Cancel those and exit?", "Confirm exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                    SaveHistoryAsync();
+                    // ask user if they are sure
+                    if (DownloadsInProgress())
                     {
-                        e.Cancel = true;
-                        return;
+                        if (MessageBox.Show("Downloads are in progress. Cancel those and exit?", "Confirm exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                        {
+                            e.Cancel = true;
+                            return;
+                        }
                     }
-                }
-                var settings = LoadSettings();
-                bool closeWarnMe = settings.TryGetValue("WarnOnExit", out string WarnValue) &&
-                                      WarnValue.Equals("true", StringComparison.OrdinalIgnoreCase); ;
-                if (closeWarnMe)
-                {
-                    var result = MessageBox.Show("Are you sure you want to close the browser?", "Exit Browser", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (result == DialogResult.No)
+                    var settings = LoadSettings();
+                    bool closeWarnMe = settings.TryGetValue("WarnOnExit", out string WarnValue) &&
+                                        WarnValue.Equals("true", StringComparison.OrdinalIgnoreCase); ;
+                    if (closeWarnMe)
                     {
-                        e.Cancel = true; // Prevent the application from closing
+                        if (Cef.IsInitialized == true)
+                        {
+                            var result = MessageBox.Show("Are you sure you want to close the browser?", "Exit Browser", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                            if (result == DialogResult.No)
+                            {
+                                e.Cancel = true; // Prevent the application from closing
+                            }
+                            else
+                            {
+                                // Close all tabs so that CEF doesn't throw an exception
+                                CloseAllTabs();
+                                // use "WaitToSaveHistory();" instead of "SaveHistoryToFile();" to save history before closing to let CEF dispose all resources
+                                WindowManager.OpenWindows--;  // Decrement when a window is closed
+                                if (WindowManager.OpenWindows == 0)
+                                {
+                                    Cef.Shutdown();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // Cef is not initialized, so we can just close the application
+                            WindowManager.OpenWindows--;
+                        }
                     }
                     else
                     {
-                        // use "WaitToSaveHistory();" instead of "SaveHistoryToFile();" to save history before closing to let CEF dispose all resources
-                        WindowManager.OpenWindows--;  // Decrement when a window is closed
-                        if (WindowManager.OpenWindows == 0)
+                        if (Cef.IsInitialized == true)
                         {
-                            Cef.Shutdown();  // Shutdown only when no windows are open
-                            WaitToSaveHistory();
+                            // Close all tabs so that CEF doesn't throw an exception
+                            CloseAllTabs();
+                            // use "WaitToSaveHistory();" instead of "SaveHistoryToFile();" to save history before closing to let CEF dispose all resources
+                            WindowManager.OpenWindows--;  // Decrement when a window is closed
+                            if (WindowManager.OpenWindows == 0)
+                            {
+                                Cef.Shutdown();
+                            }
+                        }
+                        else
+                        {
+                            // Cef is not initialized, so we can just close the application
+                            WindowManager.OpenWindows--;
                         }
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    WindowManager.OpenWindows--;  // Decrement when a window is closed
-                    if (WindowManager.OpenWindows == 0)
+                    DialogResult result = MessageBox.Show($"Error closing MainWindow: {ex.Message}\r\nDo you want to force close the application?", "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                    if (result == DialogResult.Yes)
                     {
-                        Cef.Shutdown();  // Shutdown only when no windows are open
-                        WaitToSaveHistory();
+                        Environment.Exit(0); // Force close the application
+                    }
+                    else
+                    {
+                        e.Cancel = true; // Prevent the application from closing
                     }
                 }
             }
-            
         }
         /// <summary>
         /// Loads settings file "config.cfg"; if file is not found, create new file with default settings.
@@ -215,7 +267,6 @@ namespace IntNetViewer
         private Dictionary<string, string> LoadSettings()
         {
             var settings = new Dictionary<string, string>();
-
             if (File.Exists(configFilePath))
             {
                 var lines = File.ReadAllLines(configFilePath);
@@ -233,37 +284,7 @@ namespace IntNetViewer
             else
             {
                 MessageBox.Show("Config file not found. Creating a new one.", "Config file not found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                try
-                {
-                    using (StreamWriter writer = new StreamWriter(configFilePath))
-                    {
-                        writer.WriteLine("[BrowserSettings]");
-                        writer.WriteLine($"HomePage = http://google.com");
-                        writer.WriteLine($@"CachePath = ./cache/");
-                        writer.WriteLine($"UserAgent = Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{Cef.ChromiumVersion} Safari/537.36");
-                        writer.WriteLine($"GPUAcceleration = true");
-                        writer.WriteLine($"ShowFPSCounter = false");
-                        writer.WriteLine($"UseAppDataAsCache = true");
-                        writer.WriteLine("[General]");
-                        writer.WriteLine($"DarkMode = false");
-                        writer.WriteLine($"EnableHomeButton = true");
-                        writer.WriteLine($"WarnOnExit = true");
-                        writer.WriteLine("[Theme]");
-                        writer.WriteLine($"AllowCustomTheme = false");
-                        writer.WriteLine($"BackgroundColor = SystemColors.Control");
-                        writer.WriteLine($"ForegroundColor = SystemColors.ControlText");
-                        writer.WriteLine("[Proxy]");
-                        writer.WriteLine($"EnableProxy = false");
-                        writer.WriteLine($"Host = http://");
-                        writer.WriteLine($"Port = 8080");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error creating config file: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-
+                CreateConfigAsync();
                 var lines = File.ReadAllLines(configFilePath);
                 foreach (var line in lines)
                 {
@@ -276,17 +297,56 @@ namespace IntNetViewer
                     }
                 }
             }
-
             return settings;
+        }
+        private async void CreateConfigAsync()
+        {
+            await Task.Run(() =>
+            {
+                if (!File.Exists(configFilePath))
+                {
+                    CreateConfig();
+                }
+                else
+                {
+                    MessageBox.Show("Config file already exists.", "Config file already exists", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            });
+        }
+        private void CreateConfig()
+        {
+            using (StreamWriter writer = new StreamWriter(configFilePath))
+            {
+                writer.WriteLine("[BrowserSettings]");
+                writer.WriteLine($"HomePage = http://google.com");
+                writer.WriteLine($@"CachePath = ./cache/");
+                writer.WriteLine($"UserAgent = Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{Cef.ChromiumVersion} Safari/537.36");
+                writer.WriteLine($"GPUAcceleration = true");
+                writer.WriteLine($"ShowFPSCounter = false");
+                writer.WriteLine($"UseAppDataAsCache = true");
+                writer.WriteLine("[General]");
+                writer.WriteLine($"DarkMode = false");
+                writer.WriteLine($"EnableHomeButton = true");
+                writer.WriteLine($"WarnOnExit = true");
+                writer.WriteLine("[Theme]");
+                writer.WriteLine($"AllowCustomTheme = false");
+                writer.WriteLine($"BackgroundColor = SystemColors.Control");
+                writer.WriteLine($"ForegroundColor = SystemColors.ControlText");
+                writer.WriteLine("[Proxy]");
+                writer.WriteLine($"EnableProxy = false");
+                writer.WriteLine($"Host = http://localhost");
+                writer.WriteLine($"Port = 8080");
+            }
         }
         /// <summary>
         /// Initialize hotkeys
         /// </summary>
         private void InitHotkeys()
         {
+            KeyboardHandler.AddHotKey(this, RefreshActiveTab, Keys.F5);
             KeyboardHandler.AddHotKey(this, ToggleFullscreen, Keys.F11);
+            KeyboardHandler.AddHotKey(this, ShowCEFDevTools, Keys.F12);
         }
-        
         /// <summary>
         /// Changes MainWindow styles for fullscreen (broken)
         /// </summary>
@@ -298,38 +358,59 @@ namespace IntNetViewer
             }
             else
             {
-                var browser = GetCurrentBrowser();
                 if (!isFullScreen)
                 {
                     oldWindowState = this.WindowState;
                     oldBorderStyle = this.FormBorderStyle;
+                    oldCefWidth = mainCefPanel.Width;
+                    oldCefHeight = mainCefPanel.Height;
                     this.FormBorderStyle = FormBorderStyle.None;
                     this.WindowState = FormWindowState.Maximized;
                     isFullScreen = true;
+                    mainCefPanel.Dock = DockStyle.Fill;
+                    menuStripContainer.Visible = false;
+                    navPanel.Visible = false;
+                    urlPanel.Visible = false;
+                    bkmkTSCtn.Visible = false;
+                    statusStrip1.Visible = false;
                 }
                 else
                 {
+                    mainCefPanel.Dock = DockStyle.None;
+                    mainCefPanel.Width = oldCefWidth;
+                    mainCefPanel.Height = oldCefHeight;
                     this.FormBorderStyle = oldBorderStyle;
                     this.WindowState = oldWindowState;
                     isFullScreen = false;
+                    menuStripContainer.Visible = true;
+                    navPanel.Visible = true;
+                    urlPanel.Visible = true;
+                    bkmkTSCtn.Visible = true;
+                    statusStrip1.Visible = true;
                 }
             }
-                
+        }
+        private void ShowCEFDevTools()
+        {
+            if (Program.noCef)
+            {
+                MessageBox.Show("DevTools are not available in this mode.", "DevTools", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                var browser = GetCurrentBrowser();
+                browser?.ShowDevTools();
+            }
         }
         /// <summary>
         /// This event is used when IntNetViewer is closing; waits for CEF to finish disposing before saving history
         /// </summary>
-        private void WaitToSaveHistory()
+        private async void SaveHistoryAsync()
         {
-            System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer
-            {
-                Interval = 1000
-            };
-            timer.Tick += (sender, e) =>
+            await Task.Run(() =>
             {
                 SaveHistoryToFile();
-                timer.Stop();
-            };
+            });
         }
         /// <summary>
         /// Save history traditionally
@@ -337,6 +418,7 @@ namespace IntNetViewer
         private void SaveHistoryToFile()
         {
             File.WriteAllLines("./assets/history.txt", history);
+            Console.WriteLine("History saved to history.txt");
         }
         /// <summary>
         /// Loads history.txt, Creates new history.txt if file isn't found
@@ -349,7 +431,9 @@ namespace IntNetViewer
             }
             else
             {
-                File.Create("./assets/history.txt");
+                // File.Create("./assets/history.txt");
+                File.WriteAllText("./assets/history.txt", ""); // Create an empty file
+                history.AddRange(File.ReadAllLines("./assets/history.txt"));
             }
         }
         /// <summary>
@@ -363,19 +447,14 @@ namespace IntNetViewer
         private void ApplyTheme()
         {
             var settings = LoadSettings();
-
             bool isDarkMode = settings.TryGetValue("DarkMode", out string darkModeValue) &&
                               darkModeValue.Equals("true", StringComparison.OrdinalIgnoreCase);
             bool allowCustomTheme = settings.TryGetValue("AllowCustomTheme", out string allowCustomThemeValue) &&
                               allowCustomThemeValue.Equals("true", StringComparison.OrdinalIgnoreCase);
-
-
             if (isDarkMode)
             {
                 this.BackColor = System.Drawing.Color.FromArgb(45, 45, 48);    // Dark background
                 this.ForeColor = System.Drawing.Color.White;                   // Light text
-
-
                 foreach (Control ctrl in this.Controls)
                 {
                     ApplyDarkTheme(ctrl);
@@ -385,7 +464,7 @@ namespace IntNetViewer
             {
                 if (settings.TryGetValue("BackgroundColor", out string backgroundColor) && settings.TryGetValue("ForegroundColor", out string foregroundColor))
                 {
-                    if (!backgroundColor.Equals("SystemColors.Control") && !foregroundColor.Equals("SystemColors.ControlText"))
+                    if (backgroundColor.Equals("SystemColors.Control") && foregroundColor.Equals("SystemColors.ControlText"))
                     {
                         this.BackColor = SystemColors.Control;
                         this.ForeColor = SystemColors.ControlText;
@@ -404,9 +483,7 @@ namespace IntNetViewer
                         this.BackColor = ColorTranslator.FromHtml(backgroundColor);
                         this.ForeColor = ColorTranslator.FromHtml(foregroundColor);
                         ApplyCustomTheme(this, ColorTranslator.FromHtml(backgroundColor), ColorTranslator.FromHtml(foregroundColor));
-
                     }
-
                 }
                 else
                 {
@@ -417,8 +494,6 @@ namespace IntNetViewer
             {
                 this.BackColor = SystemColors.Control;
                 this.ForeColor = SystemColors.ControlText;
-
-
             }
         }
         private void ApplyCustomTheme(Control control, Color backgroundColor, Color foregroundColor)
@@ -434,8 +509,6 @@ namespace IntNetViewer
         {
             control.BackColor = SystemColors.Control;
             control.ForeColor = SystemColors.ControlText;
-
-
             foreach (Control child in control.Controls)
             {
                 ApplyDefaultTheme(child);
@@ -445,8 +518,6 @@ namespace IntNetViewer
         {
             control.BackColor = System.Drawing.Color.FromArgb(45, 45, 48);
             control.ForeColor = System.Drawing.Color.White;
-
-
             foreach (Control child in control.Controls)
             {
                 ApplyDarkTheme(child);
@@ -455,10 +526,8 @@ namespace IntNetViewer
         private void EnableHomeButton()
         {
             var settings = LoadSettings();
-
             bool isHomeButtonEnabled = settings.TryGetValue("EnableHomeButton", out string enabledValue) &&
                               enabledValue.Equals("true", StringComparison.OrdinalIgnoreCase);
-
             if (isHomeButtonEnabled)
             {
                 homeToolStripButton.Visible = true;
@@ -467,10 +536,7 @@ namespace IntNetViewer
             {
                 homeToolStripButton.Visible = false;
             }
-
         }
-
-
         private void BtnDownloads_Click(object sender, EventArgs e)
         {
             OpenDownloadsTab();
@@ -487,9 +553,7 @@ namespace IntNetViewer
                 var browser = GetCurrentBrowser();
                 browser?.Back();
             }
-            
         }
-
         private void ForwardButton_Click(object sender, EventArgs e)
         {
             if (Program.noCef)
@@ -503,7 +567,6 @@ namespace IntNetViewer
                 browser?.Forward();
             }
         }
-
         private void RefreshButton_Click(object sender, EventArgs e)
         {
             if (Program.noCef)
@@ -517,7 +580,6 @@ namespace IntNetViewer
                 browser?.Reload();
             }
         }
-
         private void StopButton_Click(object sender, EventArgs e)
         {
             if (Program.noCef)
@@ -531,43 +593,28 @@ namespace IntNetViewer
                 browser?.Stop();
             }
         }
-
         private void GoButton_Click(object sender, EventArgs e)
         {
-            NavigateToAddress();
-        }
-
-        private void AddressTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.SuppressKeyPress = true;
-                NavigateToAddress();
-            }
+            NavigateToAddress(addressComboBox.Text.Trim());
         }
         private void NewTabButton_Click(object sender, EventArgs e)
         {
             AddNewTab("intnet://assets/newtab.html");
         }
-
         // Asyncronous button to check for updates via https://api.github.com/repos/robloxboy1000/IntNetViewer/releases/latest
         private async void CheckForUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             await UpdateChecker.CheckForUpdates();
         }
-
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
-
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             About_New aboutForm = new About_New();
             aboutForm.ShowDialog();
         }
-        
-
         private void PopulateBookmarks(List<Bookmark> bookmarks, ToolStrip toolStrip)
         {
             toolStrip.Items.Clear(); // Clear existing items
@@ -577,8 +624,10 @@ namespace IntNetViewer
                 if (!string.IsNullOrEmpty(bookmark.Url))
                 {
                     // It's a regular bookmark
-                    var button = new ToolStripButton(bookmark.Name);
-                    button.Tag = bookmark.Url; // Store URL for navigation
+                    var button = new ToolStripButton(bookmark.Name)
+                    {
+                        Tag = bookmark.Url // Store URL for navigation
+                    };
                     button.Click += BookmarkButton_Click;
                     toolStrip.Items.Add(button);
                 }
@@ -591,15 +640,16 @@ namespace IntNetViewer
                 }
             }
         }
-
         private void AddFolderItems(ToolStripDropDownButton dropdown, List<Bookmark> children)
         {
             foreach (var child in children)
             {
                 if (!string.IsNullOrEmpty(child.Url))
                 {
-                    var item = new ToolStripMenuItem(child.Name);
-                    item.Tag = child.Url;
+                    var item = new ToolStripMenuItem(child.Name)
+                    {
+                        Tag = child.Url
+                    };
                     item.Click += BookmarkButton_Click;
                     dropdown.DropDownItems.Add(item);
                 }
@@ -611,15 +661,16 @@ namespace IntNetViewer
                 }
             }
         }
-
         private void AddSubFolderItems(ToolStripMenuItem menuItem, List<Bookmark> children)
         {
             foreach (var child in children)
             {
                 if (!string.IsNullOrEmpty(child.Url))
                 {
-                    var item = new ToolStripMenuItem(child.Name);
-                    item.Tag = child.Url;
+                    var item = new ToolStripMenuItem(child.Name)
+                    {
+                        Tag = child.Url
+                    };
                     item.Click += BookmarkButton_Click;
                     menuItem.DropDownItems.Add(item);
                 }
@@ -631,176 +682,113 @@ namespace IntNetViewer
                 }
             }
         }
-
         private void BookmarkButton_Click(object sender, EventArgs e)
         {
             var item = sender as ToolStripItem;
             string url = item.Tag as string;
             if (!string.IsNullOrEmpty(url))
             {
-
-                if (Program.noCef)
-                {
-                    var browser = GetCurrentOldBrowser();
-                    browser?.Navigate(url);
-                }
-                else
-                {
-                    var browser = GetCurrentBrowser();
-                    browser?.Load(url);
-                }
+                LoadURL(url);
             }
         }
-
         private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Open the settings form
             SettingsForm settingsForm = new SettingsForm();
             settingsForm.ShowDialog(); // Show as a modal dialog
         }
-
         private void NewWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // This is not recommended. PLEASE use tabs instead of windows. Note: this has been fixed using a counter of open windows.
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show(); // Don't show as a dialog
         }
-
         private void NewTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AddNewTab("intnet://assets/newtab.html");
         }
-
-
-
         private void PixlPlaya5OnYouTubeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Program.noCef)
-            {
-                var browser = GetCurrentOldBrowser();
-                browser?.Navigate("https://youtube.com/@pixlplaya5");
-            }
-            else
-            {
-                var browser = GetCurrentBrowser();
-                browser?.Load("https://youtube.com/@pixlplaya5");
-            }
-            
-
+            LoadURL("https://youtube.com/@pixlplaya5");
         }
-
         private void PixlPlaya5OnGitHubToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Program.noCef)
-            {
-                var browser = GetCurrentOldBrowser();
-                browser?.Navigate("https://github.com/robloxboy1000");
-            }
-            else
-            {
-                var browser = GetCurrentBrowser();
-                browser?.Load("https://github.com/robloxboy1000/");
-            }
-                
-
+            LoadURL("https://github.com/robloxboy1000");
         }
         private void HomeToolStripButton_Click(object sender, EventArgs e)
         {
-            if (Program.noCef)
-            {
-                var browser = GetCurrentOldBrowser();
-                browser?.Navigate(homePage);
-            }
-            else
-            {
-                var browser = GetCurrentBrowser();
-                browser?.Load(homePage);
-            }
-            
+            LoadURL(homePage);
         }
-
         private void HistoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!File.Exists("./assets/history.html"))
             {
                 File.Create("./assets/history.html").Close();
             }
-            if (Program.noCef)
-            {
-                var browser = GetCurrentOldBrowser();
-                browser?.Navigate("intnet://assets/history.html");
-            }
-            else
-            {
-                var browser = GetCurrentBrowser();
-                browser?.Load("intnet://assets/history.html");
-            }
-            
+            LoadURL("intnet://assets/history.html");
         }
-
         private void HistoryToolStripMenuItem_MouseEnter(object sender, EventArgs e)
         {
             historyToolStripMenuItem.DropDownItems.Clear();
 
             foreach (string url in history)
             {
-                historyToolStripMenuItem.DropDownItems.Add(url.Length > 50 ? url.Substring(0, 50) + "..." : url);
+                historyToolStripMenuItem.DropDownItems.Add(url);
+                if (url.Length > 30)
+                {
+                    historyToolStripMenuItem.DropDownItems[historyToolStripMenuItem.DropDownItems.Count - 1].Text = url.Substring(0, 30) + "...";
+                }
             }
         }
-
         private void HistoryToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             foreach (string url in history)
             {
                 if (e.ClickedItem.Text == url)
                 {
-                    if (Program.noCef)
-                    {
-                        var browser = GetCurrentOldBrowser();
-                        browser?.Navigate(url);
-                    }
-                    else
-                    {
-                        var browser = GetCurrentBrowser();
-                        browser?.Load(url);
-                    }
-                        // Only open in main tab
-                       
-
+                    LoadURL(url);
                 }
             }
         }
-
+        public void LoadURL(string url)
+        {
+            if (Program.noCef)
+            {
+                var browser = GetCurrentOldBrowser();
+                browser?.Navigate(url);
+            }
+            else
+            {
+                var browser = GetCurrentBrowser();
+                browser?.Load(url);
+            }
+        }
         private void DevToolsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Program.noCef)
             {
                 MessageBox.Show("DevTools are not available in this mode.", "DevTools", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
             }
             else
             {
                 var browser = GetCurrentBrowser();
                 browser?.ShowDevTools();
             }
-            
+
         }
         private void FullscreenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToggleFullscreen();
         }
-
         private void LegacyModeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LegacyMainWindow legacyMainWindow = new LegacyMainWindow();
             legacyMainWindow.Show();
         }
-
         private void ClearHistoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ClearHistory();
         }
-
         private void BookmarksToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!File.Exists("./assets/bookmarks.html"))
@@ -817,9 +805,8 @@ namespace IntNetViewer
                 var browser = GetCurrentBrowser();
                 browser?.Load($"intnet://assets/bookmarks.html");
             }
-            
-        }
 
+        }
         private void AddBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Program.noCef)
@@ -830,6 +817,7 @@ namespace IntNetViewer
                 bookmarks.Add(new Bookmark { Name = pageTitle, Url = browser.Url.ToString() });
                 BookmarkManager.SaveBookmarks(bookmarks);
                 BookmarkManager.ExportBookmarksToHtml();
+                PopulateBookmarks(bookmarks, toolStrip1);
             }
             else
             {
@@ -838,45 +826,33 @@ namespace IntNetViewer
                 bookmarks.Add(new Bookmark { Name = pageTitle, Url = browser.Address });
                 BookmarkManager.SaveBookmarks(bookmarks);
                 BookmarkManager.ExportBookmarksToHtml();
+                PopulateBookmarks(bookmarks, toolStrip1);
             }
-            
-            
         }
-
-
-
         private void WriteLineToConsoleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Console.WriteLine("Hello, World!");
         }
-
         private void WriteLineToConsoleDifferentMethodToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Console.Write("Hello, World!\r\n");
         }
-
-
-
         private void NotificationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Notify.NotifyIcon("IntNetViewer", "This is a test notification.", Resources.IntNetViewerIconImage, false);
+            Notify.NotifyIcon("IntNetViewer", "This is a test notification.", Image.FromFile(Path.GetFullPath("./assets/IntImage.png")), false);
         }
-
-        private void testErrorToolStripMenuItem_Click(object sender, EventArgs e)
+        private void TestErrorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException("This is a test error.");
         }
-
-        private void backButton_MouseDown(object sender, MouseEventArgs e)
+        private void BackButton_MouseDown(object sender, MouseEventArgs e)
         {
             backButtonHoldTime = 0;
             holdTimer.Start();
         }
-
-        private void backButton_MouseUp(object sender, MouseEventArgs e)
+        private void BackButton_MouseUp(object sender, MouseEventArgs e)
         {
             holdTimer.Stop();
-
             if (backButtonHoldTime < HoldThreshold)
             {
                 // Quick click: go back in history
@@ -896,8 +872,7 @@ namespace IntNetViewer
                 // Already showed history popup during hold
             }
         }
-
-        private void holdTimer_Tick(object sender, EventArgs e)
+        private void HoldTimer_Tick(object sender, EventArgs e)
         {
             backButtonHoldTime += holdTimer.Interval;
 
@@ -910,7 +885,6 @@ namespace IntNetViewer
         private void ShowHistoryMenu()
         {
             historyMenu.Items.Clear();
-
             // If you're using the same `history` list from before:
             foreach (string url in history)
             {
@@ -930,19 +904,14 @@ namespace IntNetViewer
                 };
                 historyMenu.Items.Add(menuItem);
             }
-
             // Show the menu below the Back button
             Point menuLocation = backButton.PointToScreen(new Point(0, backButton.Height));
             historyMenu.Show(menuLocation);
         }
-
-        private void importantNotificationToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ImportantNotificationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Notify.NotifyIcon("IntNetViewer", "This is a test notification that'll be here indefinitely.", Resources.IntNetViewerIconImage, true);
+            Notify.NotifyIcon("IntNetViewer", "This is a test notification that'll be here indefinitely.", Image.FromFile(Path.GetFullPath("./assets/IntImage.png")), true);
         }
-
-
-
         private void MainWindow_Shown(object sender, EventArgs e)
         {
 #if DEBUG
@@ -957,34 +926,33 @@ namespace IntNetViewer
             }
 #endif
         }
-
-        private void dlWithoutChromiumToolStripMenuItem_Click(object sender, EventArgs e)
+        private void DlWithoutChromiumToolStripMenuItem_Click(object sender, EventArgs e)
         {
             StandaloneDLFormLoader form = new StandaloneDLFormLoader();
             form.Show();
         }
-
-        private void getAppPathToolStripMenuItem_Click(object sender, EventArgs e)
+        private void GetAppPathToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Console.WriteLine("App Path: " + appPath);
         }
-
-        private async void hangUiThreadToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void HangUiThreadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             await Task.Run(() => Thread.Sleep(5000));
         }
-
-        private void testVideoPlayerToolStripMenuItem_Click(object sender, EventArgs e)
+        private void TestVideoPlayerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             VideoPlayerLoader loader = new VideoPlayerLoader();
             loader.Show();
         }
-        private void restartToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RestartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Restart();
+
         }
-        #endregion
-        #region Cef/Dockpanel related stuff
+        private void RepopulateBookmarksToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PopulateBookmarks(BookmarkManager.LoadBookmarks(), toolStrip1);
+        }
         /// <summary>
         /// Called on tab switched
         /// </summary>
@@ -994,14 +962,13 @@ namespace IntNetViewer
         {
             UpdateNavigationControls();
             UpdateAddressBar();
+            UpdateTitle();
         }
-
         /// <summary>
         /// Initializes CEF with config file. if Progam.noCef is true, it will use the default web browser control.
         /// </summary>
         private void InitializeCef()
         {
-
             try
             {
                 var settings = LoadSettings();
@@ -1059,14 +1026,12 @@ namespace IntNetViewer
                 host = new HostHandler(this);
                 mHandler = new ContextMenuHandler(this);
                 lHandler = new LifeSpanHandler(this);
-                //lHandler.OnBeforePopup += LHandler_OnBeforePopUp;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error initializing CEF, {ex.Message}");
             }
         }
-
         private void InitializeBrowserTabs()
         {
             try
@@ -1083,29 +1048,73 @@ namespace IntNetViewer
                 MessageBox.Show("Error creating DockPanel. Please check your installation.");
                 return;
             }
-
             dockPanel.ContentRemoved += DockPanel_ContentRemoved;
-
             // Add the first browser tab
-            AddNewTab("intnet://assets/newtab.html");
+            if (Program.noCef)
+            {
+                AddNewIETab("intnet://assets/newtab.html");
+            }
+            else
+            {
+                AddNewTab("intnet://assets/newtab.html");
+            }
         }
-
         private void DockPanel_ContentRemoved(object sender, DockContentEventArgs e)
         {
             if (dockPanel.Contents.Count == 0)
             {
-                Application.Exit();
+                Environment.Exit(0);
             }
             else
             {
                 UpdateNavigationControls();
                 UpdateAddressBar();
+                UpdateTitle();
             }
         }
-
+        public void AddNewIETab(string uri)
+        {
+            try
+            {
+                if (uri.StartsWith("intnet:"))
+                {
+                    uri = $"file://{Path.Combine(appPath, uri.Replace("intnet://", ""))}";
+                }
+                var settings = LoadSettings();
+                bool isDarkMode = settings.TryGetValue("DarkMode", out string darkModeValue) && darkModeValue.Equals("true", StringComparison.OrdinalIgnoreCase);
+                if (isDarkMode)
+                {
+                    var theme = new VS2015DarkTheme();
+                    dockPanel.Theme = theme;
+                }
+                else
+                {
+                    var theme = new VS2015LightTheme();
+                    dockPanel.Theme = theme;
+                }
+                var newTab = new BrowserTab(uri, true);
+                newTab.Show(dockPanel, DockState.Document);
+                var browser = GetCurrentOldBrowser();
+                // Attach event handlers
+                browser.DocumentTitleChanged += OnOldBrowserTitleChanged;
+                browser.LocationChanged += OnOldBrowserAddressChanged;
+                browser.Navigating += Browser_Navigating;
+                browser.Navigated += Browser_Navigated;
+                browser.DocumentCompleted += Browser_DocumentCompleted;
+                browser.StatusTextChanged += Browser_StatusTextChanged;
+                if (!history.Contains(uri))
+                {
+                    history.Add(uri);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error creating new tab: {ex.Message}");
+                return;
+            }
+        }
         public void AddNewTab(string url)
         {
-            
             try
             {
                 var settings = LoadSettings();
@@ -1120,66 +1129,48 @@ namespace IntNetViewer
                     var theme = new VS2015LightTheme();
                     dockPanel.Theme = theme;
                 }
-
-                var newTab = new BrowserTab(url);
+                var newTab = new BrowserTab(url, false);
                 newTab.Show(dockPanel, DockState.Document);
-                if (Program.noCef)
+                var browser = GetCurrentBrowser();
+                // Attach event handlers
+                browser.TitleChanged += OnBrowserTitleChanged;
+                browser.AddressChanged += OnBrowserAddressChanged;
+                browser.LoadingStateChanged += OnBrowserLoadingStateChanged;
+                browser.FrameLoadEnd += Browser_FrameLoadEnd;
+                browser.StatusMessage += Browser_StatusMessage;
+                browser.DownloadHandler = dHandler;
+                browser.LifeSpanHandler = lHandler;
+                browser.MenuHandler = mHandler;
+                browser.JsDialogHandler = new JsDialogHandler();
+                browser.RequestHandler = new CustomRequestHandler();
+                browser.DragHandler = new DragHandler();
+                browser.KeyboardHandler = new KeyboardHandler(this);
+                if (!history.Contains(url))
                 {
-                    var browser = GetCurrentOldBrowser();
-
-                    // Attach event handlers
-                    browser.DocumentTitleChanged += OnOldBrowserTitleChanged;
-                    browser.LocationChanged += OnOldBrowserAddressChanged;
-                    browser.Navigating += Browser_Navigating;
-                    browser.Navigated += Browser_Navigated;
-                    browser.DocumentCompleted += Browser_DocumentCompleted;
-                    browser.StatusTextChanged += Browser_StatusTextChanged;
-                    if (!history.Contains(url))
+                    if (url.StartsWith("intnet"))
+                    {
+                        // don't add internal urls to history
+                    }
+                    else if (url.StartsWith("chrome"))
+                    {
+                        // don't add internal urls to history
+                    }
+                    else
                     {
                         history.Add(url);
                     }
-
                 }
-                else
+                if (url.StartsWith(BrowserConfig.InternalURL + ":"))
                 {
-                    var browser = GetCurrentBrowser();
-                    // Attach event handlers
-                    browser.TitleChanged += OnBrowserTitleChanged;
-                    browser.AddressChanged += OnBrowserAddressChanged;
-                    browser.LoadingStateChanged += OnBrowserLoadingStateChanged;
-                    browser.FrameLoadEnd += Browser_FrameLoadEnd;
-                    browser.StatusMessage += Browser_StatusMessage;
-                    browser.DownloadHandler = dHandler;
-                    browser.LifeSpanHandler = lHandler;
-                    browser.MenuHandler = mHandler;
-                    browser.JsDialogHandler = new JsDialogHandler();
-                    browser.RequestHandler = new CustomRequestHandler();
-                    browser.DragHandler = new DragHandler();
-                    browser.KeyboardHandler = new KeyboardHandler(this);
-                    if (!history.Contains(url))
-                    {
-                        history.Add(url);
-                    }
-                    if (url.StartsWith(BrowserConfig.InternalURL + ":"))
-                    {
-                        browser.JavascriptObjectRepository.Register("host", host, true);
-                    }
+                    browser.JavascriptObjectRepository.Register("host", host, true);
                 }
-                    
-
-                
-
-
-                
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error creating new tab: {ex.Message}");
                 return;
             }
-
         }
-
         private void Browser_StatusTextChanged(object sender, EventArgs e)
         {
             if (sender is WebBrowser browser)
@@ -1190,12 +1181,9 @@ namespace IntNetViewer
                 }));
             }
         }
-
         private void Browser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            
         }
-
         private void Browser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
             if (!(sender is WebBrowser browser))
@@ -1206,7 +1194,6 @@ namespace IntNetViewer
             }
             UpdateAddressBar();
         }
-
         private void Browser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
             if (!(sender is WebBrowser browser))
@@ -1236,9 +1223,12 @@ namespace IntNetViewer
                 {
                     labelLoading.Visible = true;
                 }
+                else
+                {
+                    labelLoading.Visible = false;
+                }
             }));
         }
-
         private void OnOldBrowserAddressChanged(object sender, EventArgs e)
         {
             if (!(sender is WebBrowser browser))
@@ -1248,11 +1238,10 @@ namespace IntNetViewer
             {
                 this.Invoke(new Action(() =>
                 {
-                    addressTextBox.Text = browser.Url.ToString();
+                    addressComboBox.Text = browser.Url.ToString();
                 }));
             }
         }
-
         private void OnOldBrowserTitleChanged(object sender, EventArgs e)
         {
             if (!(sender is WebBrowser browser))
@@ -1263,11 +1252,10 @@ namespace IntNetViewer
             {
                 tabPage.Text = browser.DocumentTitle.Length > 20 ? browser.DocumentTitle.Substring(0, 20) + "..." : browser.DocumentTitle;
                 tabPage.ToolTipText = browser.DocumentTitle;
-                this.Text = $"{browser.DocumentTitle.Trim()} - IntNetViewer";
+                this.Text = $"{browser.DocumentTitle.Trim()} - IntNetViewer (Legacy Mode)";
                 pageTitle = browser.DocumentTitle;
             }));
         }
-
         void DownloadFavicon(string url)
         {
             using (WebClient client = new WebClient())
@@ -1297,7 +1285,6 @@ namespace IntNetViewer
             downloadNames = new Dictionary<int, string>();
             downloadCancelRequests = new List<int>();
         }
-
         public Dictionary<int, DownloadItem> Downloads
         {
             get
@@ -1305,7 +1292,6 @@ namespace IntNetViewer
                 return downloads;
             }
         }
-
         public void UpdateDownloadItem(DownloadItem item)
         {
             lock (downloads)
@@ -1323,12 +1309,10 @@ namespace IntNetViewer
                 downloads[item.Id] = item;
             }
         }
-
         public string CalcDownloadPath(DownloadItem item)
         {
             return item.SuggestedFileName;
         }
-
         public bool DownloadsInProgress()
         {
             foreach (DownloadItem item in downloads.Values)
@@ -1340,9 +1324,6 @@ namespace IntNetViewer
             }
             return false;
         }
-
-
-
         public void OpenDownloadsTab()
         {
             this.Invoke(new Action(() =>
@@ -1367,7 +1348,6 @@ namespace IntNetViewer
                 }));
             }
         }
-
         private void UpdateNavigationControls()
         {
             if (Program.noCef)
@@ -1406,9 +1386,7 @@ namespace IntNetViewer
                     refreshButton.Visible = false;
                 }
             }
-                
         }
-
         private void UpdateAddressBar()
         {
             if (Program.noCef)
@@ -1420,20 +1398,20 @@ namespace IntNetViewer
                     {
                         this.Invoke(new Action(() =>
                         {
-                            addressTextBox.Text = string.Empty;
+                            addressComboBox.Text = string.Empty;
                         }));
                     }
                     else
                     {
                         this.Invoke(new Action(() =>
                         {
-                            addressTextBox.Text = browser.Url.ToString();
+                            addressComboBox.Text = browser.Url.ToString();
                         }));
                     }
                 }
                 else
                 {
-                    addressTextBox.Text = string.Empty;
+                    addressComboBox.Text = string.Empty;
                 }
             }
             else
@@ -1445,57 +1423,51 @@ namespace IntNetViewer
                     {
                         this.Invoke(new Action(() =>
                         {
-                            addressTextBox.Text = string.Empty;
+                            addressComboBox.Text = string.Empty;
                         }));
                     }
                     else
                     {
                         this.Invoke(new Action(() =>
                         {
-                            addressTextBox.Text = browser.Address;
+                            addressComboBox.Text = browser.Address;
                         }));
                     }
                 }
                 else
                 {
-                    addressTextBox.Text = string.Empty;
+                    addressComboBox.Text = string.Empty;
                 }
             }
-                
         }
-
+        private void UpdateTitle()
+        {
+            if (dockPanel.ActiveDocument is BrowserTab activeTab)
+            {
+                this.Text = $"{activeTab.Text.Trim()} - IntNetViewer";
+            }
+            else
+            {
+                this.Text = "IntNetViewer";
+            }
+        }
         private ChromiumWebBrowser GetCurrentBrowser()
         {
             return dockPanel.ActiveDocument is BrowserTab activeTab ? activeTab.cefBrowser : null;
         }
-
         private WebBrowser GetCurrentOldBrowser()
         {
             return dockPanel.ActiveDocument is BrowserTab activeTab ? activeTab.webBrowser : null;
         }
-
-
-
-        private void NavigateToAddress()
+        private void NavigateToAddress(string url)
         {
             if (Program.noCef)
             {
                 var browser = GetCurrentOldBrowser();
                 if (browser != null)
                 {
-                    string url = addressTextBox.Text.Trim();
-                    if (url.StartsWith("intnet:"))
-                    {
-                        Console.WriteLine("Internal URL: " + url);
-                        browser.Navigate(url);
-                    }
-                    else
-                    {
-                        string processedUrl = EnsureValidUrl(url);
-                        Console.WriteLine(processedUrl);
-                        Console.WriteLine("External URL (Processed): " + processedUrl);
-                        browser.Navigate(processedUrl);
-                    }
+                    Console.WriteLine("External URL: " + url);
+                    browser.Navigate(url);
                     if (!history.Contains(url))
                     {
                         history.Add(url);
@@ -1508,7 +1480,6 @@ namespace IntNetViewer
                 var browser = GetCurrentBrowser();
                 if (browser != null)
                 {
-                    string url = addressTextBox.Text.Trim();
                     if (url.StartsWith("intnet:"))
                     {
                         Console.WriteLine("Internal URL: " + url);
@@ -1521,44 +1492,27 @@ namespace IntNetViewer
                     }
                     else
                     {
-                        string processedUrl = EnsureValidUrl(url);
-                        Console.WriteLine(processedUrl);
-                        Console.WriteLine("External URL (Processed): " + processedUrl);
-                        browser.Load(processedUrl);
+                        Console.WriteLine("External URL: " + url);
+                        browser.Load(url);
                     }
                     if (!history.Contains(url))
                     {
-                        history.Add(url);
+                        if (url.StartsWith("intnet"))
+                        {
+                            // don't add internal urls to history
+                        }
+                        else if (url.StartsWith("chrome"))
+                        {
+                            // don't add internal urls to history
+                        }
+                        else
+                        {
+                            history.Add(url);
+                        }
                     }
                 }
-                
             }
         }
-        static string EnsureValidUrl(string input)
-        {
-            string tldPattern = @"\.(com|org|net|edu|gov|mil|int|io|co|uk|us|info|biz|tv|xyz|ca|de|fr|au|jp|cn|ru|in|br|za|eu|me|cc|us|dev|[a-z]{2,})($|/|\?|:)";
-
-            // URL is assumed to have scheme
-
-            // Check if the string ends with a known TLD
-            if (Regex.IsMatch(input.Trim(), tldPattern, RegexOptions.IgnoreCase))
-            {
-                return input;
-            }
-
-            else
-            {
-                Console.WriteLine("No TLD was found.");
-                // If no TLD is found, assume it's a search query
-                return "https://www.google.com/search?q=" + Uri.EscapeDataString(input);
-            }
-
-            // Regex for checking if the string ends with a known TLD
-
-
-
-        }
-
         // Cef Subscribed events
         private void OnBrowserTitleChanged(object sender, TitleChangedEventArgs e)
         {
@@ -1583,7 +1537,7 @@ namespace IntNetViewer
             {
                 this.Invoke(new Action(() =>
                 {
-                    addressTextBox.Text = e.Address;
+                    addressComboBox.Text = e.Address;
                 }));
             }
         }
@@ -1643,11 +1597,9 @@ namespace IntNetViewer
                     }
                 });
                 this.Invoke((MethodInvoker)(() => tab.Icon = favicon));
-                this.Invoke((MethodInvoker)(() => this.Icon = favicon));
                 var settings = LoadSettings();
                 bool isDarkMode = settings.TryGetValue("DarkMode", out string darkModeValue) &&
                                   darkModeValue.Equals("true", StringComparison.OrdinalIgnoreCase);
-
                 if (isDarkMode)
                 {
                     // Use the DevTools client to force dark mode
@@ -1657,42 +1609,26 @@ namespace IntNetViewer
             }
             if (!history.Contains(e.Url))
             {
-                history.Add(e.Url);
+                if (e.Url.StartsWith("intnet"))
+                {
+                    // don't add internal urls to history
+                }
+                else if (e.Url.StartsWith("chrome"))
+                {
+                    // don't add internal urls to history
+                }
+                else
+                {
+                    history.Add(e.Url);
+                }
             }
             UpdateAddressBar();
-        }
-
-
-
-
-
-        private void InjectDarkModeCSS()
-        {
-            var browser = GetCurrentBrowser();
-
-            string darkModeCSS = @"
-        const style = document.createElement('style');
-        style.innerHTML = `
-            html, body {
-                background-color: #121212 !important;
-                color: #e0e0e0 !important;
-            }
-            a { color: #bb86fc !important; }
-            img, video { filter: brightness(0.8) contrast(1.2); }
-            * { border-color: #444 !important; }
-        `;
-        document.head.appendChild(style);
-    ";
-
-            // Inject JavaScript that appends the CSS to the page
-            browser.ExecuteScriptAsync(darkModeCSS);
         }
         internal void RefreshActiveTab()
         {
             var browser = GetCurrentBrowser();
             browser?.Reload();
         }
-
         internal void CloseActiveTab()
         {
             if (dockPanel.ActiveDocument is BrowserTab activeTab)
@@ -1700,9 +1636,188 @@ namespace IntNetViewer
                 activeTab.Close();
             }
         }
-
-        #endregion
-
-
+        private void ListHistoryToConsoleDebugOnlyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (string url in history)
+            {
+                Console.WriteLine(url);
+            }
+        }
+        private void ListHistoryToMessageBoxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(string.Join(Environment.NewLine, history), "History");
+        }
+        private void newIETabToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddNewIETab("intnet://assets/newtab.html");
+        }
+        private void newCefSharpTabToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddNewTab("intnet://assets/newtab.html");
+        }
+        private void borderlessToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.FormBorderStyle = FormBorderStyle.None;
+        }
+        private void applyThemeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ApplyTheme();
+        }
+        private void addressComboBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                string input = addressComboBox.Text.Trim();
+                if (!string.IsNullOrEmpty(input))
+                {
+                    if (!history.Contains(input))
+                    {
+                        history.Add(input);
+                        addressComboBox.AutoCompleteCustomSource.Add(input);
+                    }
+                    string url = GetNavigableUrl(input);
+                    NavigateToAddress(url);
+                }
+            }
+        }
+        private string GetNavigableUrl(string input)
+        {
+            // Check if input looks like a URL
+            if (Regex.IsMatch(input, @"^(https?://|www\.|intnet?://|chrome?://)", RegexOptions.IgnoreCase))
+            {
+                if (!input.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (input.StartsWith("intnet", StringComparison.OrdinalIgnoreCase))
+                    {
+                    }
+                    if (input.StartsWith("chrome", StringComparison.OrdinalIgnoreCase))
+                    {
+                    }
+                    else
+                    {
+                        if (input.StartsWith("intnet", StringComparison.OrdinalIgnoreCase))
+                        {
+                        }
+                        if (input.StartsWith("chrome", StringComparison.OrdinalIgnoreCase))
+                        {
+                        }
+                        else
+                        {
+                            input = "https://" + input;
+                        }
+                    }
+                }
+                return input;
+            }
+            // Treat as a search query
+            string encoded = Uri.EscapeDataString(input);
+            DialogResult result = MessageBox.Show($"Are you searching for \"{input.Trim()}\"?", "Complete Search", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+            if (result == DialogResult.Yes)
+            {
+                return $"https://www.google.com/search?q={encoded}";
+            }
+            return input;
+        }
+        private void x200ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowResizer resizer = new WindowResizer(this);
+            resizer.ResizeWindow(400, 200);
+        }
+        private void x480ToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            WindowResizer resizer = new WindowResizer(this);
+            resizer.ResizeWindow(640, 480);
+        }
+        private void x600ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowResizer resizer = new WindowResizer(this);
+            resizer.ResizeWindow(800, 600);
+        }
+        private void x768ToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            WindowResizer resizer = new WindowResizer(this);
+            resizer.ResizeWindow(1024, 768);
+        }
+        private void x864ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowResizer resizer = new WindowResizer(this);
+            resizer.ResizeWindow(1152, 864);
+        }
+        private void x960ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowResizer resizer = new WindowResizer(this);
+            resizer.ResizeWindow(1280, 960);
+        }
+        private void x1050ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowResizer resizer = new WindowResizer(this);
+            resizer.ResizeWindow(1400, 1050);
+        }
+        private void x1200ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowResizer resizer = new WindowResizer(this);
+            resizer.ResizeWindow(1600, 1200);
+        }
+        private void x1536ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowResizer resizer = new WindowResizer(this);
+            resizer.ResizeWindow(2048, 1536);
+        }
+        private void x2400ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowResizer resizer = new WindowResizer(this);
+            resizer.ResizeWindow(3200, 2400);
+        }
+        private void x480ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowResizer resizer = new WindowResizer(this);
+            resizer.ResizeWindow(854, 480);
+        }
+        private void x720ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowResizer resizer = new WindowResizer(this);
+            resizer.ResizeWindow(1280, 720);
+        }
+        private void x768ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowResizer resizer = new WindowResizer(this);
+            resizer.ResizeWindow(1366, 768);
+        }
+        private void x900ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowResizer resizer = new WindowResizer(this);
+            resizer.ResizeWindow(1600, 900);
+        }
+        private void x1080ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowResizer resizer = new WindowResizer(this);
+            resizer.ResizeWindow(1920, 1080);
+        }
+        private void x1440ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowResizer resizer = new WindowResizer(this);
+            resizer.ResizeWindow(2560, 1440);
+        }
+        private void x2160ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowResizer resizer = new WindowResizer(this);
+            resizer.ResizeWindow(3840, 2160);
+        }
+        private void getProcessNameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine(Process.GetCurrentProcess().Id + " " + Process.GetCurrentProcess().ProcessName);
+            MessageBox.Show(Process.GetCurrentProcess().Id + " " + Process.GetCurrentProcess().ProcessName);
+        }
+        private void newNotificationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NotificationForm notificationForm = new NotificationForm("Test Title", "This is a test notification. (Not Prioritized)", "https://picsum.photos/200", false);
+            notificationForm.Show();
+        }
+        private void newNotificationyesPriorityToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NotificationForm notificationForm = new NotificationForm("Test Title", "This is a test notification. (Prioritized)", "https://picsum.photos/200", true);
+            notificationForm.Show();
+        }
     }
 }

@@ -40,10 +40,10 @@ namespace IntNetViewer
             // if url is blocked
             /*if (...request.Url....) {
 
-				// cancel the request - set handleRequest to true and return false
-				handleRequest = true;
-				return false;
-			}*/
+                // cancel the request - set handleRequest to true and return false
+                handleRequest = true;
+                return false;
+            }*/
 
             // if url is browser file
             if (uri.Host == "assets")
@@ -87,7 +87,69 @@ namespace IntNetViewer
                     return true;
                 }
             }
+            if (uri.Host == "vargfren")
+            {
+                fileName = $"{appPath}assets/vargfren.html";
+                if (File.Exists(fileName))
+                {
+                    Task.Factory.StartNew(() => {
+                        using (callback)
+                        {
+                            FileStream fStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                            mimeType = ResourceHandler.GetMimeType(Path.GetExtension(fileName));
 
+                            stream = fStream;
+                            callback.Continue();
+                        }
+                    });
+
+                    // handle the request at a later time
+                    handleRequest = false;
+                    return true;
+                }
+            }
+            if (uri.Host == "intnet-urls")
+            {
+                fileName = $"{appPath}assets/intnet-urls.html";
+                if (File.Exists(fileName))
+                {
+                    Task.Factory.StartNew(() => {
+                        using (callback)
+                        {
+                            FileStream fStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                            mimeType = ResourceHandler.GetMimeType(Path.GetExtension(fileName));
+
+                            stream = fStream;
+                            callback.Continue();
+                        }
+                    });
+
+                    // handle the request at a later time
+                    handleRequest = false;
+                    return true;
+                }
+            }
+            if (uri.Host == "amongus")
+            {
+                fileName = $"{appPath}assets/amongus.html";
+                if (File.Exists(fileName))
+                {
+                    Task.Factory.StartNew(() => {
+                        using (callback)
+                        {
+                            FileStream fStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                            mimeType = ResourceHandler.GetMimeType(Path.GetExtension(fileName));
+
+                            stream = fStream;
+                            callback.Continue();
+                        }
+                    });
+
+                    // handle the request at a later time
+                    handleRequest = false;
+                    return true;
+                }
+            }
 
 
 

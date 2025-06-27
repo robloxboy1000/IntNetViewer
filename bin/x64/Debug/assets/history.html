@@ -7,29 +7,41 @@
 	<h2>History</h2>
 	<div id="linkContainer"></div>
 	<script>
-        async function loadTextFile() {
+        async function LoadHistory() {
+            var $container = document.getElementById("linkContainer")
+
             try {
-                const response = await fetch('intnet://assets/history.txt'); // Load the text file
-                const text = await response.text();
-                const lines = text.split('\n'); // Split file into lines
-
-                const container = document.getElementById('linkContainer');
-                lines.forEach((line, index) => {
-                    if (line.trim()) { // Ignore empty lines
-                        const link = document.createElement('a');
-                        link.href = line.trim(); // Set link destination
-                        link.textContent = `Link ${index + 1}: ${line.trim()}`; // Display text
-                        link.target = "_blank"; // Open in a new tab
-                        link.style.display = "block"; // Display each link in a new line
-                        container.appendChild(link);
-                    }
-                });
+                await CefSharp.BindObjectAsync("host");
+                if (!host || typeof host.getHistory !== "function") {
+                    throw new Error("host object or getHistory function is not available.");
+                }
+                var history = await host.getHistory();
             } catch (error) {
-                console.error('Error loading text file:', error);
+                console.error("Error loading history:", error);
+                return;
             }
+            var historyList = history.split("\r\n");
+            for (var i = 0; i < historyList.length; i++) {
+                var linkUrl = historyList[i];
+                if (linkUrl.trim() !== "") {
+                    const link = document.createElement("a");
+                    link.href = linkUrl;
+                    link.textContent = linkUrl;
+                    link.target = "_blank";
+                    const listItem = document.createElement("div");
+                    listItem.appendChild(link);
+                    $container.appendChild(listItem);
+                }
+            }
+            
+                
+            
+                
+            
         }
+        LoadHistory();
 
-        loadTextFile();
+        
     </script>
 	</body>
 </html>

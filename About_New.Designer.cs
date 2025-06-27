@@ -31,7 +31,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(About_New));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.archLabel = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -45,10 +48,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
-            this.archLabel = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -82,6 +81,16 @@
             this.tabPage1.Text = "Info";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // archLabel
+            // 
+            this.archLabel.AutoSize = true;
+            this.archLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.archLabel.Location = new System.Drawing.Point(165, 6);
+            this.archLabel.Name = "archLabel";
+            this.archLabel.Size = new System.Drawing.Size(35, 18);
+            this.archLabel.TabIndex = 9;
+            this.archLabel.Text = "xXX";
+            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label12);
@@ -98,6 +107,23 @@
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "App info";
+            // 
+            // label12
+            // 
+            this.label12.Location = new System.Drawing.Point(102, 82);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(221, 49);
+            this.label12.TabIndex = 7;
+            this.label12.Text = "null";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(7, 81);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(91, 13);
+            this.label11.TabIndex = 6;
+            this.label11.Text = "Windows version:";
             // 
             // label8
             // 
@@ -197,7 +223,6 @@
             // 
             this.panel1.Controls.Add(this.label10);
             this.panel1.Controls.Add(this.label9);
-            this.panel1.Controls.Add(this.vScrollBar1);
             this.panel1.Location = new System.Drawing.Point(9, 7);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(325, 206);
@@ -205,10 +230,9 @@
             // 
             // label10
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(77, 28);
+            this.label10.Location = new System.Drawing.Point(19, 28);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(165, 26);
+            this.label10.Size = new System.Drawing.Size(286, 176);
             this.label10.TabIndex = 2;
             this.label10.Text = "CefSharp (browser engine)\r\nSharpBrowser (handler reference)";
             // 
@@ -219,41 +243,6 @@
             this.label9.Size = new System.Drawing.Size(289, 15);
             this.label9.TabIndex = 1;
             this.label9.Text = "Thanks to the following other projects to make this possible:";
-            // 
-            // vScrollBar1
-            // 
-            this.vScrollBar1.Location = new System.Drawing.Point(308, 1);
-            this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(17, 205);
-            this.vScrollBar1.TabIndex = 0;
-            // 
-            // archLabel
-            // 
-            this.archLabel.AutoSize = true;
-            this.archLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.archLabel.Location = new System.Drawing.Point(165, 6);
-            this.archLabel.Name = "archLabel";
-            this.archLabel.Size = new System.Drawing.Size(35, 18);
-            this.archLabel.TabIndex = 9;
-            this.archLabel.Text = "xXX";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(7, 81);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(91, 13);
-            this.label11.TabIndex = 6;
-            this.label11.Text = "Windows version:";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(102, 82);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(23, 13);
-            this.label12.TabIndex = 7;
-            this.label12.Text = "null";
             // 
             // About_New
             // 
@@ -276,7 +265,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -299,7 +287,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.VScrollBar vScrollBar1;
         private System.Windows.Forms.Label archLabel;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label11;

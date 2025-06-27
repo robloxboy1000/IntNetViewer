@@ -48,7 +48,7 @@
         </div>
       </div>
       <div class="dangerous" hidden>
-        <img class="icon" alt="">
+        
         <div class="description"></div>
         <div class="controls">
           <a is="action-link" class="restore" focus-type="restore-save"  tabindex="0" role="link">Recover malicious file</a>
@@ -149,7 +149,7 @@
 			});
 
 			// icon
-			$item.find("img.icon").attr("src", "sharpbrowser://fileicon/" + item.SuggestedFileName);
+			//$item.find("img.icon").attr("src", "intnet://assets/" + item.SuggestedFileName);
 
 			// name
 			if (item.SuggestedFileName != "") $item.find("span.name").text(item.SuggestedFileName);

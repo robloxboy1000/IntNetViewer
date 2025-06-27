@@ -96,10 +96,12 @@ namespace IntNetViewer
 
         private void Button1_Click(object sender, EventArgs e)
         {
+            
             using (StreamWriter writer = new StreamWriter(configFilePath))
             {
                 writer.WriteLine("[BrowserSettings]");
                 writer.WriteLine($"HomePage = {textBoxHomePage.Text}");
+                writer.WriteLine($"SearchEngine = ");
                 writer.WriteLine($@"CachePath = ./cache/");
                 writer.WriteLine($"UserAgent = {textBoxUA.Text}");
                 writer.WriteLine($"GPUAcceleration = {checkBoxGPUAccel.Checked}");

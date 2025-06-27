@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages\CefSharp.Common.135.0.170\build\CefSharp.Common.props" Condition="Exists('packages\CefSharp.Common.135.0.170\build\CefSharp.Common.props')" />
-  <Import Project="packages\chromiumembeddedframework.runtime.win-x86.135.0.17\build\chromiumembeddedframework.runtime.win-x86.props" Condition="Exists('packages\chromiumembeddedframework.runtime.win-x86.135.0.17\build\chromiumembeddedframework.runtime.win-x86.props')" />
-  <Import Project="packages\chromiumembeddedframework.runtime.win-x64.135.0.17\build\chromiumembeddedframework.runtime.win-x64.props" Condition="Exists('packages\chromiumembeddedframework.runtime.win-x64.135.0.17\build\chromiumembeddedframework.runtime.win-x64.props')" />
+  <Import Project="packages\CefSharp.Common.137.0.100\build\CefSharp.Common.props" Condition="Exists('packages\CefSharp.Common.137.0.100\build\CefSharp.Common.props')" />
+  <Import Project="packages\chromiumembeddedframework.runtime.win-x86.137.0.10\build\chromiumembeddedframework.runtime.win-x86.props" Condition="Exists('packages\chromiumembeddedframework.runtime.win-x86.137.0.10\build\chromiumembeddedframework.runtime.win-x86.props')" />
+  <Import Project="packages\chromiumembeddedframework.runtime.win-x64.137.0.10\build\chromiumembeddedframework.runtime.win-x64.props" Condition="Exists('packages\chromiumembeddedframework.runtime.win-x64.137.0.10\build\chromiumembeddedframework.runtime.win-x64.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -10,7 +10,7 @@
     <ProjectGuid>{3015C236-449F-4989-A11A-D274BE8BBE50}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>IntNetViewer</RootNamespace>
-    <AssemblyName>int</AssemblyName>
+    <AssemblyName>int-noconsole</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -41,13 +41,13 @@
     <ApplicationIcon>Icon-512pt2x.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>09B1FC02574B697A9458881B3EC0C24F90BDCEA7</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>EF3C91FE32B60B2E94DEEFE2E861A53761ECED6E</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>IntNetViewer_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>encrypt.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
@@ -64,7 +64,7 @@
     <DocumentationFile>
     </DocumentationFile>
     <UseWinFormsOutOfProcDesigner>False</UseWinFormsOutOfProcDesigner>
-    <WarningLevel>1</WarningLevel>
+    <WarningLevel>3</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -112,30 +112,41 @@
   <PropertyGroup>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>encrypt.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CefSharp, Version=135.0.170.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
-      <HintPath>packages\CefSharp.Common.135.0.170\lib\net462\CefSharp.dll</HintPath>
+    <Reference Include="CefSharp, Version=137.0.100.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
+      <HintPath>packages\CefSharp.Common.137.0.100\lib\net462\CefSharp.dll</HintPath>
     </Reference>
-    <Reference Include="CefSharp.Core, Version=135.0.170.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
-      <HintPath>packages\CefSharp.Common.135.0.170\lib\net462\CefSharp.Core.dll</HintPath>
+    <Reference Include="CefSharp.Core, Version=137.0.100.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
+      <HintPath>packages\CefSharp.Common.137.0.100\lib\net462\CefSharp.Core.dll</HintPath>
     </Reference>
-    <Reference Include="CefSharp.WinForms, Version=135.0.170.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
-      <HintPath>packages\CefSharp.WinForms.135.0.170\lib\net462\CefSharp.WinForms.dll</HintPath>
+    <Reference Include="CefSharp.WinForms, Version=137.0.100.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
+      <HintPath>packages\CefSharp.WinForms.137.0.100\lib\net462\CefSharp.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="LibVLCSharp, Version=3.9.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\LibVLCSharp.3.9.3\lib\net40\LibVLCSharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="LibVLCSharp.WinForms, Version=3.9.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\LibVLCSharp.WinForms.3.9.3\lib\net40\LibVLCSharp.WinForms.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -150,12 +161,14 @@
     <Reference Include="System">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration">
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Core">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Design">
       <Private>True</Private>
     </Reference>
@@ -165,6 +178,7 @@
     <Reference Include="System.Net" />
     <Reference Include="System.ValueTuple, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.ValueTuple.4.6.1\lib\net462\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web">
       <Private>True</Private>
@@ -224,6 +238,7 @@
     <Compile Include="About_New.Designer.cs">
       <DependentUpon>About_New.cs</DependentUpon>
     </Compile>
+    <Compile Include="ActionHandler.cs" />
     <Compile Include="Bookmark.cs" />
     <Compile Include="BookmarkManager.cs" />
     <Compile Include="BorderlessVideoPlayer.cs">
@@ -241,6 +256,12 @@
     <Compile Include="CustomRequestHandler.cs" />
     <Compile Include="CustomSchemeHandler.cs" />
     <Compile Include="DownloadHandler.cs" />
+    <Compile Include="NotificationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NotificationForm.Designer.cs">
+      <DependentUpon>NotificationForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="StandaloneDLForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -307,11 +328,15 @@
     <Compile Include="VideoPlayerLoader.Designer.cs">
       <DependentUpon>VideoPlayerLoader.cs</DependentUpon>
     </Compile>
+    <Compile Include="WindowResizer.cs" />
     <EmbeddedResource Include="About_New.resx">
       <DependentUpon>About_New.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BorderlessVideoPlayer.resx">
       <DependentUpon>BorderlessVideoPlayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NotificationForm.resx">
+      <DependentUpon>NotificationForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StandaloneDLForm.resx">
       <DependentUpon>StandaloneDLForm.cs</DependentUpon>
@@ -343,6 +368,7 @@
       <DependentUpon>VideoPlayerLoader.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="config.ini" />
+    <None Include="encrypt.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
@@ -429,18 +455,18 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\VideoLAN.LibVLC.Windows.3.0.21\build\VideoLAN.LibVLC.Windows.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoLAN.LibVLC.Windows.3.0.21\build\VideoLAN.LibVLC.Windows.targets'))" />
-    <Error Condition="!Exists('packages\chromiumembeddedframework.runtime.win-x64.135.0.17\build\chromiumembeddedframework.runtime.win-x64.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\chromiumembeddedframework.runtime.win-x64.135.0.17\build\chromiumembeddedframework.runtime.win-x64.props'))" />
-    <Error Condition="!Exists('packages\chromiumembeddedframework.runtime.win-x86.135.0.17\build\chromiumembeddedframework.runtime.win-x86.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\chromiumembeddedframework.runtime.win-x86.135.0.17\build\chromiumembeddedframework.runtime.win-x86.props'))" />
-    <Error Condition="!Exists('packages\CefSharp.Common.135.0.170\build\CefSharp.Common.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.Common.135.0.170\build\CefSharp.Common.props'))" />
-    <Error Condition="!Exists('packages\CefSharp.Common.135.0.170\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.Common.135.0.170\build\CefSharp.Common.targets'))" />
     <Error Condition="!Exists('packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+    <Error Condition="!Exists('packages\VideoLAN.LibVLC.Windows.3.0.21\build\VideoLAN.LibVLC.Windows.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoLAN.LibVLC.Windows.3.0.21\build\VideoLAN.LibVLC.Windows.targets'))" />
+    <Error Condition="!Exists('packages\chromiumembeddedframework.runtime.win-x64.137.0.10\build\chromiumembeddedframework.runtime.win-x64.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\chromiumembeddedframework.runtime.win-x64.137.0.10\build\chromiumembeddedframework.runtime.win-x64.props'))" />
+    <Error Condition="!Exists('packages\chromiumembeddedframework.runtime.win-x86.137.0.10\build\chromiumembeddedframework.runtime.win-x86.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\chromiumembeddedframework.runtime.win-x86.137.0.10\build\chromiumembeddedframework.runtime.win-x86.props'))" />
+    <Error Condition="!Exists('packages\CefSharp.Common.137.0.100\build\CefSharp.Common.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.Common.137.0.100\build\CefSharp.Common.props'))" />
+    <Error Condition="!Exists('packages\CefSharp.Common.137.0.100\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.Common.137.0.100\build\CefSharp.Common.targets'))" />
   </Target>
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="packages\VideoLAN.LibVLC.Windows.3.0.21\build\VideoLAN.LibVLC.Windows.targets" Condition="Exists('packages\VideoLAN.LibVLC.Windows.3.0.21\build\VideoLAN.LibVLC.Windows.targets')" />
-  <Import Project="packages\CefSharp.Common.135.0.170\build\CefSharp.Common.targets" Condition="Exists('packages\CefSharp.Common.135.0.170\build\CefSharp.Common.targets')" />
   <Import Project="packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="packages\VideoLAN.LibVLC.Windows.3.0.21\build\VideoLAN.LibVLC.Windows.targets" Condition="Exists('packages\VideoLAN.LibVLC.Windows.3.0.21\build\VideoLAN.LibVLC.Windows.targets')" />
+  <Import Project="packages\CefSharp.Common.137.0.100\build\CefSharp.Common.targets" Condition="Exists('packages\CefSharp.Common.137.0.100\build\CefSharp.Common.targets')" />
 </Project>
