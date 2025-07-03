@@ -14,13 +14,13 @@ namespace IntNetViewer
     public partial class SettingsForm : Form
     {
         private readonly string configFilePath = "config.cfg";
-        private string[] themeSettings = new string[2];
 
         public SettingsForm()
         {
             InitializeComponent();
             LoadSettings();
         }
+
         private void LoadSettings()
         {
             if (File.Exists(configFilePath))
@@ -89,7 +89,6 @@ namespace IntNetViewer
                     {
                         // Do nothing, as we are not using this setting in the UI
                     }
-
                 }
             }
         }
@@ -166,9 +165,11 @@ namespace IntNetViewer
 
 
 
-        private void chkBxUseAppDataAsCache_CheckedChanged(object sender, EventArgs e)
+        private void SettingsForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            
+            // Try to apply changes to main window
+            MainWindow mainWindow = new MainWindow(null);
+            mainWindow.Invoke(new System.Action(() => mainWindow.ApplyTheme())); 
         }
     }
 }

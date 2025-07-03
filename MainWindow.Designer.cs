@@ -125,6 +125,7 @@ namespace IntNetViewer
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.bkmkTSCtn = new System.Windows.Forms.ToolStripContainer();
             this.historyMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.defaultBookmarksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.urlPanel.SuspendLayout();
             this.menuStripContainer.TopToolStripPanel.SuspendLayout();
@@ -311,7 +312,8 @@ namespace IntNetViewer
             this.applyThemeToolStripMenuItem,
             this.getProcessNameToolStripMenuItem,
             this.newNotificationToolStripMenuItem,
-            this.newNotificationyesPriorityToolStripMenuItem});
+            this.newNotificationyesPriorityToolStripMenuItem,
+            this.defaultBookmarksToolStripMenuItem});
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
             this.debugToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.debugToolStripMenuItem.Text = "Debug";
@@ -923,6 +925,13 @@ namespace IntNetViewer
             this.historyMenu.Name = "contextMenuStrip1";
             this.historyMenu.Size = new System.Drawing.Size(61, 4);
             // 
+            // defaultBookmarksToolStripMenuItem
+            // 
+            this.defaultBookmarksToolStripMenuItem.Name = "defaultBookmarksToolStripMenuItem";
+            this.defaultBookmarksToolStripMenuItem.Size = new System.Drawing.Size(282, 22);
+            this.defaultBookmarksToolStripMenuItem.Text = "default bookmarks";
+            this.defaultBookmarksToolStripMenuItem.Click += new System.EventHandler(this.defaultBookmarksToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1060,6 +1069,7 @@ namespace IntNetViewer
         private ToolStripMenuItem toolStripMenuItem1;
         private ToolStripMenuItem newNotificationToolStripMenuItem;
         private ToolStripMenuItem newNotificationyesPriorityToolStripMenuItem;
+        private ToolStripMenuItem defaultBookmarksToolStripMenuItem;
     }
 }
 

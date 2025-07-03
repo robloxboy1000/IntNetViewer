@@ -43,10 +43,11 @@ namespace IntNetViewer
         private const int HoldThreshold = 500; // 500ms for long press
         private int oldCefWidth;
         private int oldCefHeight;
+        private string pubUrlArg;
         /// <summary>
         /// MainWindow constructor
         /// </summary>
-        public MainWindow()
+        public MainWindow(string urlArg)
         {
             Instance = this;
             InitializeComponent();
@@ -54,6 +55,16 @@ namespace IntNetViewer
             var autoComplete = new AutoCompleteStringCollection();
             autoComplete.AddRange(history.ToArray());
             addressComboBox.AutoCompleteCustomSource = autoComplete;
+            // Make sure 'pubUrlArg' is not null
+            if (urlArg != null)
+            {
+                pubUrlArg = urlArg;
+            }
+            else
+            {
+                pubUrlArg = "";
+            }
+
             if (Program.noCef)
             {
                 // If noCef is true, don't initialize CEF
@@ -119,11 +130,13 @@ namespace IntNetViewer
                     {
                         this.MaximizeBox = false;
                         this.MinimizeBox = false;
+                        this.FormBorderStyle = FormBorderStyle.FixedSingle;
                     }
                     else
                     {
                         this.MaximizeBox = true;
                         this.MinimizeBox = true;
+                        this.FormBorderStyle = FormBorderStyle.Sizable;
                     }
                 }
                 // check for updates automatically via https://api.github.com/repos/robloxboy1000/IntNetViewer/releases/latest
@@ -444,7 +457,7 @@ namespace IntNetViewer
             history.Clear();
             SaveHistoryToFile();
         }
-        private void ApplyTheme()
+        public void ApplyTheme()
         {
             var settings = LoadSettings();
             bool isDarkMode = settings.TryGetValue("DarkMode", out string darkModeValue) &&
@@ -599,7 +612,15 @@ namespace IntNetViewer
         }
         private void NewTabButton_Click(object sender, EventArgs e)
         {
-            AddNewTab("intnet://assets/newtab.html");
+            if (Program.noCef)
+            {
+                AddNewIETab("intnet://assets/newtab.html");
+            }
+            else
+            {
+                AddNewTab("intnet://assets/newtab.html");
+            }
+            
         }
         // Asyncronous button to check for updates via https://api.github.com/repos/robloxboy1000/IntNetViewer/releases/latest
         private async void CheckForUpdateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -700,12 +721,20 @@ namespace IntNetViewer
         private void NewWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // This is not recommended. PLEASE use tabs instead of windows. Note: this has been fixed using a counter of open windows.
-            MainWindow mainWindow = new MainWindow();
+            MainWindow mainWindow = new MainWindow("intnet://assets/newtab.html");
             mainWindow.Show(); // Don't show as a dialog
         }
         private void NewTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewTab("intnet://assets/newtab.html");
+            if (Program.noCef)
+            {
+                AddNewIETab("intnet://assets/newtab.html");
+            }
+            else
+            {
+                AddNewTab("intnet://assets/newtab.html");
+            }
+            
         }
         private void PixlPlaya5OnYouTubeToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1052,11 +1081,26 @@ namespace IntNetViewer
             // Add the first browser tab
             if (Program.noCef)
             {
-                AddNewIETab("intnet://assets/newtab.html");
+                if (pubUrlArg == "")
+                {
+                    AddNewIETab("intnet://assets/newtab.html");
+                }
+                else
+                {
+                    AddNewIETab(pubUrlArg);
+                }
             }
             else
             {
-                AddNewTab("intnet://assets/newtab.html");
+                if (pubUrlArg == "")
+                {
+                    AddNewTab("intnet://assets/newtab.html");
+                }
+                else
+                {
+                    AddNewTab(pubUrlArg);
+                }
+                    
             }
         }
         private void DockPanel_ContentRemoved(object sender, DockContentEventArgs e)
@@ -1100,7 +1144,6 @@ namespace IntNetViewer
                 browser.LocationChanged += OnOldBrowserAddressChanged;
                 browser.Navigating += Browser_Navigating;
                 browser.Navigated += Browser_Navigated;
-                browser.DocumentCompleted += Browser_DocumentCompleted;
                 browser.StatusTextChanged += Browser_StatusTextChanged;
                 if (!history.Contains(uri))
                 {
@@ -1181,9 +1224,7 @@ namespace IntNetViewer
                 }));
             }
         }
-        private void Browser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-        }
+        
         private void Browser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
             if (!(sender is WebBrowser browser))
@@ -1818,6 +1859,15 @@ namespace IntNetViewer
         {
             NotificationForm notificationForm = new NotificationForm("Test Title", "This is a test notification. (Prioritized)", "https://picsum.photos/200", true);
             notificationForm.Show();
+        }
+
+        private void defaultBookmarksToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (StreamWriter streamWriter = new StreamWriter("bookmarks.json"))
+            {
+                streamWriter.WriteLine("[  \r\n  {    \r\n\t\"Name\": \"Google\",\r\n    \"Url\": \"https://www.google.com\",\r\n    \"Children\": []\r\n  },\r\n  {\r\n    \"Name\": \"News\",\r\n    \"Url\": null,\r\n    \"Children\": [\r\n      {\r\n        \"Name\": \"CNN\",\r\n        \"Url\": \"https://www.cnn.com\",\r\n        \"Children\": []\r\n      },\r\n      {\r\n        \"Name\": \"BBC\",\r\n        \"Url\": \"https://www.bbc.com\",\r\n        \"Children\": []\r\n      }\r\n    ]\r\n  },\r\n  {\r\n    \"Name\": \"Fun Sites\",\r\n    \"Url\": null,\r\n    \"Children\": [\r\n      {\r\n        \"Name\": \"Neocities\",\r\n        \"Url\": \"https://neocities.org\",\r\n        \"Children\": []\r\n      }\r\n    ]\r\n  }\r\n]");
+            }
+            PopulateBookmarks(BookmarkManager.LoadBookmarks(), toolStrip1);
         }
     }
 }

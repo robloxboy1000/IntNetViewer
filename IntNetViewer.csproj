@@ -10,7 +10,7 @@
     <ProjectGuid>{3015C236-449F-4989-A11A-D274BE8BBE50}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>IntNetViewer</RootNamespace>
-    <AssemblyName>int-noconsole</AssemblyName>
+    <AssemblyName>int</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
